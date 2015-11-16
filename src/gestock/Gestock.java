@@ -5,6 +5,9 @@
  */
 package gestock;
 
+import gestock.window.*;
+import javax.swing.UIManager;
+
 /**
  *
  * @author rmiretgine
@@ -15,7 +18,12 @@ public class Gestock {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        System.out.println("Hello world ! " + System.getProperty("java.version"));
+        try {
+            UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
+            //UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+        } catch (Exception evt) {
+        }
+
+        new MainWindow();
     }
-    
 }
