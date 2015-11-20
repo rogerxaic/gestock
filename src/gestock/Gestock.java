@@ -5,8 +5,10 @@
  */
 package gestock;
 
-import gestock.window.*;
-import javax.swing.UIManager;
+import gestock.window.MainWindow;
+
+import javax.swing.*;
+import java.awt.*;
 
 /**
  *
@@ -19,11 +21,11 @@ public class Gestock {
      */
     public static void main(String[] args) {
         try {
+            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
             UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
-            //UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
         } catch (Exception evt) {
         }
 
-        new MainWindow();
+        EventQueue.invokeLater(MainWindow::new);
     }
 }
