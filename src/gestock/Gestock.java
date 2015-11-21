@@ -27,5 +27,6 @@ public class Gestock {
         }
 
         EventQueue.invokeLater(MainWindow::new);
+        Interface windows = new Interface();
     }
 }
