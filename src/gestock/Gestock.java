@@ -25,8 +25,6 @@ public class Gestock {
             UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
         } catch (Exception evt) {
         }
-
-        EventQueue.invokeLater(MainWindow::new);
         Interface windows = new Interface();
     }
 }
