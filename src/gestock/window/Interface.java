@@ -3,13 +3,17 @@ package gestock.window;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
 import java.io.IOException;
 
-public class Interface extends JFrame{
+public class Interface extends JFrame implements ActionListener {
 
     public Interface(){
         super("gestock");
         setDefaultCloseOperation(EXIT_ON_CLOSE);
+        setLocationRelativeTo(null);
 
         // The main panel
         JPanel mainPanel = new JPanel(new BorderLayout());
@@ -44,9 +48,39 @@ public class Interface extends JFrame{
         bottomButton.setHorizontalTextPosition(SwingConstants.CENTER);
 
 
-
+        createMenuBar();
         setVisible(true);
+    }
 
+    private void createMenuBar() {
 
+        JMenuBar menubar = new JMenuBar();
+
+        JMenu fileMenu = new JMenu("File");
+        JMenu helpMenu = new JMenu("Help");
+        fileMenu.setMnemonic(KeyEvent.VK_F);
+        helpMenu.setMnemonic(KeyEvent.VK_H);
+
+        JMenuItem exit = new JMenuItem("Exit");
+        JMenuItem licences = new JMenuItem("Licences");
+        exit.addActionListener((ActionEvent e) -> {
+            System.exit(0);
+        });
+        licences.addActionListener((ActionEvent e) -> {
+            new LicensesWindow();
+        });
+
+        fileMenu.add(exit);
+        helpMenu.add(licences);
+
+        menubar.add(fileMenu);
+        menubar.add(helpMenu);
+
+        setJMenuBar(menubar);
+    }
+
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        System.out.println(e.getSource());
     }
 }
