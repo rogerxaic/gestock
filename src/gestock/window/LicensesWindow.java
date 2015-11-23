@@ -5,6 +5,7 @@
  */
 package gestock.window;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -46,6 +47,11 @@ public class LicensesWindow extends JFrame implements ActionListener {
 
         setContentPane(panel);
 
+        try {
+            Image img = ImageIO.read(getClass().getResource("../resources/gestock-blue.png"));
+            setIconImage(img);
+        } catch (Exception e) {
+        }
         setSize(600, 600);
         setLocationRelativeTo(null);
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);

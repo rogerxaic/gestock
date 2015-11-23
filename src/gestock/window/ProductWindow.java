@@ -9,6 +9,7 @@ import gestock.util.Curl;
 import gestock.util.Tools;
 import org.json.JSONObject;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -180,6 +181,12 @@ public class ProductWindow extends JFrame {
         mainPanel.add(headPanel, BorderLayout.NORTH);
         mainPanel.add(centerPanel, BorderLayout.CENTER);
         mainPanel.add(addPanel, BorderLayout.SOUTH);
+
+        try {
+            Image img = ImageIO.read(getClass().getResource("../resources/gestock-blue.png"));
+            setIconImage(img);
+        } catch (Exception e) {
+        }
 
         setContentPane(mainPanel);
         pack();

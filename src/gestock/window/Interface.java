@@ -12,13 +12,10 @@ public class Interface extends JFrame implements ActionListener {
 
     public Interface(){
         super("gestock");
-        setDefaultCloseOperation(EXIT_ON_CLOSE);
-        setLocationRelativeTo(null);
 
         // The main panel
         JPanel mainPanel = new JPanel(new BorderLayout());
         setContentPane(mainPanel);
-        setSize(500,500);
 
         JPanel menuUp = new JPanel(new FlowLayout());
         mainPanel.add(menuUp, BorderLayout.NORTH);
@@ -40,8 +37,9 @@ public class Interface extends JFrame implements ActionListener {
         bottomButton.setBackground(Color.white);
         bottomButtonPanel.add(bottomButton, BorderLayout.WEST);
         try {
-            Image img = ImageIO.read(getClass().getResource("resources/plus.png"));
-            bottomButton.setIcon(new ImageIcon(img));
+            Image img = ImageIO.read(getClass().getResource("../resources/add64.png"));
+            Image newImg = img.getScaledInstance(48, 48, Image.SCALE_SMOOTH);
+            bottomButton.setIcon(new ImageIcon(newImg));
         } catch (IOException ex) {
         }
         bottomButton.setVerticalTextPosition(SwingConstants.BOTTOM);
@@ -49,6 +47,14 @@ public class Interface extends JFrame implements ActionListener {
 
 
         createMenuBar();
+        try {
+            Image img = ImageIO.read(getClass().getResource("../resources/gestock-blue.png"));
+            setIconImage(img);
+        } catch (Exception e) {
+        }
+        setSize(500, 500);
+        setLocationRelativeTo(null);
+        setDefaultCloseOperation(EXIT_ON_CLOSE);
         setVisible(true);
     }
 
