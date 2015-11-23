@@ -17,7 +17,7 @@ public class Interface extends JFrame implements ActionListener {
         JPanel mainPanel = new JPanel(new BorderLayout());
         setContentPane(mainPanel);
 
-        JPanel menuUp = new JPanel(new FlowLayout());
+        JPanel menuUp = new JPanel(new FlowLayout(FlowLayout.LEFT));
         mainPanel.add(menuUp, BorderLayout.NORTH);
         menuUp.setBackground(Color.white);
 
@@ -44,6 +44,17 @@ public class Interface extends JFrame implements ActionListener {
         }
         bottomButton.setVerticalTextPosition(SwingConstants.BOTTOM);
         bottomButton.setHorizontalTextPosition(SwingConstants.CENTER);
+
+        AbstractButton catalogue = new JButton("Catalogue");
+        menuUp.add(catalogue);
+        try {
+            Image img = ImageIO.read(getClass().getResource("../resources/data110.png"));
+            Image newImg = img.getScaledInstance(48, 48, Image.SCALE_SMOOTH);
+            catalogue.setIcon(new ImageIcon(newImg));
+        } catch (IOException ex) {
+        }
+        catalogue.setVerticalTextPosition(SwingConstants.BOTTOM);
+        catalogue.setHorizontalTextPosition(SwingConstants.CENTER);
 
 
         createMenuBar();
