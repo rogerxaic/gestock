@@ -116,11 +116,11 @@ public class ProductWindow extends JFrame {
         GroupLayout layout = new GroupLayout(nutritionPanel);
         //getContentPane().setLayout(layout);
         nutritionPanel.setLayout(layout);
+        nutritionPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createLineBorder(Color.black), "Informations nutritionnelles"));
         layout.setAutoCreateGaps(true);
         layout.setAutoCreateContainerGaps(true);
 
         layout.setHorizontalGroup(layout.createParallelGroup(LEADING)
-                .addComponent(nutritionFactsLabel)
                 .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(TRAILING)
                                 .addComponent(energieLabel)
@@ -143,7 +143,6 @@ public class ProductWindow extends JFrame {
         );
 
         layout.setVerticalGroup(layout.createSequentialGroup()
-                .addComponent(nutritionFactsLabel)
                 .addGroup(layout.createParallelGroup(BASELINE)
                         .addComponent(energieLabel)
                         .addComponent(energieTextField))
