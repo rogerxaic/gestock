@@ -5,14 +5,13 @@
  */
 package gestock;
 
-import gestock.window.MainWindow;
+import gestock.window.Interface;
 
 import javax.swing.*;
-import java.awt.*;
 
 /**
  *
- * @author rmiretgine
+ * @author rogerxaic
  */
 public class Gestock {
 

@@ -5,12 +5,11 @@
  */
 package gestock.window;
 
-import gestock.util.Tools;
+import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.HashMap;
-import javax.swing.*;
 
 /**
  *
@@ -77,6 +76,8 @@ public class LicensesWindow extends JFrame implements ActionListener {
                 + " LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,\n"
                 + " OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE\n"
                 + " SOFTWARE.");
+        this.licenceText.put("Icons made by Freepik (http://www.freepik.com)\n| (http://www.flaticon.com)",
+                "Licensed under CC BY 3.0 (Creative Commons BY 3.0) \n http://creativecommons.org/licenses/by/3.0/");
     }
 
     private void addText() {

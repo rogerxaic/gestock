@@ -1,15 +1,15 @@
-package gestock;
+package gestock.window;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
-import java.io.*;
-import javax.imageio.*;
+import java.io.IOException;
 
 public class Interface extends JFrame{
 
     public Interface(){
         super("gestock");
-        setDefaultCloseOperation(super.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(EXIT_ON_CLOSE);
 
         // The main panel
         JPanel mainPanel = new JPanel(new BorderLayout());
