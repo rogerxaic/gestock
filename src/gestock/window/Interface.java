@@ -17,25 +17,34 @@ public class Interface extends JFrame implements ActionListener {
         JPanel mainPanel = new JPanel(new BorderLayout());
         setContentPane(mainPanel);
 
+
         JPanel menuUp = new JPanel(new FlowLayout(FlowLayout.LEFT));
         mainPanel.add(menuUp, BorderLayout.NORTH);
         menuUp.setBackground(Color.white);
+
 
         JPanel tables = new JPanel(new FlowLayout());
         mainPanel.add(tables, BorderLayout.CENTER);
         tables.setBackground(Color.white);
 
+
         JPanel bottomButtonPanel = new JPanel(new BorderLayout());
         mainPanel.add(bottomButtonPanel, BorderLayout.SOUTH);
         bottomButtonPanel.setBackground(Color.white);
+
 
         JPanel space = new JPanel();
         bottomButtonPanel.add(space, BorderLayout.SOUTH);
         space.setBackground(Color.white);
 
+
         AbstractButton bottomButton = new JButton("Je viens d'acheter");
         bottomButton.setBackground(Color.white);
         bottomButtonPanel.add(bottomButton, BorderLayout.WEST);
+        bottomButton.setBackground(Color.WHITE);
+        bottomButton.setContentAreaFilled(false);
+        bottomButton.setOpaque(true);
+        bottomButton.setPressedIcon(new ImageIcon("../resources/plus.png"));
         try {
             Image img = ImageIO.read(getClass().getResource("../resources/add64.png"));
             Image newImg = img.getScaledInstance(48, 48, Image.SCALE_SMOOTH);
@@ -45,8 +54,13 @@ public class Interface extends JFrame implements ActionListener {
         bottomButton.setVerticalTextPosition(SwingConstants.BOTTOM);
         bottomButton.setHorizontalTextPosition(SwingConstants.CENTER);
 
+
         AbstractButton catalogue = new JButton("Catalogue");
         menuUp.add(catalogue);
+        catalogue.setBackground(Color.WHITE);
+        catalogue.setContentAreaFilled(false);
+        catalogue.setOpaque(true);
+        catalogue.setPressedIcon(new ImageIcon("../resources/plus.png"));
         try {
             Image img = ImageIO.read(getClass().getResource("../resources/data110.png"));
             Image newImg = img.getScaledInstance(48, 48, Image.SCALE_SMOOTH);
@@ -55,6 +69,36 @@ public class Interface extends JFrame implements ActionListener {
         }
         catalogue.setVerticalTextPosition(SwingConstants.BOTTOM);
         catalogue.setHorizontalTextPosition(SwingConstants.CENTER);
+
+
+        AbstractButton gardeManger = new JButton("Garde-manger");
+        menuUp.add(gardeManger);
+        gardeManger.setBackground(Color.WHITE);
+        gardeManger.setContentAreaFilled(false);
+        gardeManger.setOpaque(true);
+        try {
+            Image img = ImageIO.read(getClass().getResource("../resources/cutlery23.png"));
+            Image newImg = img.getScaledInstance(48, 48, Image.SCALE_SMOOTH);
+            gardeManger.setIcon(new ImageIcon(newImg));
+        } catch (IOException ex) {
+        }
+        gardeManger.setVerticalTextPosition(SwingConstants.BOTTOM);
+        gardeManger.setHorizontalTextPosition(SwingConstants.CENTER);
+
+
+        AbstractButton listeAchats = new JButton("Liste achats");
+        listeAchats.setBackground(Color.WHITE);
+        listeAchats.setContentAreaFilled(false);
+        listeAchats.setOpaque(true);
+        menuUp.add(listeAchats);
+        try {
+            Image img = ImageIO.read(getClass().getResource("../resources/shopping122.png"));
+            Image newImg = img.getScaledInstance(48, 48, Image.SCALE_SMOOTH);
+            listeAchats.setIcon(new ImageIcon(newImg));
+        } catch (IOException ex) {
+        }
+        listeAchats.setVerticalTextPosition(SwingConstants.BOTTOM);
+        listeAchats.setHorizontalTextPosition(SwingConstants.CENTER);
 
 
         createMenuBar();
