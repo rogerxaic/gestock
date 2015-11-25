@@ -18,7 +18,8 @@ public class Interface extends JFrame implements ActionListener {
         setContentPane(mainPanel);
 
 
-        JPanel menuUp = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        JPanel menuUp = new JPanel();
+        menuUp.setLayout(new BoxLayout(menuUp, BoxLayout.X_AXIS));
         mainPanel.add(menuUp, BorderLayout.NORTH);
         menuUp.setBackground(Color.white);
 
@@ -44,7 +45,7 @@ public class Interface extends JFrame implements ActionListener {
         bottomButton.setBackground(Color.WHITE);
         bottomButton.setContentAreaFilled(false);
         bottomButton.setOpaque(true);
-        bottomButton.setPressedIcon(new ImageIcon("../resources/plus.png"));
+        bottomButton.setPressedIcon(new ImageIcon());
         try {
             Image img = ImageIO.read(getClass().getResource("../resources/add64.png"));
             Image newImg = img.getScaledInstance(48, 48, Image.SCALE_SMOOTH);
@@ -60,7 +61,7 @@ public class Interface extends JFrame implements ActionListener {
         catalogue.setBackground(Color.WHITE);
         catalogue.setContentAreaFilled(false);
         catalogue.setOpaque(true);
-        catalogue.setPressedIcon(new ImageIcon("../resources/plus.png"));
+        catalogue.setPressedIcon(new ImageIcon());
         try {
             Image img = ImageIO.read(getClass().getResource("../resources/data110.png"));
             Image newImg = img.getScaledInstance(48, 48, Image.SCALE_SMOOTH);
@@ -76,6 +77,7 @@ public class Interface extends JFrame implements ActionListener {
         gardeManger.setBackground(Color.WHITE);
         gardeManger.setContentAreaFilled(false);
         gardeManger.setOpaque(true);
+        gardeManger.setPressedIcon(new ImageIcon());
         try {
             Image img = ImageIO.read(getClass().getResource("../resources/cutlery23.png"));
             Image newImg = img.getScaledInstance(48, 48, Image.SCALE_SMOOTH);
@@ -90,6 +92,7 @@ public class Interface extends JFrame implements ActionListener {
         listeAchats.setBackground(Color.WHITE);
         listeAchats.setContentAreaFilled(false);
         listeAchats.setOpaque(true);
+        listeAchats.setPressedIcon(new ImageIcon());
         menuUp.add(listeAchats);
         try {
             Image img = ImageIO.read(getClass().getResource("../resources/shopping122.png"));
@@ -99,6 +102,21 @@ public class Interface extends JFrame implements ActionListener {
         }
         listeAchats.setVerticalTextPosition(SwingConstants.BOTTOM);
         listeAchats.setHorizontalTextPosition(SwingConstants.CENTER);
+
+        AbstractButton chercher = new JButton("Chercher");
+        chercher.setBackground(Color.WHITE);
+        chercher.setContentAreaFilled(false);
+        chercher.setOpaque(true);
+        chercher.setPressedIcon(new ImageIcon());
+        menuUp.add(chercher);
+        try {
+            Image img = ImageIO.read(getClass().getResource("../resources/search100.png"));
+            Image newImg = img.getScaledInstance(48, 48, Image.SCALE_SMOOTH);
+            chercher.setIcon(new ImageIcon(newImg));
+        } catch (IOException ex) {
+        }
+        chercher.setVerticalTextPosition(SwingConstants.BOTTOM);
+        chercher.setHorizontalTextPosition(SwingConstants.CENTER);
 
 
         createMenuBar();
