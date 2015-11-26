@@ -143,7 +143,6 @@ public class Interface extends JFrame implements ActionListener {
         JLabel user = new JLabel("User");
         log.add(user);
 
-
         AbstractButton logout = new JButton("Logout");
         logout.setBackground(Color.WHITE);
         logout.setContentAreaFilled(false);
