@@ -118,6 +118,49 @@ public class Interface extends JFrame implements ActionListener {
         chercher.setVerticalTextPosition(SwingConstants.BOTTOM);
         chercher.setHorizontalTextPosition(SwingConstants.CENTER);
 
+        menuUp.add(Box.createHorizontalGlue());
+
+        AbstractButton parametres = new JButton("Parametres");
+        parametres.setBackground(Color.WHITE);
+        parametres.setContentAreaFilled(false);
+        parametres.setOpaque(true);
+        parametres.setPressedIcon(new ImageIcon());
+        menuUp.add(parametres);
+        try {
+            Image img = ImageIO.read(getClass().getResource("../resources/network60.png"));
+            Image newImg = img.getScaledInstance(48, 48, Image.SCALE_SMOOTH);
+            parametres.setIcon(new ImageIcon(newImg));
+        } catch (IOException ex) {
+        }
+        parametres.setVerticalTextPosition(SwingConstants.BOTTOM);
+        parametres.setHorizontalTextPosition(SwingConstants.CENTER);
+
+        JPanel log = new JPanel();
+        log.setLayout(new BoxLayout(log, BoxLayout.Y_AXIS));
+        menuUp.add(log);
+        log.setBackground(Color.white);
+
+        JLabel user = new JLabel("User");
+        log.add(user);
+
+
+        AbstractButton logout = new JButton("Logout");
+        logout.setBackground(Color.WHITE);
+        logout.setContentAreaFilled(false);
+        logout.setOpaque(true);
+        logout.setPressedIcon(new ImageIcon());
+        logout.setBorderPainted(true);
+        log.add(logout);
+
+        try {
+            Image img = ImageIO.read(getClass().getResource("../resources/network60.png"));
+            Image newImg = img.getScaledInstance(48, 48, Image.SCALE_SMOOTH);
+            logout.setIcon(new ImageIcon(newImg));
+        } catch (IOException ex) {
+        }
+        logout.setVerticalTextPosition(SwingConstants.CENTER);
+        logout.setHorizontalTextPosition(SwingConstants.RIGHT);
+
 
         createMenuBar();
         try {
@@ -125,7 +168,7 @@ public class Interface extends JFrame implements ActionListener {
             setIconImage(img);
         } catch (Exception e) {
         }
-        setSize(500, 500);
+        setSize(700, 700);
         setLocationRelativeTo(null);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setVisible(true);
