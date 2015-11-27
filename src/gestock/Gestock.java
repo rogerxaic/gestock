@@ -6,6 +6,7 @@
 package gestock;
 
 import gestock.window.Interface;
+import gestock.window.ProductWindow;
 
 import javax.swing.*;
 import java.awt.*;

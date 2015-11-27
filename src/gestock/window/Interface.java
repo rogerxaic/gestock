@@ -24,7 +24,8 @@ public class Interface extends JFrame implements ActionListener {
         menuUp.setBackground(Color.white);
 
 
-        JPanel tables = new JPanel(new FlowLayout());
+        JPanel tables = new JPanel();
+        tables.setLayout(new BoxLayout(tables, BoxLayout.X_AXIS));
         mainPanel.add(tables, BorderLayout.CENTER);
         tables.setBackground(Color.white);
 
@@ -140,8 +141,12 @@ public class Interface extends JFrame implements ActionListener {
         menuUp.add(log);
         log.setBackground(Color.white);
 
+
         JLabel user = new JLabel("User");
+        user.setBorder(javax.swing.BorderFactory.createEmptyBorder(0,30,5,0));
         log.add(user);
+        user.setAlignmentX(user.CENTER);
+
 
         AbstractButton logout = new JButton("Logout");
         logout.setBackground(Color.WHITE);
@@ -159,6 +164,8 @@ public class Interface extends JFrame implements ActionListener {
         }
         logout.setVerticalTextPosition(SwingConstants.CENTER);
         logout.setHorizontalTextPosition(SwingConstants.RIGHT);
+
+        JTable perim = new JTable();
 
 
         createMenuBar();
