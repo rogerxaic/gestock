@@ -1,5 +1,8 @@
 package gestock.window;
 
+import gestock.Gestock;
+import gestock.User;
+
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
@@ -10,8 +13,12 @@ import java.io.IOException;
 
 public class Interface extends JFrame implements ActionListener {
 
-    public Interface(){
+    private User user;
+
+    public Interface(Gestock app) {
         super("gestock");
+
+        this.user = app.getUser();
 
         // The main panel
         JPanel mainPanel = new JPanel(new BorderLayout());
@@ -52,6 +59,7 @@ public class Interface extends JFrame implements ActionListener {
             Image newImg = img.getScaledInstance(48, 48, Image.SCALE_SMOOTH);
             bottomButton.setIcon(new ImageIcon(newImg));
         } catch (IOException ex) {
+            ex.printStackTrace();
         }
         bottomButton.setVerticalTextPosition(SwingConstants.BOTTOM);
         bottomButton.setHorizontalTextPosition(SwingConstants.CENTER);
@@ -68,6 +76,7 @@ public class Interface extends JFrame implements ActionListener {
             Image newImg = img.getScaledInstance(48, 48, Image.SCALE_SMOOTH);
             catalogue.setIcon(new ImageIcon(newImg));
         } catch (IOException ex) {
+            ex.printStackTrace();
         }
         catalogue.setVerticalTextPosition(SwingConstants.BOTTOM);
         catalogue.setHorizontalTextPosition(SwingConstants.CENTER);
@@ -84,6 +93,7 @@ public class Interface extends JFrame implements ActionListener {
             Image newImg = img.getScaledInstance(48, 48, Image.SCALE_SMOOTH);
             gardeManger.setIcon(new ImageIcon(newImg));
         } catch (IOException ex) {
+            ex.printStackTrace();
         }
         gardeManger.setVerticalTextPosition(SwingConstants.BOTTOM);
         gardeManger.setHorizontalTextPosition(SwingConstants.CENTER);
@@ -100,6 +110,7 @@ public class Interface extends JFrame implements ActionListener {
             Image newImg = img.getScaledInstance(48, 48, Image.SCALE_SMOOTH);
             listeAchats.setIcon(new ImageIcon(newImg));
         } catch (IOException ex) {
+            ex.printStackTrace();
         }
         listeAchats.setVerticalTextPosition(SwingConstants.BOTTOM);
         listeAchats.setHorizontalTextPosition(SwingConstants.CENTER);
@@ -115,6 +126,7 @@ public class Interface extends JFrame implements ActionListener {
             Image newImg = img.getScaledInstance(48, 48, Image.SCALE_SMOOTH);
             chercher.setIcon(new ImageIcon(newImg));
         } catch (IOException ex) {
+            ex.printStackTrace();
         }
         chercher.setVerticalTextPosition(SwingConstants.BOTTOM);
         chercher.setHorizontalTextPosition(SwingConstants.CENTER);
@@ -132,6 +144,7 @@ public class Interface extends JFrame implements ActionListener {
             Image newImg = img.getScaledInstance(48, 48, Image.SCALE_SMOOTH);
             parametres.setIcon(new ImageIcon(newImg));
         } catch (IOException ex) {
+            ex.printStackTrace();
         }
         parametres.setVerticalTextPosition(SwingConstants.BOTTOM);
         parametres.setHorizontalTextPosition(SwingConstants.CENTER);
@@ -142,10 +155,10 @@ public class Interface extends JFrame implements ActionListener {
         log.setBackground(Color.white);
 
 
-        JLabel user = new JLabel("User");
-        user.setBorder(javax.swing.BorderFactory.createEmptyBorder(0,30,5,0));
-        log.add(user);
-        user.setAlignmentX(user.CENTER);
+        JLabel userName = new JLabel(user.getName());
+        userName.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 30, 5, 0));
+        log.add(userName);
+        userName.setAlignmentX(SwingConstants.CENTER);
 
 
         AbstractButton logout = new JButton("Logout");
@@ -157,10 +170,11 @@ public class Interface extends JFrame implements ActionListener {
         log.add(logout);
 
         try {
-            Image img = ImageIO.read(getClass().getResource("../resources/network60.png"));
-            Image newImg = img.getScaledInstance(48, 48, Image.SCALE_SMOOTH);
+            Image img = ImageIO.read(getClass().getResource("../resources/logout20.png"));
+            Image newImg = img.getScaledInstance(16, 16, Image.SCALE_SMOOTH);
             logout.setIcon(new ImageIcon(newImg));
         } catch (IOException ex) {
+            ex.printStackTrace();
         }
         logout.setVerticalTextPosition(SwingConstants.CENTER);
         logout.setHorizontalTextPosition(SwingConstants.RIGHT);
@@ -173,10 +187,11 @@ public class Interface extends JFrame implements ActionListener {
             Image img = ImageIO.read(getClass().getResource("../resources/gestock-blue.png"));
             setIconImage(img);
         } catch (Exception e) {
+            e.printStackTrace();
         }
         setSize(700, 700);
         setLocationRelativeTo(null);
-        setDefaultCloseOperation(EXIT_ON_CLOSE);
+        setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         setVisible(true);
     }
 
@@ -194,9 +209,7 @@ public class Interface extends JFrame implements ActionListener {
         exit.addActionListener((ActionEvent e) -> {
             System.exit(0);
         });
-        licences.addActionListener((ActionEvent e) -> {
-            new LicensesWindow();
-        });
+        licences.addActionListener((ActionEvent e) -> new LicensesWindow());
 
         fileMenu.add(exit);
         helpMenu.add(licences);
