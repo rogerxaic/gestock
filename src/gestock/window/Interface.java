@@ -5,6 +5,7 @@ import gestock.User;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
+import javax.swing.table.JTableHeader;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.IOException;
@@ -17,6 +18,7 @@ public class Interface extends JFrame implements ActionListener {
 
     public Interface(Gestock app) {
         super("gestock");
+        setSize(700, 700);
 
         this.user = app.getUser();
 
@@ -183,8 +185,19 @@ public class Interface extends JFrame implements ActionListener {
         logout.setVerticalTextPosition(SwingConstants.CENTER);
         logout.setHorizontalTextPosition(SwingConstants.RIGHT);
 
-        JTable perim = new JTable();
+        tables.add(Box.createRigidArea(new Dimension((int)(Toolkit.getDefaultToolkit().getScreenSize().getWidth()/20),0)));
 
+        JTable perim = new JTable(2,3);
+        tables.add(perim);
+        perim.setValueAt(this.getBounds().getWidth(),1,1);
+        perim.setShowHorizontalLines(false);
+
+        tables.add(Box.createRigidArea(new Dimension((int)(Toolkit.getDefaultToolkit().getScreenSize().getWidth()/20),0)));
+
+        JTable peu = new JTable(2,3);
+        tables.add(peu);
+
+        tables.add(Box.createRigidArea(new Dimension((int)(Toolkit.getDefaultToolkit().getScreenSize().getWidth()/20),0)));
 
         createMenuBar();
         try {
@@ -193,7 +206,7 @@ public class Interface extends JFrame implements ActionListener {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        setSize(700, 700);
+
         setLocationRelativeTo(null);
         addWindowListener(new WindowAdapter() {
 
