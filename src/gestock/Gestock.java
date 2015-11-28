@@ -10,9 +10,7 @@ import gestock.window.Interface;
 
 import javax.swing.*;
 import java.awt.*;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
+import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Arrays;
@@ -27,14 +25,15 @@ public class Gestock {
 
     public User mainUser;
     protected Properties prop;
+    protected String fs = System.getProperty("file.separator");
+    protected String filepath = System.getProperty("user.home") + fs
+            + (Tools.isWindows() ? "AppData" + fs + "Roaming" + fs + "gestock" : ".config" + fs + "gestock");
+    protected String filename = "config.properties";
 
     public Gestock() {
-        String fs = System.getProperty("file.separator");
-        String filepath = System.getProperty("user.home") + fs;
-        filepath += Tools.isWindows() ? "AppData" + fs + "Roaming" + fs + "gestock" : ".config" + fs + "gestock";
-        String filename = "config.properties";
 
-        if (!init(filepath, fs, filename)) {
+
+        if (!init()) {
             //gotta create it
             List<String> props = Arrays.asList("userName:" + System.getProperty("user.name"));
             try {
@@ -75,12 +74,9 @@ public class Gestock {
      * Creates the filepath directory if it does not exist.
      * Checks if there's the properties file inside the directory.
      *
-     * @param filepath Where the properties file should be located
-     * @param fs       System file separator
-     * @param filename Properties file
      * @return true if the file exists, else false.
      */
-    private boolean init(String filepath, String fs, String filename) {
+    private boolean init() {
         File f;
         boolean bool = false;
         try {
@@ -120,6 +116,26 @@ public class Gestock {
             }
         }
         return prop;
+    }
+
+    public void saveProperties() {
+        OutputStream outputStream = null;
+        try {
+            outputStream = new FileOutputStream(filepath + fs + filename);
+            prop.store(outputStream, null);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            if (outputStream != null) {
+                try {
+                    outputStream.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
     }
 
     public User getUser() {

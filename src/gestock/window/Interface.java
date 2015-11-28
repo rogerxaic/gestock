@@ -6,14 +6,14 @@ import gestock.User;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.KeyEvent;
+import java.awt.event.*;
 import java.io.IOException;
 
 public class Interface extends JFrame implements ActionListener {
 
     private User user;
+
+    private JLabel userName;
 
     public Interface(Gestock app) {
         super("gestock");
@@ -148,6 +148,10 @@ public class Interface extends JFrame implements ActionListener {
         }
         parametres.setVerticalTextPosition(SwingConstants.BOTTOM);
         parametres.setHorizontalTextPosition(SwingConstants.CENTER);
+        parametres.addActionListener((ActionEvent ae) -> {
+            new SettingsWindow(this, user);
+            setEnabled(false);
+        });
 
         JPanel log = new JPanel();
         log.setLayout(new BoxLayout(log, BoxLayout.Y_AXIS));
@@ -155,7 +159,7 @@ public class Interface extends JFrame implements ActionListener {
         log.setBackground(Color.white);
 
 
-        JLabel userName = new JLabel(user.getName());
+        userName = new JLabel(user.getName());
         userName.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 30, 5, 0));
         log.add(userName);
         userName.setAlignmentX(SwingConstants.CENTER);
@@ -191,7 +195,14 @@ public class Interface extends JFrame implements ActionListener {
         }
         setSize(700, 700);
         setLocationRelativeTo(null);
-        setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+        addWindowListener(new WindowAdapter() {
+
+            @Override
+            public void windowClosing(WindowEvent e) {
+                app.saveProperties();
+                System.exit(0);
+            }
+        });
         setVisible(true);
     }
 
@@ -218,6 +229,10 @@ public class Interface extends JFrame implements ActionListener {
         menubar.add(helpMenu);
 
         setJMenuBar(menubar);
+    }
+
+    public void refresh() {
+        this.userName.setText(user.getName());
     }
 
     @Override

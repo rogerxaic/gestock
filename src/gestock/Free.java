@@ -21,4 +21,12 @@ public class Free {
     public void sendMessage(String message) {
         
     }
+
+    public String getUser() {
+        return username;
+    }
+
+    public String getSecret() {
+        return secret;
+    }
 }

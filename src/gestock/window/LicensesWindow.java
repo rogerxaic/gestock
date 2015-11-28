@@ -51,6 +51,7 @@ public class LicensesWindow extends JFrame implements ActionListener {
             Image img = ImageIO.read(getClass().getResource("../resources/gestock-blue.png"));
             setIconImage(img);
         } catch (Exception e) {
+            e.printStackTrace();
         }
         setSize(600, 600);
         setLocationRelativeTo(null);
