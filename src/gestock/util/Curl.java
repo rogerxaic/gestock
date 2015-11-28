@@ -21,7 +21,7 @@ public class Curl {
         this.url = url;
         if (this.url.startsWith("http://")) {
             this.isSecure = false;
-        } else if (this.url.startsWith("http://")) {
+        } else if (this.url.startsWith("https://")) {
             this.isSecure = true;
         } else {
             throw new IllegalArgumentException("String has to start /w http or https");
