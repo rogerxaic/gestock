@@ -5,10 +5,10 @@ import gestock.User;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
-import javax.swing.table.JTableHeader;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.IOException;
+import javax.swing.table.DefaultTableModel;
 
 public class Interface extends JFrame implements ActionListener {
 
@@ -187,15 +187,24 @@ public class Interface extends JFrame implements ActionListener {
 
         tables.add(Box.createRigidArea(new Dimension((int)(Toolkit.getDefaultToolkit().getScreenSize().getWidth()/20),0)));
 
-        JTable perim = new JTable(2,3);
+        MyRenderer renderer = new MyRenderer();
+
+        JTable perim = new JTable(8,3);
         tables.add(perim);
+        perim.setEnabled(false);
         perim.setValueAt(this.getBounds().getWidth(),1,1);
-        perim.setShowHorizontalLines(false);
+        perim.setShowHorizontalLines(true);
+        perim.setGridColor(Color.pink);
+        perim.setDefaultRenderer(Object.class, renderer);
+
+
 
         tables.add(Box.createRigidArea(new Dimension((int)(Toolkit.getDefaultToolkit().getScreenSize().getWidth()/20),0)));
 
         JTable peu = new JTable(2,3);
         tables.add(peu);
+        peu.setEnabled(false);
+        peu.setShowHorizontalLines(false);
 
         tables.add(Box.createRigidArea(new Dimension((int)(Toolkit.getDefaultToolkit().getScreenSize().getWidth()/20),0)));
 
