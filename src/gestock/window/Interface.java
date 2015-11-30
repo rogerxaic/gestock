@@ -198,23 +198,22 @@ public class Interface extends JFrame implements ActionListener {
 
         tables.add(Box.createRigidArea(new Dimension((int)(Toolkit.getDefaultToolkit().getScreenSize().getWidth()/20),0)));
 
-        MyRenderer renderer = new MyRenderer();
-       /* Vector<String> columnName = new Vector<String>();
+     MyRenderer renderer = new MyRenderer();
+      /*     Vector<String> columnName = new Vector<String>();
         columnName.addElement("Nom");
         columnName.addElement("Qte");
         columnName.addElement("Date de perimation");
-        LinkedList<String> nom = new LinkedList<String>();
-        LinkedList<String> qte = new LinkedList<String>();
-        LinkedList<Calendar> dateDePerimation = new LinkedList<Calendar>();
+        Vector<String> nom = new Vector<>();
+        Vector<String> qte = new Vector<>();
+        Vector<Calendar> dateDePerimation = new Vector<>();
         Vector data = new Vector();
         data.addElement(nom);
         data.addElement(qte);
         data.addElement(dateDePerimation);
 */
 
-        JTable perim = new JTable(8,3);
-        perim.setTableHeader(new JTableHeader());
-        tables.add(perim);
+        JTable perim = new JTable(20,3);
+        tables.add(new JScrollPane(perim));
         perim.setEnabled(false);
         perim.setValueAt(this.getBounds().getWidth(),1,1);
         perim.setGridColor(Color.black);
@@ -222,7 +221,6 @@ public class Interface extends JFrame implements ActionListener {
         perim.setShowHorizontalLines(false);
         perim.setRowHeight(25);
         perim.getColumnModel().getColumn(1).setPreferredWidth(30);
-
 
         tables.add(Box.createRigidArea(new Dimension((int)(Toolkit.getDefaultToolkit().getScreenSize().getWidth()/20),0)));
 
