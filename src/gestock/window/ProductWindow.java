@@ -30,8 +30,16 @@ public class ProductWindow extends JFrame {
     private JPanel nutritionPanel;
     private JButton lookup;
     private JTextField codeName;
+    //*************** General product info
+    private JLabel nameLabel;
+    private JLabel descriptionLabel;
+    private JLabel tracesLabel;
+    private JLabel brandLabel;
+    private JTextField nameField;
+    private JTextArea descriptionArea;
+    private JTextField tracesField;
+    private JTextField brandField;
     //*************** Nutrition facts
-    private JLabel nutritionFactsLabel = new JLabel("Informations Nutritionnelles ");
     private JLabel energieLabel;
     private JLabel grassesLabel;
     private JLabel acidesLabel;
@@ -52,7 +60,7 @@ public class ProductWindow extends JFrame {
 
     public ProductWindow() {
         super("Gestock - Product");
-        setSize(600, 600);
+        setSize(400, 400);
         setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 
         codeName = new JTextField(20);
@@ -68,12 +76,23 @@ public class ProductWindow extends JFrame {
                     jsonProduct = httpsReturn.getResponse();
                     JSONObject productReturn = new JSONObject(jsonProduct);
                     if (productReturn.get("status_verbose").equals("product found")) {
-                        System.out.println(productReturn);
+                        JSONObject productArray = (JSONObject) productReturn.get("product");
+                        nameField.setText((String) productArray.get("product_name"));
+                        brandField.setText((String) productArray.get("brands"));
+                        JSONObject nutriments = (JSONObject) productArray.get("nutriments");
+                        energieTextField.setText((String) nutriments.get("energy"));
+                        grassesTextField.setText((String) nutriments.get("fat"));
+                        acidesTextField.setText((String) nutriments.get("saturated-fat"));
+                        glucidesTextField.setText((String) nutriments.get("carbohydrates"));
+                        sucresTextField.setText((String) nutriments.get("sugars"));
+                        fibresTextField.setText((String) nutriments.get("fiber"));
+                        proteinesTextField.setText((String) nutriments.get("proteins"));
+                        saltTextField.setText((String) nutriments.get("salt"));
                     } else {
                         throw new Exception("Product not found");
                     }
                 } catch (Exception e) {
-                    System.out.println(e);
+                    e.printStackTrace();
                 }
 
 
@@ -90,9 +109,7 @@ public class ProductWindow extends JFrame {
         headPanel.add(codeName);
         headPanel.add(lookup);
 
-        centerPanel = new JPanel(new BorderLayout());
-        infoPanel = new JPanel(new GridLayout(1, 2));
-        generalInfoPanel = new JPanel(new BorderLayout());
+
 
         {
             energieLabel = new JLabel("Energie");
@@ -116,7 +133,8 @@ public class ProductWindow extends JFrame {
         GroupLayout layout = new GroupLayout(nutritionPanel);
         //getContentPane().setLayout(layout);
         nutritionPanel.setLayout(layout);
-        nutritionPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createLineBorder(Color.black), "Informations nutritionnelles"));
+        nutritionPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createLineBorder(Color.black),
+                "Informations nutritionnelles - (pour 100 g/ 100 ml)"));
         layout.setAutoCreateGaps(true);
         layout.setAutoCreateContainerGaps(true);
 
@@ -169,8 +187,57 @@ public class ProductWindow extends JFrame {
                         .addComponent(saltTextField))
         );
 
+        {
+            nameLabel = new JLabel("Name");
+            descriptionLabel = new JLabel("Description");
+            tracesLabel = new JLabel("Traces");
+            brandLabel = new JLabel("Brand");
+            nameField = new JTextField(10);
+            descriptionArea = new JTextArea();
+            tracesField = new JTextField(10);
+            brandField = new JTextField(10);
+        }
+        generalInfoPanel = new JPanel();
+        GroupLayout generalLayout = new GroupLayout(generalInfoPanel);
+        //getContentPane().setLayout(layout);
+        generalInfoPanel.setLayout(generalLayout);
+        //generalInfoPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createLineBorder(Color.black), "Informations nutritionnelles"));
+        generalLayout.setAutoCreateGaps(true);
+        generalLayout.setAutoCreateContainerGaps(true);
+
+        generalLayout.setHorizontalGroup(generalLayout.createParallelGroup(LEADING)
+                .addGroup(generalLayout.createSequentialGroup()
+                        .addGroup(generalLayout.createParallelGroup(TRAILING)
+                                .addComponent(nameLabel)
+                                .addComponent(descriptionLabel)
+                                .addComponent(tracesLabel)
+                                .addComponent(brandLabel))
+                        .addGroup(generalLayout.createParallelGroup(LEADING)
+                                .addComponent(nameField)
+                                .addComponent(descriptionArea)
+                                .addComponent(tracesField)
+                                .addComponent(brandField)))
+        );
+
+        generalLayout.setVerticalGroup(generalLayout.createSequentialGroup()
+                .addGroup(generalLayout.createParallelGroup(BASELINE)
+                        .addComponent(nameLabel)
+                        .addComponent(nameField))
+                .addGroup(generalLayout.createParallelGroup(BASELINE)
+                        .addComponent(descriptionLabel)
+                        .addComponent(descriptionArea))
+                .addGroup(generalLayout.createParallelGroup(BASELINE)
+                        .addComponent(tracesLabel)
+                        .addComponent(tracesField))
+                .addGroup(generalLayout.createParallelGroup(BASELINE)
+                        .addComponent(brandLabel)
+                        .addComponent(brandField))
+        );
+
+        infoPanel = new JPanel(new GridLayout(1, 2));
         infoPanel.add(generalInfoPanel);
         infoPanel.add(nutritionPanel);
+        centerPanel = new JPanel(new BorderLayout());
         centerPanel.add(infoPanel, BorderLayout.CENTER);
 
         addPanel = new JPanel(new FlowLayout());
@@ -185,10 +252,12 @@ public class ProductWindow extends JFrame {
             Image img = ImageIO.read(getClass().getResource("../resources/gestock-blue.png"));
             setIconImage(img);
         } catch (Exception e) {
+            e.printStackTrace();
         }
 
         setContentPane(mainPanel);
         pack();
+        setLocationRelativeTo(null);
         setVisible(true);
     }
 
