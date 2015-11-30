@@ -13,7 +13,7 @@ public class MyRenderer extends DefaultTableCellRenderer {
         if (! table.isRowSelected(row))
         {
             if(row % 2 == 0 )
-                c.setBackground(Color.gray);
+                c.setBackground(new Color(230,230,230));
             else
                 c.setBackground(table.getBackground());
         }

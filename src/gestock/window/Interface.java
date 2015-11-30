@@ -193,18 +193,23 @@ public class Interface extends JFrame implements ActionListener {
         tables.add(perim);
         perim.setEnabled(false);
         perim.setValueAt(this.getBounds().getWidth(),1,1);
-        perim.setShowHorizontalLines(true);
-        perim.setGridColor(Color.pink);
+        perim.setGridColor(Color.black);
         perim.setDefaultRenderer(Object.class, renderer);
-
+        perim.setShowHorizontalLines(false);
+        perim.setRowHeight(25);
+        perim.getColumnModel().getColumn(1).setPreferredWidth(30);
 
 
         tables.add(Box.createRigidArea(new Dimension((int)(Toolkit.getDefaultToolkit().getScreenSize().getWidth()/20),0)));
 
-        JTable peu = new JTable(2,3);
+        JTable peu = new JTable(8,3);
         tables.add(peu);
         peu.setEnabled(false);
         peu.setShowHorizontalLines(false);
+        peu.setGridColor(Color.black);
+        peu.setDefaultRenderer(Object.class, renderer);
+        peu.setRowHeight(25);
+        peu.getColumnModel().getColumn(1).setPreferredWidth(30);
 
         tables.add(Box.createRigidArea(new Dimension((int)(Toolkit.getDefaultToolkit().getScreenSize().getWidth()/20),0)));
 
