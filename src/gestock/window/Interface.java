@@ -8,7 +8,11 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.IOException;
+import java.util.Calendar;
+import java.util.LinkedList;
+import java.util.Vector;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.JTableHeader;
 
 public class Interface extends JFrame implements ActionListener {
 
@@ -55,6 +59,7 @@ public class Interface extends JFrame implements ActionListener {
         bottomButton.setBackground(Color.WHITE);
         bottomButton.setContentAreaFilled(false);
         bottomButton.setOpaque(true);
+        bottomButton.setFont(new Font("Arial",Font.BOLD,12));
         bottomButton.setPressedIcon(new ImageIcon());
         try {
             Image img = ImageIO.read(getClass().getResource("../resources/add64.png"));
@@ -72,6 +77,7 @@ public class Interface extends JFrame implements ActionListener {
         catalogue.setBackground(Color.WHITE);
         catalogue.setContentAreaFilled(false);
         catalogue.setOpaque(true);
+        catalogue.setFont(new Font("Arial",Font.BOLD,12));
         catalogue.setPressedIcon(new ImageIcon());
         try {
             Image img = ImageIO.read(getClass().getResource("../resources/data110.png"));
@@ -89,6 +95,7 @@ public class Interface extends JFrame implements ActionListener {
         gardeManger.setBackground(Color.WHITE);
         gardeManger.setContentAreaFilled(false);
         gardeManger.setOpaque(true);
+        gardeManger.setFont(new Font("Arial",Font.BOLD,12));
         gardeManger.setPressedIcon(new ImageIcon());
         try {
             Image img = ImageIO.read(getClass().getResource("../resources/cutlery23.png"));
@@ -105,6 +112,7 @@ public class Interface extends JFrame implements ActionListener {
         listeAchats.setBackground(Color.WHITE);
         listeAchats.setContentAreaFilled(false);
         listeAchats.setOpaque(true);
+        listeAchats.setFont(new Font("Arial",Font.BOLD,12));
         listeAchats.setPressedIcon(new ImageIcon());
         menuUp.add(listeAchats);
         try {
@@ -121,6 +129,7 @@ public class Interface extends JFrame implements ActionListener {
         chercher.setBackground(Color.WHITE);
         chercher.setContentAreaFilled(false);
         chercher.setOpaque(true);
+        chercher.setFont(new Font("Arial",Font.BOLD,12));
         chercher.setPressedIcon(new ImageIcon());
         menuUp.add(chercher);
         try {
@@ -139,6 +148,7 @@ public class Interface extends JFrame implements ActionListener {
         parametres.setBackground(Color.WHITE);
         parametres.setContentAreaFilled(false);
         parametres.setOpaque(true);
+        parametres.setFont(new Font("Arial",Font.BOLD,12));
         parametres.setPressedIcon(new ImageIcon());
         menuUp.add(parametres);
         try {
@@ -162,9 +172,10 @@ public class Interface extends JFrame implements ActionListener {
 
 
         userName = new JLabel(user.getName());
-        userName.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 30, 5, 0));
+        userName.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 20, 5, 0));
         log.add(userName);
         userName.setAlignmentX(SwingConstants.CENTER);
+        userName.setFont(new Font("Arial",Font.ITALIC,14));
 
 
         AbstractButton logout = new JButton("Logout");
@@ -188,8 +199,21 @@ public class Interface extends JFrame implements ActionListener {
         tables.add(Box.createRigidArea(new Dimension((int)(Toolkit.getDefaultToolkit().getScreenSize().getWidth()/20),0)));
 
         MyRenderer renderer = new MyRenderer();
+       /* Vector<String> columnName = new Vector<String>();
+        columnName.addElement("Nom");
+        columnName.addElement("Qte");
+        columnName.addElement("Date de perimation");
+        LinkedList<String> nom = new LinkedList<String>();
+        LinkedList<String> qte = new LinkedList<String>();
+        LinkedList<Calendar> dateDePerimation = new LinkedList<Calendar>();
+        Vector data = new Vector();
+        data.addElement(nom);
+        data.addElement(qte);
+        data.addElement(dateDePerimation);
+*/
 
         JTable perim = new JTable(8,3);
+        perim.setTableHeader(new JTableHeader());
         tables.add(perim);
         perim.setEnabled(false);
         perim.setValueAt(this.getBounds().getWidth(),1,1);
