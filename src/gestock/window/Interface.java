@@ -22,14 +22,14 @@ public class Interface extends JFrame implements ActionListener {
 
     public Interface(Gestock app) {
         super("gestock");
-        setSize(700, 700);
+        setSize(800, 800);
 
         this.user = app.getUser();
 
         // The main panel
-        JPanel mainPanel = new JPanel(new BorderLayout());
+        JPanel mainPanel = new JPanel(new BorderLayout(5,30));
         setContentPane(mainPanel);
-
+        mainPanel.setBackground(Color.WHITE);
 
         JPanel menuUp = new JPanel();
         menuUp.setLayout(new BoxLayout(menuUp, BoxLayout.X_AXIS));
@@ -196,7 +196,7 @@ public class Interface extends JFrame implements ActionListener {
         logout.setVerticalTextPosition(SwingConstants.CENTER);
         logout.setHorizontalTextPosition(SwingConstants.RIGHT);
 
-        tables.add(Box.createRigidArea(new Dimension((int)(Toolkit.getDefaultToolkit().getScreenSize().getWidth()/20),0)));
+        tables.add(Box.createRigidArea(new Dimension((int)(Toolkit.getDefaultToolkit().getScreenSize().getWidth()/30),0)));
 
      MyRenderer renderer = new MyRenderer();
       /*     Vector<String> columnName = new Vector<String>();
@@ -211,8 +211,9 @@ public class Interface extends JFrame implements ActionListener {
         data.addElement(qte);
         data.addElement(dateDePerimation);
 */
-
-        JTable perim = new JTable(20,3);
+        String[] columnNames1 = {"Nom", "Qte", "Date de Perimation"};
+        TableModel model1 = new TableModel(columnNames1);
+        JTable perim = new JTable(model1);
         tables.add(new JScrollPane(perim));
         perim.setEnabled(false);
         perim.setValueAt(this.getBounds().getWidth(),1,1);
@@ -222,10 +223,13 @@ public class Interface extends JFrame implements ActionListener {
         perim.setRowHeight(25);
         perim.getColumnModel().getColumn(1).setPreferredWidth(30);
 
-        tables.add(Box.createRigidArea(new Dimension((int)(Toolkit.getDefaultToolkit().getScreenSize().getWidth()/20),0)));
+        tables.add(Box.createRigidArea(new Dimension((int)(Toolkit.getDefaultToolkit().getScreenSize().getWidth()/30),0)));
 
-        JTable peu = new JTable(8,3);
-        tables.add(peu);
+
+        String[] columnNames2 = {"Nom", "Qte", "Ajouter L.A."};
+        TableModel model2 = new TableModel(columnNames2);
+        JTable peu = new JTable(model2);
+        tables.add(new JScrollPane(peu));
         peu.setEnabled(false);
         peu.setShowHorizontalLines(false);
         peu.setGridColor(Color.black);
@@ -233,7 +237,7 @@ public class Interface extends JFrame implements ActionListener {
         peu.setRowHeight(25);
         peu.getColumnModel().getColumn(1).setPreferredWidth(30);
 
-        tables.add(Box.createRigidArea(new Dimension((int)(Toolkit.getDefaultToolkit().getScreenSize().getWidth()/20),0)));
+        tables.add(Box.createRigidArea(new Dimension((int)(Toolkit.getDefaultToolkit().getScreenSize().getWidth()/30),0)));
 
         createMenuBar();
         try {
