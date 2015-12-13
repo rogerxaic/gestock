@@ -48,7 +48,7 @@ public class Gestock {
         }
 
         try {
-            System.out.println("Trying to load props file");
+            System.out.println("Loading properties file");
             prop = getProperties(filepath + fs + filename);
         } catch (IOException e) {
             e.printStackTrace();
@@ -130,8 +130,6 @@ public class Gestock {
         try {
             outputStream = new FileOutputStream(filepath + fs + filename);
             prop.store(outputStream, null);
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
         } finally {

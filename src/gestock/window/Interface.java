@@ -8,11 +8,6 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.IOException;
-import java.util.Calendar;
-import java.util.LinkedList;
-import java.util.Vector;
-import javax.swing.table.DefaultTableModel;
-import javax.swing.table.JTableHeader;
 
 public class Interface extends JFrame implements ActionListener {
 
@@ -172,7 +167,7 @@ public class Interface extends JFrame implements ActionListener {
 
 
         userName = new JLabel(user.getName());
-        userName.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 20, 5, 0));
+        userName.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 20, 5, 5));
         log.add(userName);
         userName.setAlignmentX(SwingConstants.CENTER);
         userName.setFont(new Font("Arial",Font.ITALIC,14));

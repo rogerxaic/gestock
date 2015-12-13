@@ -249,7 +249,7 @@ public class ProductWindow extends JFrame {
         JButton add = new JButton("Ajouter");
         add.addActionListener((ActionEvent ae) -> {
             String codeBarres = codeName.getText();
-            int code = codeBarres.equals("") ? 0 : Integer.parseInt(codeBarres);
+            long code = codeBarres.equals("") ? 0 : Long.parseLong(codeBarres.trim());
             String energyString = energieTextField.getText();
             double energy = (energyString.equals("") ? 0 : Double.parseDouble(energyString));
             String fatsString = grassesTextField.getText();

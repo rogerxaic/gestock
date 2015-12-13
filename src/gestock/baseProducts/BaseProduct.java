@@ -16,14 +16,14 @@ import java.util.Stack;
  */
 public class BaseProduct {
 
-    protected int code;
+    protected long code;
     protected String name;
     protected String description;
     protected String brand;
     protected Stack<Price> prices;
     protected HashMap<String, Double> nutritionFacts;
 
-    public BaseProduct(int code, String name, String description, String brand, HashMap<String, Double> nutritionFacts) {
+    public BaseProduct(long code, String name, String description, String brand, HashMap<String, Double> nutritionFacts) {
         this.code = code;
         this.name = name;
         this.description = description;
@@ -31,7 +31,7 @@ public class BaseProduct {
         this.nutritionFacts = nutritionFacts;
     }
 
-    public int getCode() {
+    public long getCode() {
         return code;
     }
 
