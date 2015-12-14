@@ -22,7 +22,7 @@ public class Interface extends JFrame implements ActionListener {
 
     public Interface(Gestock app) {
         super("gestock");
-        setSize(800, 800);
+        setSize(1120, 750);
 
         this.user = app.getUser();
 
@@ -198,44 +198,51 @@ public class Interface extends JFrame implements ActionListener {
 
         tables.add(Box.createRigidArea(new Dimension((int)(Toolkit.getDefaultToolkit().getScreenSize().getWidth()/30),0)));
 
-     MyRenderer renderer = new MyRenderer();
-      /*     Vector<String> columnName = new Vector<String>();
-        columnName.addElement("Nom");
-        columnName.addElement("Qte");
-        columnName.addElement("Date de perimation");
-        Vector<String> nom = new Vector<>();
-        Vector<String> qte = new Vector<>();
-        Vector<Calendar> dateDePerimation = new Vector<>();
-        Vector data = new Vector();
-        data.addElement(nom);
-        data.addElement(qte);
-        data.addElement(dateDePerimation);
-*/
+        MyRenderer renderer = new MyRenderer();
+
+        JPanel perimPanel = new JPanel();
+        perimPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createLineBorder(Color.black),
+                "Produits qui periment bientot"));
+        tables.add(perimPanel);
+        perimPanel.setBackground(Color.white);
+
+
         String[] columnNames1 = {"Nom", "Qte", "Date de Perimation"};
         TableModel model1 = new TableModel(columnNames1);
         JTable perim = new JTable(model1);
-        tables.add(new JScrollPane(perim));
+        perimPanel.add(new JScrollPane(perim));
         perim.setEnabled(false);
         perim.setValueAt(this.getBounds().getWidth(),1,1);
         perim.setGridColor(Color.black);
         perim.setDefaultRenderer(Object.class, renderer);
         perim.setShowHorizontalLines(false);
         perim.setRowHeight(25);
-        perim.getColumnModel().getColumn(1).setPreferredWidth(30);
+        perim.getColumnModel().getColumn(0).setPreferredWidth(200);
+        perim.getColumnModel().getColumn(1).setPreferredWidth(70);
+        perim.getColumnModel().getColumn(2).setPreferredWidth(120);
+        
 
         tables.add(Box.createRigidArea(new Dimension((int)(Toolkit.getDefaultToolkit().getScreenSize().getWidth()/30),0)));
+
+        JPanel peuPanel = new JPanel();
+        peuPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createLineBorder(Color.black),
+                "Peu d'existences"));
+        tables.add(peuPanel);
+        peuPanel.setBackground(Color.white);
 
 
         String[] columnNames2 = {"Nom", "Qte", "Ajouter L.A."};
         TableModel model2 = new TableModel(columnNames2);
         JTable peu = new JTable(model2);
-        tables.add(new JScrollPane(peu));
+        peuPanel.add(new JScrollPane(peu));
         peu.setEnabled(false);
         peu.setShowHorizontalLines(false);
         peu.setGridColor(Color.black);
         peu.setDefaultRenderer(Object.class, renderer);
         peu.setRowHeight(25);
-        peu.getColumnModel().getColumn(1).setPreferredWidth(30);
+        peu.getColumnModel().getColumn(0).setPreferredWidth(200);
+        peu.getColumnModel().getColumn(1).setPreferredWidth(70);
+        peu.getColumnModel().getColumn(2).setPreferredWidth(120);
 
         tables.add(Box.createRigidArea(new Dimension((int)(Toolkit.getDefaultToolkit().getScreenSize().getWidth()/30),0)));
 
