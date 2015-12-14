@@ -6,6 +6,7 @@
 package gestock.baseProducts;
 
 import gestock.Price;
+
 import java.util.HashMap;
 import java.util.Stack;
 
@@ -15,14 +16,22 @@ import java.util.Stack;
  */
 public class BaseProduct {
 
-    protected int code;
+    protected long code;
     protected String name;
     protected String description;
     protected String brand;
     protected Stack<Price> prices;
-    protected HashMap<String, Integer> nutritionFacts;
+    protected HashMap<String, Double> nutritionFacts;
 
-    public int getCode() {
+    public BaseProduct(long code, String name, String description, String brand, HashMap<String, Double> nutritionFacts) {
+        this.code = code;
+        this.name = name;
+        this.description = description;
+        this.brand = brand;
+        this.nutritionFacts = nutritionFacts;
+    }
+
+    public long getCode() {
         return code;
     }
 

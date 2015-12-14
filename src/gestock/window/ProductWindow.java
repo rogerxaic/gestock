@@ -5,6 +5,8 @@
  */
 package gestock.window;
 
+import gestock.Gestock;
+import gestock.baseProducts.BaseProduct;
 import gestock.util.Curl;
 import gestock.util.Tools;
 import org.json.JSONObject;
@@ -13,6 +15,7 @@ import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
+import java.util.HashMap;
 
 import static javax.swing.GroupLayout.Alignment.*;
 
@@ -20,6 +23,8 @@ import static javax.swing.GroupLayout.Alignment.*;
  * @author Roger
  */
 public class ProductWindow extends JFrame {
+
+    protected Gestock app;
 
     private JPanel mainPanel;
     private JPanel headPanel;
@@ -58,8 +63,9 @@ public class ProductWindow extends JFrame {
     private JTextField saltTextField;
 
 
-    public ProductWindow() {
+    public ProductWindow(Gestock app) {
         super("Gestock - Product");
+        this.app = app;
         setSize(400, 400);
         setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -120,14 +126,14 @@ public class ProductWindow extends JFrame {
             fibresLabel = new JLabel("Fibres alimentaires");
             proteinesLabel = new JLabel("Proteines");
             saltLabel = new JLabel("Sel - sodium");
-            energieTextField = new JTextField(10);
-            grassesTextField = new JTextField(10);
-            acidesTextField = new JTextField(10);
-            glucidesTextField = new JTextField(10);
-            sucresTextField = new JTextField(10);
-            fibresTextField = new JTextField(10);
-            proteinesTextField = new JTextField(10);
-            saltTextField = new JTextField(10);
+            energieTextField = new JTextField(15);
+            grassesTextField = new JTextField(15);
+            acidesTextField = new JTextField(15);
+            glucidesTextField = new JTextField(15);
+            sucresTextField = new JTextField(15);
+            fibresTextField = new JTextField(15);
+            proteinesTextField = new JTextField(15);
+            saltTextField = new JTextField(15);
         }
         nutritionPanel = new JPanel();
         GroupLayout layout = new GroupLayout(nutritionPanel);
@@ -240,8 +246,41 @@ public class ProductWindow extends JFrame {
         centerPanel = new JPanel(new BorderLayout());
         centerPanel.add(infoPanel, BorderLayout.CENTER);
 
+        JButton add = new JButton("Ajouter");
+        add.addActionListener((ActionEvent ae) -> {
+            String codeBarres = codeName.getText();
+            long code = codeBarres.equals("") ? 0 : Long.parseLong(codeBarres.trim());
+            String energyString = energieTextField.getText();
+            double energy = (energyString.equals("") ? 0 : Double.parseDouble(energyString));
+            String fatsString = grassesTextField.getText();
+            double fats = fatsString.equals("") ? 0 : Double.parseDouble(fatsString);
+            String acidsString = acidesTextField.getText();
+            double acids = acidsString.equals("") ? 0 : Double.parseDouble(acidsString);
+            String carbohydratesString = glucidesTextField.getText();
+            double carbohydrates = carbohydratesString.equals("") ? 0 : Double.parseDouble(carbohydratesString);
+            String sugarsString = sucresTextField.getText();
+            double sugars = sugarsString.equals("") ? 0 : Double.parseDouble(sugarsString);
+            String fibersString = fibresTextField.getText();
+            double fibers = fibersString.equals("") ? 0 : Double.parseDouble(fibersString);
+            String proteinsString = proteinesTextField.getText();
+            double proteins = proteinsString.equals("") ? 0 : Double.parseDouble(proteinsString);
+            String saltString = saltTextField.getText();
+            double salt = saltString.equals("") ? 0 : Double.parseDouble(saltString);
+            HashMap<String, Double> nutritionHashMap = new HashMap();
+            nutritionHashMap.put("Energy", energy);
+            nutritionHashMap.put("Fats", fats);
+            nutritionHashMap.put("Acids", acids);
+            nutritionHashMap.put("Carbohydrates", carbohydrates);
+            nutritionHashMap.put("Sugars", sugars);
+            nutritionHashMap.put("Fibers", fibers);
+            nutritionHashMap.put("Proteins", proteins);
+            nutritionHashMap.put("Salt", salt);
+            BaseProduct baseProduct = new BaseProduct(code, nameField.getText(), descriptionArea.getText(), brandField.getText(), nutritionHashMap);
+            app.getCatalogue().add(baseProduct);
+            System.out.println(app.getCatalogue().toString());
+        });
         addPanel = new JPanel(new FlowLayout());
-        addPanel.add(new JButton("Ajouter"));
+        addPanel.add(add);
 
         mainPanel = new JPanel(new BorderLayout());
         mainPanel.add(headPanel, BorderLayout.NORTH);

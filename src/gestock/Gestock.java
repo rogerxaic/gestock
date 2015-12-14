@@ -5,6 +5,7 @@
  */
 package gestock;
 
+import gestock.baseProducts.BaseProduct;
 import gestock.util.Tools;
 import gestock.window.Interface;
 
@@ -14,6 +15,7 @@ import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Arrays;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Properties;
 
@@ -29,6 +31,7 @@ public class Gestock {
     protected String filepath = System.getProperty("user.home") + fs
             + (Tools.isWindows() ? "AppData" + fs + "Roaming" + fs + "gestock" : ".config" + fs + "gestock");
     protected String filename = "config.properties";
+    protected LinkedList<BaseProduct> catalogue;
 
     public Gestock() {
 
@@ -45,13 +48,14 @@ public class Gestock {
         }
 
         try {
-            System.out.println("Trying to load props file");
+            System.out.println("Loading properties file");
             prop = getProperties(filepath + fs + filename);
         } catch (IOException e) {
             e.printStackTrace();
         }
 
         mainUser = new User(prop);
+        catalogue = new LinkedList<>();
     }
 
     /**
@@ -67,7 +71,10 @@ public class Gestock {
         } catch (Exception evt) {
             evt.printStackTrace();
         }
-        EventQueue.invokeLater(() -> new Interface(app));
+        EventQueue.invokeLater(() -> {
+            new Interface(app);
+            //new ProductWindow(app);
+        });
     }
 
     /**
@@ -123,8 +130,6 @@ public class Gestock {
         try {
             outputStream = new FileOutputStream(filepath + fs + filename);
             prop.store(outputStream, null);
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
         } finally {
@@ -140,5 +145,9 @@ public class Gestock {
 
     public User getUser() {
         return mainUser;
+    }
+
+    public LinkedList getCatalogue() {
+        return this.catalogue;
     }
 }
