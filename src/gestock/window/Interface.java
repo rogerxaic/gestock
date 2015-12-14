@@ -119,6 +119,7 @@ public class Interface extends JFrame implements ActionListener {
         }
         listeAchats.setVerticalTextPosition(SwingConstants.BOTTOM);
         listeAchats.setHorizontalTextPosition(SwingConstants.CENTER);
+        listeAchats.addActionListener((ActionEvent ae) -> {new ShoppingListWindow(app);});
 
         AbstractButton chercher = new JButton("Chercher");
         chercher.setBackground(Color.WHITE);
