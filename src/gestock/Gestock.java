@@ -6,8 +6,10 @@
 package gestock;
 
 import gestock.baseProducts.BaseProduct;
+import gestock.util.Curl;
 import gestock.util.Tools;
 import gestock.window.Interface;
+import org.json.JSONArray;
 
 import javax.swing.*;
 import java.awt.*;
@@ -56,6 +58,20 @@ public class Gestock {
 
         mainUser = new User(prop);
         catalogue = new LinkedList<>();
+
+        try {
+            Curl curl = new Curl("http://gestock.xaic.cat/api/baseproducts");
+            curl.run();
+            JSONArray baseProductsArray = new JSONArray(curl.getResponse());
+            System.out.println(baseProductsArray.get(0));
+            for (int i = 0; i < baseProductsArray.length(); i++) {
+                BaseProduct product = new BaseProduct(baseProductsArray.get(i));
+                catalogue.add(product);
+            }
+            System.out.println(catalogue);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     /**

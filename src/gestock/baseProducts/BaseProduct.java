@@ -6,6 +6,7 @@
 package gestock.baseProducts;
 
 import gestock.Price;
+import org.json.JSONObject;
 
 import java.util.HashMap;
 import java.util.Stack;
@@ -29,6 +30,35 @@ public class BaseProduct {
         this.description = description;
         this.brand = brand;
         this.nutritionFacts = nutritionFacts;
+    }
+
+    public BaseProduct(Object JSON) {
+        JSONObject productJSON = (JSONObject) JSON;
+        try { //code
+            this.code = (long) productJSON.get("code");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        try { //name
+            this.name = (String) productJSON.get("name");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        try { //desc
+            this.description = (String) productJSON.get("description");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        try { //brand
+            this.brand = (String) productJSON.get("brand");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        try { //nutr
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public long getCode() {
