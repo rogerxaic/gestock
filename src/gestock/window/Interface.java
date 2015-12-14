@@ -65,6 +65,9 @@ public class Interface extends JFrame implements ActionListener {
         }
         bottomButton.setVerticalTextPosition(SwingConstants.BOTTOM);
         bottomButton.setHorizontalTextPosition(SwingConstants.CENTER);
+        bottomButton.addActionListener((ActionEvent ae) -> {
+            new IJustBought();
+        });
 
 
         AbstractButton catalogue = new JButton("Catalogue");
