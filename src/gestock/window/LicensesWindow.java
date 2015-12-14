@@ -33,6 +33,7 @@ public class LicensesWindow extends JFrame implements ActionListener {
         licences.setEditable(false);
         initText();
         addText();
+        licences.setCaretPosition(0);
 
         scrollLicences = new JScrollPane(licences);
 
