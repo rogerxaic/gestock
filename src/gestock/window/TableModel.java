@@ -13,7 +13,7 @@ public class TableModel extends DefaultTableModel{
 */
 
     public TableModel(String[] columnNames){
-        super(new String[20][3],columnNames);
+        super(new Object[0][3],columnNames);
     }
 
  /*   public int getColumnCount() {

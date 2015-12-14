@@ -2,6 +2,7 @@ package gestock.window;
 
 import gestock.Gestock;
 import gestock.User;
+import java.util.Date;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -210,15 +211,18 @@ public class Interface extends JFrame implements ActionListener {
         JTable perim = new JTable(model1);
         perimPanel.add(new JScrollPane(perim));
         perim.setEnabled(false);
-        perim.setValueAt(this.getBounds().getWidth(),1,1);
+        model1.addRow(new Object[]{"Prune",15,new Date(2016,01,15)});
+        model1.addRow(new Object[]{"Mure",18,new Date(2015,12,27)});
+        model1.addRow(new Object[]{"Lamai",3,new Date(2015,12,19)});
         perim.setGridColor(Color.black);
         perim.setDefaultRenderer(Object.class, renderer);
         perim.setShowHorizontalLines(false);
         perim.setRowHeight(25);
         perim.getColumnModel().getColumn(0).setPreferredWidth(200);
         perim.getColumnModel().getColumn(1).setPreferredWidth(70);
-        perim.getColumnModel().getColumn(2).setPreferredWidth(120);
-        
+        perim.getColumnModel().getColumn(2).setPreferredWidth(500);
+        perim.setAutoCreateRowSorter(true);
+        perim.setFillsViewportHeight(true);
 
         tables.add(Box.createRigidArea(new Dimension((int)(Toolkit.getDefaultToolkit().getScreenSize().getWidth()/30),0)));
 
@@ -241,6 +245,9 @@ public class Interface extends JFrame implements ActionListener {
         peu.getColumnModel().getColumn(0).setPreferredWidth(200);
         peu.getColumnModel().getColumn(1).setPreferredWidth(70);
         peu.getColumnModel().getColumn(2).setPreferredWidth(120);
+        peu.setFillsViewportHeight(true);
+        peu.setAutoCreateRowSorter(true);
+
 
         tables.add(Box.createRigidArea(new Dimension((int)(Toolkit.getDefaultToolkit().getScreenSize().getWidth()/30),0)));
 
