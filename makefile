@@ -5,9 +5,10 @@ RFLAGS = -cp build
 RUN=Gestock
 
 all:
-	@$(JAVAC) src/*/*.ja*
-	@find org -name "*.java" | xargs javac
-	@find gestock -name "*.java" | xargs javac
+	@cd src
+	@find org -name "*.java" | xargs $(JAVAC)
+	@find gestock -name "*.java" | xargs $(JAVAC)
+	@cd ..
 	@echo ""
 	@echo "Vous devriez executer : "
 	@echo "make install"
