@@ -1,7 +1,7 @@
 package gestock.window;
 
-import gestock.Free;
-import gestock.User;
+import gestock.entity.Free;
+import gestock.entity.User;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;

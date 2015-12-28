@@ -5,7 +5,10 @@
  */
 package gestock;
 
-import gestock.baseProducts.BaseProduct;
+import gestock.entity.BaseProduct;
+import gestock.entity.MilkBaseProduct;
+import gestock.entity.User;
+import gestock.util.Constants;
 import gestock.util.Curl;
 import gestock.util.Tools;
 import gestock.window.Interface;
@@ -16,16 +19,14 @@ import java.awt.*;
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.Arrays;
-import java.util.LinkedList;
+import java.util.*;
 import java.util.List;
-import java.util.Properties;
 
 /**
  *
  * @author rogerxaic
  */
-public class Gestock {
+public class Gestock extends Observable {
 
     public User mainUser;
     protected Properties prop;
@@ -37,7 +38,9 @@ public class Gestock {
 
     public Gestock() {
 
-
+        /**
+         * Loading the properties if they exist, create a basic properties file otherwise.
+         */
         if (!init()) {
             //gotta create it
             List<String> props = Arrays.asList("userName:" + System.getProperty("user.name"));
@@ -48,9 +51,8 @@ public class Gestock {
                 e.printStackTrace();
             }
         }
-
         try {
-            System.out.println("Loading properties file");
+            System.out.println("Loading properties file...");
             prop = getProperties(filepath + fs + filename);
         } catch (IOException e) {
             e.printStackTrace();
@@ -59,17 +61,28 @@ public class Gestock {
         mainUser = new User(prop);
         catalogue = new LinkedList<>();
 
+        /**
+         * We fetch the products from the database using the gestock api. Created /w Symfony 2.
+         * The integration of MySQL-Java wasn't possible because the CIPC's db didn't work.
+         */
         try {
+            System.out.print("Fetching database content... ");
             Curl curl = new Curl("http://gestock.xaic.cat/api/baseproducts");
             curl.run();
             JSONArray baseProductsArray = new JSONArray(curl.getResponse());
-            System.out.println(baseProductsArray.get(0));
             for (int i = 0; i < baseProductsArray.length(); i++) {
-                BaseProduct product = new BaseProduct(baseProductsArray.get(i));
-                catalogue.add(product);
+                try {
+                    BaseProduct product = new BaseProduct(baseProductsArray.get(i));
+                    catalogue.add(product);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
-            System.out.println(catalogue);
+            BaseProduct b = new MilkBaseProduct(0, "Lait 1.5L Candia", "", "", "Candia", new HashMap<String, Double>(), 1, 1);
+            catalogue.add(b);
+            System.out.println("Done!");
         } catch (Exception e) {
+            System.out.println("\nThere has been a problem... Do you have an active internet connection?");
             e.printStackTrace();
         }
     }
@@ -89,7 +102,6 @@ public class Gestock {
         }
         EventQueue.invokeLater(() -> {
             new Interface(app);
-            //new ProductWindow(app);
         });
     }
 
@@ -165,5 +177,11 @@ public class Gestock {
 
     public LinkedList getCatalogue() {
         return this.catalogue;
+    }
+
+    public void addToCatalogue(BaseProduct baseProduct) {
+        this.catalogue.add(baseProduct);
+        setChanged();
+        notifyObservers(Constants.OBSERVER_CREATED_PRODUCT);
     }
 }

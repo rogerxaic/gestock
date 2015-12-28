@@ -1,14 +1,15 @@
 package gestock.window;
 
 import gestock.Gestock;
-import gestock.User;
-import java.util.Date;
+import gestock.entity.User;
+import gestock.window.catalogue.Catalogue;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.IOException;
+import java.util.Date;
 
 public class Interface extends JFrame implements ActionListener {
 
@@ -87,6 +88,9 @@ public class Interface extends JFrame implements ActionListener {
         }
         catalogue.setVerticalTextPosition(SwingConstants.BOTTOM);
         catalogue.setHorizontalTextPosition(SwingConstants.CENTER);
+        catalogue.addActionListener((ActionEvent ae) -> {
+            new Catalogue(app);
+        });
 
 
         AbstractButton gardeManger = new JButton("Garde-manger");
@@ -201,12 +205,12 @@ public class Interface extends JFrame implements ActionListener {
 
         JPanel perimPanel = new JPanel();
         perimPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createLineBorder(Color.black),
-                "Produits qui periment bientot"));
+                "Produits qui périment bientôt"));
         tables.add(perimPanel);
         perimPanel.setBackground(Color.white);
 
 
-        String[] columnNames1 = {"Nom", "Qte", "Date de Perimation"};
+        String[] columnNames1 = {"Nom", "Qte", "Date de Péremption"};
         TableModel model1 = new TableModel(columnNames1);
         JTable perim = new JTable(model1);
         perimPanel.add(new JScrollPane(perim));
