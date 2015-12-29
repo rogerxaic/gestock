@@ -1,6 +1,7 @@
-package gestock.resources.views;
+package gestock.controller;
 
 import gestock.Gestock;
+import gestock.resources.views.LoginView;
 
 /**
  * Created by Roger on 12/29/2015.

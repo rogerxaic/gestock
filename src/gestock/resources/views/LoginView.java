@@ -1,6 +1,7 @@
 package gestock.resources.views;
 
 import gestock.Gestock;
+import gestock.controller.LoginController;
 
 import javax.swing.*;
 import java.awt.*;

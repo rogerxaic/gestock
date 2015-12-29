@@ -6,6 +6,7 @@
 package gestock.resources.views;
 
 import gestock.Gestock;
+import gestock.controller.ProductController;
 import gestock.entity.*;
 import gestock.util.Curl;
 import gestock.util.Tools;
@@ -68,13 +69,15 @@ public class ProductView extends GFrame {
     private JCheckBox halal = new JCheckBox("Halal");
 
     //ProductView View
+    private ProductController controller;
     private BaseProduct baseProduct;
     private boolean update;
 
 
-    public ProductView(Gestock app, BaseProduct baseProd, boolean updt) {
+    public ProductView(Gestock app, ProductController productController, BaseProduct baseProd, boolean updt) {
         super("Gestock - Product");
         this.app = app;
+        this.controller = productController;
         this.baseProduct = baseProd;
         this.update = updt;
         setSize(400, 400);
