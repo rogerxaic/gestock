@@ -1,4 +1,4 @@
-package gestock.window.catalogue;
+package gestock.resources.views;
 
 import gestock.entity.BaseProduct;
 
@@ -12,15 +12,15 @@ import java.awt.event.MouseListener;
  */
 public class ProductPanel extends JPanel implements MouseListener, Scrollable {
 
-    private Catalogue catalogue;
+    private CatalogueView catalogueView;
     private BaseProduct baseProduct;
     private JLabel text;
     private int defaultFontSize;
 
-    public ProductPanel(BaseProduct baseProduct, Catalogue catalogue) {
+    public ProductPanel(BaseProduct baseProduct, CatalogueView catalogueView) {
         super(new BorderLayout());
         setPreferredSize(new Dimension(150, 100));
-        this.catalogue = catalogue;
+        this.catalogueView = catalogueView;
         this.baseProduct = baseProduct;
         //this.notes = notes;
         //this.note = note;
@@ -39,21 +39,17 @@ public class ProductPanel extends JPanel implements MouseListener, Scrollable {
 
     @Override
     public void mouseClicked(MouseEvent e) {
-        new Product(catalogue.app, baseProduct, true);
+        new ProductView(catalogueView.app, baseProduct, true);
     }
-
     @Override
     public void mousePressed(MouseEvent e) {
     }
-
     @Override
     public void mouseReleased(MouseEvent e) {
     }
-
     @Override
     public void mouseEntered(MouseEvent e) {
     }
-
     @Override
     public void mouseExited(MouseEvent e) {
     }

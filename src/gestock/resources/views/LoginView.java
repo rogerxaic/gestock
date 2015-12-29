@@ -1,10 +1,11 @@
-package gestock.window;
+package gestock.resources.views;
+
+import gestock.Gestock;
 
 import javax.swing.*;
 import java.awt.*;
-import java.util.LinkedList;
 
-public class Login extends JFrame {
+public class LoginView extends GFrame {
 
     private JPanel monPanelCommande;
     private JPanel Panel1;
@@ -23,8 +24,13 @@ public class Login extends JFrame {
     private JTextField Pass;
     private JTextArea maZoneTexte;
 
-    public Login() {
-        super();
+    private Gestock model;
+    private LoginController loginController;
+
+    public LoginView(Gestock gestock, LoginController loginController) {
+        super("Gestock - Login");
+        this.model = gestock;
+        this.loginController = loginController;
         setSize(new Dimension(250, 250));
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         maZoneTexte = new JTextArea();
@@ -66,7 +72,7 @@ public class Login extends JFrame {
         PanelMain.add(info2,BorderLayout.SOUTH);
         
         setContentPane(PanelMain);
-        
+        setLocationRelativeTo(null);
         setVisible(true);
     }
 

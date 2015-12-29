@@ -6,7 +6,7 @@ public class FishBaseProduct extends BaseProduct {
 
 	private boolean fresh;
 
-	public FishBaseProduct(int code, String name, String description, String traces, String brand, HashMap<String, Double> nutritionFacts, boolean fresh) {
+	public FishBaseProduct(long code, String name, String description, String traces, String brand, HashMap<String, Double> nutritionFacts, boolean fresh) {
 		super(code, name, description, traces, brand, nutritionFacts);
 		this.fresh = fresh;
 	}

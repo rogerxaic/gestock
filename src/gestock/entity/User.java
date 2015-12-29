@@ -5,14 +5,17 @@
  */
 package gestock.entity;
 
+import gestock.util.Constants;
+
 import java.util.LinkedList;
+import java.util.Observable;
 import java.util.Properties;
 
 /**
  *
  * @author Roger
  */
-public class User {
+public class User extends Observable {
     
     protected String name;
     protected String email;
@@ -34,6 +37,8 @@ public class User {
         if (freeUsername != null && freeSecret != null) {
             this.mobile = new Free(freeUsername, freeSecret);
         } else this.mobile = new Free("", "");
+        setChanged();
+        notifyObservers(Constants.OBSERVER_USER_CREATED);
     }
 
     public String getName() {
@@ -65,5 +70,7 @@ public class User {
         prop.setProperty("userEmail", this.email);
         prop.setProperty("freeUsername", this.mobile.getUser());
         prop.setProperty("freeSecret", this.mobile.getSecret());
+        setChanged();
+        notifyObservers(Constants.OBSERVER_USER_UPDATED);
     }
 }

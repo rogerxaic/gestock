@@ -1,8 +1,10 @@
 package gestock.window;
 
 import gestock.Gestock;
+import gestock.controller.CatalogueController;
 import gestock.entity.User;
-import gestock.window.catalogue.Catalogue;
+import gestock.resources.views.LicensesView;
+import gestock.resources.views.SettingsView;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -67,9 +69,7 @@ public class Interface extends JFrame implements ActionListener {
         }
         bottomButton.setVerticalTextPosition(SwingConstants.BOTTOM);
         bottomButton.setHorizontalTextPosition(SwingConstants.CENTER);
-        bottomButton.addActionListener((ActionEvent ae) -> {
-            new IJustBought();
-        });
+        bottomButton.addActionListener((ActionEvent ae) -> new IJustBought());
 
 
         AbstractButton catalogue = new JButton("Catalogue");
@@ -88,9 +88,7 @@ public class Interface extends JFrame implements ActionListener {
         }
         catalogue.setVerticalTextPosition(SwingConstants.BOTTOM);
         catalogue.setHorizontalTextPosition(SwingConstants.CENTER);
-        catalogue.addActionListener((ActionEvent ae) -> {
-            new Catalogue(app);
-        });
+        catalogue.addActionListener((ActionEvent ae) -> new CatalogueController(app));
 
 
         AbstractButton gardeManger = new JButton("Garde-manger");
@@ -164,7 +162,7 @@ public class Interface extends JFrame implements ActionListener {
         parametres.setVerticalTextPosition(SwingConstants.BOTTOM);
         parametres.setHorizontalTextPosition(SwingConstants.CENTER);
         parametres.addActionListener((ActionEvent ae) -> {
-            new SettingsWindow(this, user);
+            new SettingsView(this, user);
             setEnabled(false);
         });
 
@@ -215,7 +213,7 @@ public class Interface extends JFrame implements ActionListener {
         JTable perim = new JTable(model1);
         perimPanel.add(new JScrollPane(perim));
         perim.setEnabled(false);
-        model1.addRow(new Object[]{"Prune",15,new Date(2016,01,15)});
+        model1.addRow(new Object[]{"Prune", 15, new Date(2016, 1, 15)});
         model1.addRow(new Object[]{"Mure",18,new Date(2015,12,27)});
         model1.addRow(new Object[]{"Lamai",3,new Date(2015,12,19)});
         perim.setGridColor(Color.black);
@@ -286,10 +284,8 @@ public class Interface extends JFrame implements ActionListener {
 
         JMenuItem exit = new JMenuItem("Exit");
         JMenuItem licences = new JMenuItem("Licences");
-        exit.addActionListener((ActionEvent e) -> {
-            System.exit(0);
-        });
-        licences.addActionListener((ActionEvent e) -> new LicensesWindow());
+        exit.addActionListener((ActionEvent e) -> System.exit(0));
+        licences.addActionListener((ActionEvent e) -> new LicensesView());
 
         fileMenu.add(exit);
         helpMenu.add(licences);

@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package gestock.window.catalogue;
+package gestock.resources.views;
 
 import gestock.Gestock;
 import gestock.entity.*;
@@ -11,7 +11,6 @@ import gestock.util.Curl;
 import gestock.util.Tools;
 import org.json.JSONObject;
 
-import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -24,7 +23,7 @@ import static javax.swing.GroupLayout.Alignment.*;
 /**
  * @author Roger
  */
-public class Product extends JFrame {
+public class ProductView extends GFrame {
 
     protected Gestock app;
 
@@ -68,10 +67,16 @@ public class Product extends JFrame {
     //*************** Specific information
     private JCheckBox halal = new JCheckBox("Halal");
 
+    //ProductView View
+    private BaseProduct baseProduct;
+    private boolean update;
 
-    public Product(Gestock app, BaseProduct baseProduct, boolean update) {
+
+    public ProductView(Gestock app, BaseProduct baseProd, boolean updt) {
         super("Gestock - Product");
         this.app = app;
+        this.baseProduct = baseProd;
+        this.update = updt;
         setSize(400, 400);
         setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -120,7 +125,7 @@ public class Product extends JFrame {
                     specificPanel.setBorder(null);
                     break;
             }
-            refresh();
+            refresh(false);
         });
         if (update) {
             productType.setEnabled(false);
@@ -128,6 +133,7 @@ public class Product extends JFrame {
                 productType.setSelectedItem(new ProductType("", "fish"));
             } else if (baseProduct instanceof MeatBaseProduct) {
                 productType.setSelectedItem(new ProductType("", "meat"));
+                halal.setSelected(((MeatBaseProduct) baseProduct).isHalal());
             } else if (baseProduct instanceof MilkBaseProduct) {
                 productType.setSelectedItem(new ProductType("", "milk"));
             } else if (baseProduct instanceof DairyBaseProduct) {
@@ -313,6 +319,7 @@ public class Product extends JFrame {
             nutritionHashMap.put("Proteins", proteins);
             nutritionHashMap.put("Salt", salt);
             //BaseProduct baseProduct = new BaseProduct(code, nameField.getText(), descriptionArea.getText(), brandField.getText(), nutritionHashMap);
+            String type = ((ProductType) productType.getSelectedItem()).getBackendName().toLowerCase();
             if (update) {
                 baseProduct.setCode(code);
                 baseProduct.setName(nameField.getText());
@@ -320,8 +327,59 @@ public class Product extends JFrame {
                 baseProduct.setBrand(brandField.getText());
                 baseProduct.setTraces(tracesField.getText());
                 baseProduct.setNutritionFacts(nutritionHashMap);
+                switch (type) {
+                    case "normal":
+                        break;
+                    case "fish":
+                        FishBaseProduct fishBaseProduct = (FishBaseProduct) baseProduct;
+                        fishBaseProduct.setFresh(true);
+                        break;
+                    case "meat":
+                        MeatBaseProduct meatBaseProduct = (MeatBaseProduct) baseProduct;
+                        meatBaseProduct.setHalal(halal.isSelected());
+                        break;
+                    case "dps":
+                        DairyBaseProduct dairyBaseProduct = (DairyBaseProduct) baseProduct;
+                        dairyBaseProduct.setOriginAnimal(1);
+                        break;
+                    case "milk":
+                        MilkBaseProduct milkBaseProduct = (MilkBaseProduct) baseProduct;
+                        milkBaseProduct.setOriginAnimal(1);
+                        milkBaseProduct.setSkimmed(1);
+                        break;
+                    default:
+                        break;
+                }
             } else {
-                app.addToCatalogue(baseProduct);
+                BaseProduct finalBaseProduct;
+                switch (type) {
+                    case "normal":
+                        finalBaseProduct = new BaseProduct(code, nameField.getText(), descriptionArea.getText(),
+                                tracesField.getText(), brandField.getText(), nutritionHashMap);
+                        break;
+                    case "fish":
+                        finalBaseProduct = new FishBaseProduct(code, nameField.getText(), descriptionArea.getText(),
+                                tracesField.getText(), brandField.getText(), nutritionHashMap, true);
+                        break;
+                    case "meat":
+                        finalBaseProduct = new MeatBaseProduct(code, nameField.getText(), descriptionArea.getText(),
+                                tracesField.getText(), brandField.getText(), nutritionHashMap, halal.isSelected());
+                        break;
+                    case "dps":
+                        finalBaseProduct = new DairyBaseProduct(code, nameField.getText(), descriptionArea.getText(),
+                                tracesField.getText(), brandField.getText(), nutritionHashMap, 1);
+                        break;
+                    case "milk":
+                        finalBaseProduct = new MilkBaseProduct(code, nameField.getText(), descriptionArea.getText(),
+                                tracesField.getText(), brandField.getText(), nutritionHashMap, 1, 1);
+                        break;
+                    default:
+                        finalBaseProduct = new BaseProduct();
+                        break;
+                }
+                app.addToCatalogue(finalBaseProduct);
+                //new ProductView(app, finalBaseProduct, true);
+                dispose();
             }
         });
         addPanel = new JPanel(new FlowLayout());
@@ -332,24 +390,11 @@ public class Product extends JFrame {
         mainPanel.add(centerPanel, BorderLayout.CENTER);
         mainPanel.add(addPanel, BorderLayout.SOUTH);
 
-        try {
-            Image img = ImageIO.read(getClass().getResource("../../resources/gestock-blue.png"));
-            setIconImage(img);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+
 
         setContentPane(mainPanel);
         pack();
         setLocationRelativeTo(null);
-        setVisible(true);
-    }
-
-
-    public void refresh() {
-        revalidate();
-        repaint();
-        pack();
         setVisible(true);
     }
 
@@ -368,17 +413,55 @@ public class Product extends JFrame {
                     JSONObject productReturn = new JSONObject(jsonProduct);
                     if (productReturn.get("status_verbose").equals("product found")) {
                         JSONObject productArray = (JSONObject) productReturn.get("product");
-                        nameField.setText((String) productArray.get("product_name"));
-                        brandField.setText((String) productArray.get("brands"));
+                        try {
+                            nameField.setText((String) productArray.get("product_name"));
+                        } catch (Exception ignored) {
+                        }
+                        try {
+                            brandField.setText((String) productArray.get("brands"));
+                        } catch (Exception ignored) {
+                        }
+                        try {
+                            descriptionArea.setText((String) productArray.get("generic_name"));
+                        } catch (Exception ignored) {
+                        }
+                        try {
+                            tracesField.setText((String) productArray.get("traces"));
+                        } catch (Exception ignored) {
+                        }
                         JSONObject nutriments = (JSONObject) productArray.get("nutriments");
-                        energieTextField.setText((String) nutriments.get("energy"));
-                        grassesTextField.setText((String) nutriments.get("fat"));
-                        acidesTextField.setText((String) nutriments.get("saturated-fat"));
-                        glucidesTextField.setText((String) nutriments.get("carbohydrates"));
-                        sucresTextField.setText((String) nutriments.get("sugars"));
-                        fibresTextField.setText((String) nutriments.get("fiber"));
-                        proteinesTextField.setText((String) nutriments.get("proteins"));
-                        saltTextField.setText((String) nutriments.get("salt"));
+                        try {
+                            energieTextField.setText((String) nutriments.get("energy"));
+                        } catch (Exception ignored) {
+                        }
+                        try {
+                            grassesTextField.setText((String) nutriments.get("fat"));
+                        } catch (Exception ignored) {
+                        }
+                        try {
+                            acidesTextField.setText((String) nutriments.get("saturated-fat"));
+                        } catch (Exception ignored) {
+                        }
+                        try {
+                            glucidesTextField.setText((String) nutriments.get("carbohydrates"));
+                        } catch (Exception ignored) {
+                        }
+                        try {
+                            sucresTextField.setText((String) nutriments.get("sugars"));
+                        } catch (Exception ignored) {
+                        }
+                        try {
+                            fibresTextField.setText((String) nutriments.get("fiber"));
+                        } catch (Exception ignored) {
+                        }
+                        try {
+                            proteinesTextField.setText((String) nutriments.get("proteins"));
+                        } catch (Exception ignored) {
+                        }
+                        try {
+                            saltTextField.setText((String) nutriments.get("salt"));
+                        } catch (Exception ignored) {
+                        }
                     } else {
                         throw new Exception("Product not found");
                     }
