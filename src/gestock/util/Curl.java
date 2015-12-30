@@ -36,7 +36,7 @@ public class Curl {
         }
     }
 
-    public void runHttp() throws Exception {
+    private void runHttp() throws Exception {
         URL obj = new URL(url);
         HttpURLConnection con = (HttpURLConnection) obj.openConnection();
 
@@ -51,7 +51,7 @@ public class Curl {
         BufferedReader in = new BufferedReader(
                 new InputStreamReader(con.getInputStream()));
         String inputLine;
-        StringBuffer response = new StringBuffer();
+        StringBuilder response = new StringBuilder();
 
         while ((inputLine = in.readLine()) != null) {
             response.append(inputLine);
@@ -62,7 +62,7 @@ public class Curl {
         this.response = response.toString();
     }
 
-    public void runHttps() throws Exception {
+    private void runHttps() throws Exception {
         URL obj = new URL(this.url);
         HttpsURLConnection con = (HttpsURLConnection) obj.openConnection();
 
@@ -78,7 +78,7 @@ public class Curl {
         BufferedReader in = new BufferedReader(
                 new InputStreamReader(con.getInputStream()));
         String inputLine;
-        StringBuffer response = new StringBuffer();
+        StringBuilder response = new StringBuilder();
 
         while ((inputLine = in.readLine()) != null) {
             response.append(inputLine);
