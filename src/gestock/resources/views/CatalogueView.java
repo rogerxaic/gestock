@@ -2,6 +2,7 @@ package gestock.resources.views;
 
 import gestock.Gestock;
 import gestock.controller.CatalogueController;
+import gestock.controller.ProductController;
 import gestock.entity.BaseProduct;
 
 import javax.imageio.ImageIO;
@@ -49,7 +50,7 @@ public class CatalogueView extends GFrame {
         }
         add.setVerticalTextPosition(SwingConstants.BOTTOM);
         add.setHorizontalTextPosition(SwingConstants.CENTER);
-        add.addActionListener((ActionEvent ae) -> new ProductView(app, new BaseProduct(), false));
+        add.addActionListener((ActionEvent ae) -> new ProductController(app, new BaseProduct()));
         header.add(new JLabel("Add"));
         header.add(new JLabel("Magasins"));
 

@@ -9,17 +9,17 @@ public final class Constants {
      * The {@code int} that represents the signal for added
      * products to the catalogue for the {@code Observable}.
      */
-    public static final int OBSERVER_CREATED_PRODUCT = 1;
+    public static final int OBSERVER_PRODUCT_CREATED = 1;
     /**
      * The {@code int} that represents the signal for updated
      * products of the catalogue for the {@code Observable}.
      */
-    public static final int OBSERVER_UPDATED_PRODUCT = 3;
+    public static final int OBSERVER_PRODUCT_UPDATED = 3;
     /**
      * The {@code int} that represents the signal for deleted
      * products from the catalogue for the {@code Observable}.
      */
-    public static final int OBSERVER_DELETED_PRODUCT = 4;
+    public static final int OBSERVER_PRODUCT_DELETED = 4;
 
     public static final int OBSERVER_USER_CREATED = 5;
 

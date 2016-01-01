@@ -15,6 +15,10 @@ public class ProductController {
     public ProductController(Gestock gestock, BaseProduct baseProduct) {
         this.model = gestock;
         this.product = baseProduct;
-        new ProductView(model, this, product, true);
+        if (model.getCatalogue().contains(product)) {
+            new ProductView(model, this, product, true);
+        } else {
+            new ProductView(model, this, product, false);
+        }
     }
 }

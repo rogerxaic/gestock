@@ -22,7 +22,7 @@ public class LoginView extends GFrame {
     private JLabel Password;
     private JLabel Forget;
     private JTextField Mail;
-    private JTextField Pass;
+    private JPasswordField Pass;
     private JTextArea maZoneTexte;
 
     private Gestock model;
@@ -33,13 +33,13 @@ public class LoginView extends GFrame {
         this.model = gestock;
         this.loginController = loginController;
         setSize(new Dimension(250, 250));
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         maZoneTexte = new JTextArea();
         Forget = new JLabel("Forgot Password?(online)");
         Email = new JLabel("Email:");
         Password = new JLabel("Password:");
         Mail = new JTextField(10);
-        Pass = new JTextField(10);
+        Pass = new JPasswordField(10);
         btnSignup = new JButton("Signup");
         btnSignin = new JButton("Signin");
 

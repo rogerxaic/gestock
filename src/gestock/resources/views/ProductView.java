@@ -353,6 +353,7 @@ public class ProductView extends GFrame {
                     default:
                         break;
                 }
+                baseProduct.setUpdated();
             } else {
                 BaseProduct finalBaseProduct;
                 switch (type) {
@@ -382,8 +383,9 @@ public class ProductView extends GFrame {
                 }
                 app.addToCatalogue(finalBaseProduct);
                 //new ProductView(app, finalBaseProduct, true);
-                dispose();
+
             }
+            dispose();
         });
         addPanel = new JPanel(new FlowLayout());
         addPanel.add(add);

@@ -2,9 +2,11 @@ package gestock.window;
 
 import gestock.Gestock;
 import gestock.controller.CatalogueController;
+import gestock.controller.LoginController;
 import gestock.entity.User;
 import gestock.resources.views.LicensesView;
 import gestock.resources.views.SettingsView;
+import gestock.util.Constants;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -12,6 +14,7 @@ import java.awt.*;
 import java.awt.event.*;
 import java.io.IOException;
 import java.util.Date;
+import java.util.Observable;
 
 public class Interface extends JFrame implements ActionListener {
 
@@ -26,7 +29,7 @@ public class Interface extends JFrame implements ActionListener {
         this.user = app.getUser();
 
         // The main panel
-        JPanel mainPanel = new JPanel(new BorderLayout(5,30));
+        JPanel mainPanel = new JPanel(new BorderLayout(5, 30));
         setContentPane(mainPanel);
         mainPanel.setBackground(Color.WHITE);
 
@@ -58,7 +61,7 @@ public class Interface extends JFrame implements ActionListener {
         bottomButton.setBackground(Color.WHITE);
         bottomButton.setContentAreaFilled(false);
         bottomButton.setOpaque(true);
-        bottomButton.setFont(new Font("Arial",Font.BOLD,12));
+        bottomButton.setFont(new Font("Arial", Font.BOLD, 12));
         bottomButton.setPressedIcon(new ImageIcon());
         try {
             Image img = ImageIO.read(getClass().getResource("../resources/add64.png"));
@@ -77,7 +80,7 @@ public class Interface extends JFrame implements ActionListener {
         catalogue.setBackground(Color.WHITE);
         catalogue.setContentAreaFilled(false);
         catalogue.setOpaque(true);
-        catalogue.setFont(new Font("Arial",Font.BOLD,12));
+        catalogue.setFont(new Font("Arial", Font.BOLD, 12));
         catalogue.setPressedIcon(new ImageIcon());
         try {
             Image img = ImageIO.read(getClass().getResource("../resources/data110.png"));
@@ -96,7 +99,7 @@ public class Interface extends JFrame implements ActionListener {
         gardeManger.setBackground(Color.WHITE);
         gardeManger.setContentAreaFilled(false);
         gardeManger.setOpaque(true);
-        gardeManger.setFont(new Font("Arial",Font.BOLD,12));
+        gardeManger.setFont(new Font("Arial", Font.BOLD, 12));
         gardeManger.setPressedIcon(new ImageIcon());
         try {
             Image img = ImageIO.read(getClass().getResource("../resources/cutlery23.png"));
@@ -113,7 +116,7 @@ public class Interface extends JFrame implements ActionListener {
         listeAchats.setBackground(Color.WHITE);
         listeAchats.setContentAreaFilled(false);
         listeAchats.setOpaque(true);
-        listeAchats.setFont(new Font("Arial",Font.BOLD,12));
+        listeAchats.setFont(new Font("Arial", Font.BOLD, 12));
         listeAchats.setPressedIcon(new ImageIcon());
         menuUp.add(listeAchats);
         try {
@@ -130,7 +133,7 @@ public class Interface extends JFrame implements ActionListener {
         chercher.setBackground(Color.WHITE);
         chercher.setContentAreaFilled(false);
         chercher.setOpaque(true);
-        chercher.setFont(new Font("Arial",Font.BOLD,12));
+        chercher.setFont(new Font("Arial", Font.BOLD, 12));
         chercher.setPressedIcon(new ImageIcon());
         menuUp.add(chercher);
         try {
@@ -149,7 +152,7 @@ public class Interface extends JFrame implements ActionListener {
         parametres.setBackground(Color.WHITE);
         parametres.setContentAreaFilled(false);
         parametres.setOpaque(true);
-        parametres.setFont(new Font("Arial",Font.BOLD,12));
+        parametres.setFont(new Font("Arial", Font.BOLD, 12));
         parametres.setPressedIcon(new ImageIcon());
         menuUp.add(parametres);
         try {
@@ -176,28 +179,48 @@ public class Interface extends JFrame implements ActionListener {
         userName.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 20, 5, 5));
         log.add(userName);
         userName.setAlignmentX(SwingConstants.CENTER);
-        userName.setFont(new Font("Arial",Font.ITALIC,14));
+        userName.setFont(new Font("Arial", Font.ITALIC, 14));
 
-
-        AbstractButton logout = new JButton("Logout");
-        logout.setBackground(Color.WHITE);
-        logout.setContentAreaFilled(false);
-        logout.setOpaque(true);
-        logout.setPressedIcon(new ImageIcon());
-        logout.setBorderPainted(true);
-        log.add(logout);
+        String[] loginoutText = {"Login", "Logout"};
+        AbstractButton loginout = new JButton((user.isLoggedIn()) ? loginoutText[1] : loginoutText[0]);
+        loginout.setBackground(Color.WHITE);
+        loginout.setContentAreaFilled(false);
+        loginout.setOpaque(true);
+        loginout.setPressedIcon(new ImageIcon());
+        loginout.setBorderPainted(true);
+        log.add(loginout);
 
         try {
             Image img = ImageIO.read(getClass().getResource("../resources/logout20.png"));
             Image newImg = img.getScaledInstance(16, 16, Image.SCALE_SMOOTH);
-            logout.setIcon(new ImageIcon(newImg));
+            loginout.setIcon(new ImageIcon(newImg));
         } catch (IOException ex) {
             ex.printStackTrace();
         }
-        logout.setVerticalTextPosition(SwingConstants.CENTER);
-        logout.setHorizontalTextPosition(SwingConstants.RIGHT);
+        loginout.setVerticalTextPosition(SwingConstants.CENTER);
+        loginout.setHorizontalTextPosition(SwingConstants.RIGHT);
+        loginout.addActionListener((ActionEvent ae) -> {
+            if (user.isLoggedIn()) {
+                user.logout();
+            } else {
+                new LoginController(app);
+            }
+        });
+        user.addObserver((Observable o, Object arg) -> {
+            if (arg != null && arg instanceof Integer) {
+                if (arg.equals(Constants.OBSERVER_USER_UPDATED)) {
+                    if (user.isLoggedIn()) {
+                        loginout.setText(loginoutText[1]);
+                    } else {
+                        loginout.setText(loginoutText[0]);
+                    }
+                    refresh();
+                }
+            }
+            System.out.println(o.getClass());
+        });
 
-        tables.add(Box.createRigidArea(new Dimension((int)(Toolkit.getDefaultToolkit().getScreenSize().getWidth()/30),0)));
+        tables.add(Box.createRigidArea(new Dimension((int) (Toolkit.getDefaultToolkit().getScreenSize().getWidth() / 30), 0)));
 
         MyRenderer renderer = new MyRenderer();
 
@@ -214,8 +237,8 @@ public class Interface extends JFrame implements ActionListener {
         perimPanel.add(new JScrollPane(perim));
         perim.setEnabled(false);
         model1.addRow(new Object[]{"Prune", 15, new Date(2016, 1, 15)});
-        model1.addRow(new Object[]{"Mure",18,new Date(2015,12,27)});
-        model1.addRow(new Object[]{"Lamai",3,new Date(2015,12,19)});
+        model1.addRow(new Object[]{"Mure", 18, new Date(2015, 12, 27)});
+        model1.addRow(new Object[]{"Lamai", 3, new Date(2015, 12, 19)});
         perim.setGridColor(Color.black);
         perim.setDefaultRenderer(Object.class, renderer);
         perim.setShowHorizontalLines(false);
@@ -226,7 +249,7 @@ public class Interface extends JFrame implements ActionListener {
         perim.setAutoCreateRowSorter(true);
         perim.setFillsViewportHeight(true);
 
-        tables.add(Box.createRigidArea(new Dimension((int)(Toolkit.getDefaultToolkit().getScreenSize().getWidth()/30),0)));
+        tables.add(Box.createRigidArea(new Dimension((int) (Toolkit.getDefaultToolkit().getScreenSize().getWidth() / 30), 0)));
 
         JPanel peuPanel = new JPanel();
         peuPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createLineBorder(Color.black),
@@ -251,7 +274,7 @@ public class Interface extends JFrame implements ActionListener {
         peu.setAutoCreateRowSorter(true);
 
 
-        tables.add(Box.createRigidArea(new Dimension((int)(Toolkit.getDefaultToolkit().getScreenSize().getWidth()/30),0)));
+        tables.add(Box.createRigidArea(new Dimension((int) (Toolkit.getDefaultToolkit().getScreenSize().getWidth() / 30), 0)));
 
         createMenuBar();
         try {

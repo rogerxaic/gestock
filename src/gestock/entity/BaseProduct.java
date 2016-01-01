@@ -5,15 +5,17 @@
  */
 package gestock.entity;
 
+import gestock.util.Constants;
 import org.json.JSONObject;
 
 import java.util.HashMap;
+import java.util.Observable;
 import java.util.Stack;
 
 /**
  * @author rmiretgine
  */
-public class BaseProduct {
+public class BaseProduct extends Observable {
 
     protected long id; //id in the database
     protected long code; //barcode
@@ -136,5 +138,10 @@ public class BaseProduct {
 
     public void setTraces(String traces) {
         this.traces = traces;
+    }
+
+    public void setUpdated() {
+        setChanged();
+        notifyObservers(Constants.OBSERVER_PRODUCT_UPDATED);
     }
 }

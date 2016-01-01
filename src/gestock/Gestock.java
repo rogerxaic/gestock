@@ -29,6 +29,7 @@ import java.util.List;
 public class Gestock extends Observable {
 
     public User mainUser;
+    public Properties lang;
     protected Properties prop;
     protected String fs = System.getProperty("file.separator");
     protected String filepath = System.getProperty("user.home") + fs
@@ -182,6 +183,6 @@ public class Gestock extends Observable {
     public void addToCatalogue(BaseProduct baseProduct) {
         this.catalogue.add(baseProduct);
         setChanged();
-        notifyObservers(Constants.OBSERVER_CREATED_PRODUCT);
+        notifyObservers(Constants.OBSERVER_PRODUCT_CREATED);
     }
 }

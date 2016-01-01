@@ -6,6 +6,7 @@
 package gestock.entity;
 
 import gestock.util.Constants;
+import gestock.util.Curl;
 
 import java.util.LinkedList;
 import java.util.Observable;
@@ -18,6 +19,8 @@ import java.util.Properties;
 public class User extends Observable {
     
     protected String name;
+    protected String password;
+    protected String cookie;
     protected String email;
     protected LinkedList<ShoppingList> shoppingList;
     protected Free mobile;
@@ -65,12 +68,40 @@ public class User extends Observable {
         this.mobile = free;
     }
 
-    public void update() {
+    public void setUpdated() {
         prop.setProperty("userName", this.name);
         prop.setProperty("userEmail", this.email);
+        prop.setProperty("password", this.password);
+        prop.setProperty("cookie", this.cookie);
         prop.setProperty("freeUsername", this.mobile.getUser());
         prop.setProperty("freeSecret", this.mobile.getSecret());
         setChanged();
         notifyObservers(Constants.OBSERVER_USER_UPDATED);
+    }
+
+    public boolean isLoggedIn() {
+        if (cookie == null) return false;
+        Curl verify = new Curl("http://gestock.xaic.cat/user/verify", cookie);
+        try {
+            verify.run();
+            return verify.getResponse().equals("true");
+        } catch (Exception ignored) {
+        }
+
+        return true;
+    }
+
+    public void login() {
+
+    }
+
+    public void clearCookies() {
+        this.cookie = null;
+    }
+
+    public void logout() {
+        this.cookie = null;
+        this.password = null;
+        this.setUpdated();
     }
 }

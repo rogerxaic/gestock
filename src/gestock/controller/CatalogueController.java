@@ -26,7 +26,7 @@ public class CatalogueController implements Observer {
     @Override
     public void update(Observable o, Object arg) {
         if (arg != null && arg instanceof Integer) {
-            if (arg.equals(Constants.OBSERVER_CREATED_PRODUCT)) {
+            if (arg.equals(Constants.OBSERVER_PRODUCT_CREATED)) {
                 catalogueView.fillCatalogue(true);
                 catalogueView.refresh();
             }

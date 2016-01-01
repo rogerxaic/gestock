@@ -156,7 +156,7 @@ public class SettingsView extends GFrame {
         Free free = new Free(freeUser, freeSecret);
         user.setFree(free);
 
-        user.update();
+        user.setUpdated();
         main.refresh();
     }
 
