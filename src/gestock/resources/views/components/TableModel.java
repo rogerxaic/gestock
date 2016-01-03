@@ -1,7 +1,6 @@
-package gestock.window;
+package gestock.resources.views.components;
 
 import javax.swing.table.DefaultTableModel;
-import javax.swing.text.StringContent;
 
 /**
  * Created by Cristinuta on 12/5/2015.

@@ -3,6 +3,7 @@ package gestock.resources.views;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
+import java.io.IOException;
 
 /**
  * Created by Roger on 12/29/2015.
@@ -15,7 +16,11 @@ public class GFrame extends JFrame {
             Image img = ImageIO.read(getClass().getResource("../gestock-blue.png"));
             setIconImage(img);
         } catch (Exception e) {
-            e.printStackTrace();
+            try {
+                Image img = ImageIO.read(getClass().getResource("../../gestock-blue.png"));
+                setIconImage(img);
+            } catch (IOException ignored) {
+            }
         }
     }
 

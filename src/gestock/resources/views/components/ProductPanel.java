@@ -1,7 +1,8 @@
-package gestock.resources.views;
+package gestock.resources.views.components;
 
 import gestock.controller.ProductController;
 import gestock.entity.BaseProduct;
+import gestock.resources.views.CatalogueView;
 import gestock.util.Constants;
 
 import javax.swing.*;
@@ -42,7 +43,7 @@ public class ProductPanel extends JPanel implements MouseListener, Observer, Scr
 
     @Override
     public void mouseClicked(MouseEvent e) {
-        new ProductController(catalogueView.app, baseProduct);
+        new ProductController(catalogueView.getModel(), baseProduct);
     }
 
     @Override

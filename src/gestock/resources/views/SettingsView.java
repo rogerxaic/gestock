@@ -2,7 +2,6 @@ package gestock.resources.views;
 
 import gestock.entity.Free;
 import gestock.entity.User;
-import gestock.window.Interface;
 
 import javax.swing.*;
 import java.awt.*;
@@ -16,7 +15,7 @@ import static javax.swing.GroupLayout.Alignment.*;
  */
 public class SettingsView extends GFrame {
     protected User user;
-    protected Interface main;
+    protected GestockView main;
     protected String initName;
     protected String initEmail;
     protected String initPassword;
@@ -39,7 +38,7 @@ public class SettingsView extends GFrame {
     private JButton exportButton;
     private JButton saveButton;
 
-    public SettingsView(Interface main, User user) {
+    public SettingsView(GestockView main, User user) {
         super("Gestock - Settings");
 
         this.main = main;

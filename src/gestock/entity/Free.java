@@ -5,6 +5,11 @@
  */
 package gestock.entity;
 
+import gestock.util.Curl;
+
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
+
 /**
  *
  * @author Roger
@@ -19,7 +24,21 @@ public class Free {
     }
     
     public void sendMessage(String message) {
-        
+        String url = null;
+        try {
+            url = "https://smsapi.free-mobile.fr/sendmsg?user=" + this.username
+                    + "&pass=" + this.secret
+                    + "&msg=" + URLEncoder.encode(message, "UTF-8");
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+        Curl curl = new Curl(url);
+        try {
+            curl.run();
+        } catch (Exception ignored) {
+            ignored.printStackTrace();
+            System.out.println("Il y a eu un problème en envoyant le message...");
+        }
     }
 
     public String getUser() {
@@ -28,5 +47,9 @@ public class Free {
 
     public String getSecret() {
         return secret;
+    }
+
+    public boolean isValid() {
+        return !(username.equals("") || secret.equals(""));
     }
 }

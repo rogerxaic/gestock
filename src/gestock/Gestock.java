@@ -6,12 +6,14 @@
 package gestock;
 
 import gestock.entity.BaseProduct;
+import gestock.entity.BoughtProduct;
 import gestock.entity.MilkBaseProduct;
 import gestock.entity.User;
+import gestock.resources.views.GestockView;
+import gestock.resources.views.components.Launcher;
 import gestock.util.Constants;
 import gestock.util.Curl;
 import gestock.util.Tools;
-import gestock.window.Interface;
 import org.json.JSONArray;
 
 import javax.swing.*;
@@ -23,22 +25,21 @@ import java.util.*;
 import java.util.List;
 
 /**
- *
  * @author rogerxaic
  */
 public class Gestock extends Observable {
 
     public User mainUser;
-    public Properties lang;
-    protected Properties prop;
-    protected String fs = System.getProperty("file.separator");
-    protected String filepath = System.getProperty("user.home") + fs
+    private Properties prop;
+    private String fs = System.getProperty("file.separator");
+    private String filepath = System.getProperty("user.home") + fs
             + (Tools.isWindows() ? "AppData" + fs + "Roaming" + fs + "gestock" : ".config" + fs + "gestock");
-    protected String filename = "config.properties";
-    protected LinkedList<BaseProduct> catalogue;
+    private String filename = "config.properties";
+    private LinkedList<BaseProduct> catalogue;
+    private List<BoughtProduct> pantry;
 
     public Gestock() {
-
+        Launcher launcher = new Launcher();
         /**
          * Loading the properties if they exist, create a basic properties file otherwise.
          */
@@ -54,6 +55,7 @@ public class Gestock extends Observable {
         }
         try {
             System.out.println("Loading properties file...");
+            launcher.setText("Loading properties file...");
             prop = getProperties(filepath + fs + filename);
         } catch (IOException e) {
             e.printStackTrace();
@@ -61,6 +63,7 @@ public class Gestock extends Observable {
 
         mainUser = new User(prop);
         catalogue = new LinkedList<>();
+        pantry = new LinkedList<>();
 
         /**
          * We fetch the products from the database using the gestock api. Created /w Symfony 2.
@@ -68,24 +71,28 @@ public class Gestock extends Observable {
          */
         try {
             System.out.print("Fetching database content... ");
+            launcher.setText("Fetching database products from Internet...");
             Curl curl = new Curl("http://gestock.xaic.cat/api/baseproducts");
             curl.run();
             JSONArray baseProductsArray = new JSONArray(curl.getResponse());
+            launcher.setText("Adding products to catalogue...");
             for (int i = 0; i < baseProductsArray.length(); i++) {
                 try {
+                    launcher.setText("Adding product " + (i + 1) + " of " + baseProductsArray.length() + " to catalogue...");
                     BaseProduct product = new BaseProduct(baseProductsArray.get(i));
                     catalogue.add(product);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
             }
-            BaseProduct b = new MilkBaseProduct(0, "Lait 1.5L Candia", "", "", "Candia", new HashMap<String, Double>(), 1, 1);
-            catalogue.add(b);
             System.out.println("Done!");
         } catch (Exception e) {
             System.out.println("\nThere has been a problem... Do you have an active internet connection?");
             e.printStackTrace();
         }
+        BaseProduct b = new MilkBaseProduct(0, "Lait 1.5L Candia", "", "", "Candia", new HashMap<>(), 1, 1);
+        catalogue.add(b);
+        launcher.dispose();
     }
 
     /**
@@ -101,9 +108,7 @@ public class Gestock extends Observable {
         } catch (Exception evt) {
             evt.printStackTrace();
         }
-        EventQueue.invokeLater(() -> {
-            new Interface(app);
-        });
+        EventQueue.invokeLater(() -> new GestockView(app));
     }
 
     /**
@@ -184,5 +189,13 @@ public class Gestock extends Observable {
         this.catalogue.add(baseProduct);
         setChanged();
         notifyObservers(Constants.OBSERVER_PRODUCT_CREATED);
+    }
+
+    public List<BoughtProduct> getPantry() {
+        return pantry;
+    }
+
+    public void setPantry(List<BoughtProduct> pantry) {
+        this.pantry = pantry;
     }
 }

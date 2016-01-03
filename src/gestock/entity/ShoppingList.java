@@ -9,7 +9,6 @@ import java.util.Calendar;
 import java.util.LinkedList;
 
 /**
- *
  * @author Roger
  */
 public class ShoppingList {
@@ -25,7 +24,7 @@ public class ShoppingList {
     public void setProducts(LinkedList<BaseProduct> products) {
         this.products = products;
     }
-    
+
     public void addProduct(BaseProduct product) {
         this.products.add(product);
     }
@@ -53,6 +52,6 @@ public class ShoppingList {
     public void setDate(Calendar date) {
         this.date = date;
     }
-    
-    
+
+
 }

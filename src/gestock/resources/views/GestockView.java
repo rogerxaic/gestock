@@ -1,11 +1,13 @@
-package gestock.window;
+package gestock.resources.views;
 
 import gestock.Gestock;
 import gestock.controller.CatalogueController;
 import gestock.controller.LoginController;
+import gestock.controller.PantryController;
+import gestock.controller.ShoppingListController;
 import gestock.entity.User;
-import gestock.resources.views.LicensesView;
-import gestock.resources.views.SettingsView;
+import gestock.resources.views.components.MyRenderer;
+import gestock.resources.views.components.TableModel;
 import gestock.util.Constants;
 
 import javax.imageio.ImageIO;
@@ -16,13 +18,13 @@ import java.io.IOException;
 import java.util.Date;
 import java.util.Observable;
 
-public class Interface extends JFrame implements ActionListener {
+public class GestockView extends JFrame implements ActionListener {
 
     private User user;
 
     private JLabel userName;
 
-    public Interface(Gestock app) {
+    public GestockView(Gestock app) {
         super("gestock");
         setSize(1120, 750);
 
@@ -64,7 +66,7 @@ public class Interface extends JFrame implements ActionListener {
         bottomButton.setFont(new Font("Arial", Font.BOLD, 12));
         bottomButton.setPressedIcon(new ImageIcon());
         try {
-            Image img = ImageIO.read(getClass().getResource("../resources/add64.png"));
+            Image img = ImageIO.read(getClass().getResource("../add64.png"));
             Image newImg = img.getScaledInstance(48, 48, Image.SCALE_SMOOTH);
             bottomButton.setIcon(new ImageIcon(newImg));
         } catch (IOException ex) {
@@ -72,7 +74,7 @@ public class Interface extends JFrame implements ActionListener {
         }
         bottomButton.setVerticalTextPosition(SwingConstants.BOTTOM);
         bottomButton.setHorizontalTextPosition(SwingConstants.CENTER);
-        bottomButton.addActionListener((ActionEvent ae) -> new IJustBought());
+        bottomButton.addActionListener((ActionEvent ae) -> new JustBoughtView());
 
 
         AbstractButton catalogue = new JButton("Catalogue");
@@ -83,7 +85,7 @@ public class Interface extends JFrame implements ActionListener {
         catalogue.setFont(new Font("Arial", Font.BOLD, 12));
         catalogue.setPressedIcon(new ImageIcon());
         try {
-            Image img = ImageIO.read(getClass().getResource("../resources/data110.png"));
+            Image img = ImageIO.read(getClass().getResource("../data110.png"));
             Image newImg = img.getScaledInstance(48, 48, Image.SCALE_SMOOTH);
             catalogue.setIcon(new ImageIcon(newImg));
         } catch (IOException ex) {
@@ -102,7 +104,7 @@ public class Interface extends JFrame implements ActionListener {
         gardeManger.setFont(new Font("Arial", Font.BOLD, 12));
         gardeManger.setPressedIcon(new ImageIcon());
         try {
-            Image img = ImageIO.read(getClass().getResource("../resources/cutlery23.png"));
+            Image img = ImageIO.read(getClass().getResource("../cutlery23.png"));
             Image newImg = img.getScaledInstance(48, 48, Image.SCALE_SMOOTH);
             gardeManger.setIcon(new ImageIcon(newImg));
         } catch (IOException ex) {
@@ -110,6 +112,9 @@ public class Interface extends JFrame implements ActionListener {
         }
         gardeManger.setVerticalTextPosition(SwingConstants.BOTTOM);
         gardeManger.setHorizontalTextPosition(SwingConstants.CENTER);
+        gardeManger.addActionListener((ActionEvent ae) -> {
+            new PantryController(app);
+        });
 
 
         AbstractButton listeAchats = new JButton("Liste achats");
@@ -120,7 +125,7 @@ public class Interface extends JFrame implements ActionListener {
         listeAchats.setPressedIcon(new ImageIcon());
         menuUp.add(listeAchats);
         try {
-            Image img = ImageIO.read(getClass().getResource("../resources/shopping122.png"));
+            Image img = ImageIO.read(getClass().getResource("../shopping122.png"));
             Image newImg = img.getScaledInstance(48, 48, Image.SCALE_SMOOTH);
             listeAchats.setIcon(new ImageIcon(newImg));
         } catch (IOException ex) {
@@ -128,6 +133,7 @@ public class Interface extends JFrame implements ActionListener {
         }
         listeAchats.setVerticalTextPosition(SwingConstants.BOTTOM);
         listeAchats.setHorizontalTextPosition(SwingConstants.CENTER);
+        listeAchats.addActionListener((ActionEvent ae) -> new ShoppingListController(app));
 
         AbstractButton chercher = new JButton("Chercher");
         chercher.setBackground(Color.WHITE);
@@ -137,7 +143,7 @@ public class Interface extends JFrame implements ActionListener {
         chercher.setPressedIcon(new ImageIcon());
         menuUp.add(chercher);
         try {
-            Image img = ImageIO.read(getClass().getResource("../resources/search100.png"));
+            Image img = ImageIO.read(getClass().getResource("../search100.png"));
             Image newImg = img.getScaledInstance(48, 48, Image.SCALE_SMOOTH);
             chercher.setIcon(new ImageIcon(newImg));
         } catch (IOException ex) {
@@ -156,7 +162,7 @@ public class Interface extends JFrame implements ActionListener {
         parametres.setPressedIcon(new ImageIcon());
         menuUp.add(parametres);
         try {
-            Image img = ImageIO.read(getClass().getResource("../resources/network60.png"));
+            Image img = ImageIO.read(getClass().getResource("../network60.png"));
             Image newImg = img.getScaledInstance(48, 48, Image.SCALE_SMOOTH);
             parametres.setIcon(new ImageIcon(newImg));
         } catch (IOException ex) {
@@ -191,7 +197,7 @@ public class Interface extends JFrame implements ActionListener {
         log.add(loginout);
 
         try {
-            Image img = ImageIO.read(getClass().getResource("../resources/logout20.png"));
+            Image img = ImageIO.read(getClass().getResource("../logout20.png"));
             Image newImg = img.getScaledInstance(16, 16, Image.SCALE_SMOOTH);
             loginout.setIcon(new ImageIcon(newImg));
         } catch (IOException ex) {
@@ -278,7 +284,7 @@ public class Interface extends JFrame implements ActionListener {
 
         createMenuBar();
         try {
-            Image img = ImageIO.read(getClass().getResource("../resources/gestock-blue.png"));
+            Image img = ImageIO.read(getClass().getResource("../gestock-blue.png"));
             setIconImage(img);
         } catch (Exception e) {
             e.printStackTrace();

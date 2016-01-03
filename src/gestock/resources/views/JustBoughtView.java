@@ -1,5 +1,5 @@
 
-package gestock.window;
+package gestock.resources.views;
 
 
 import javax.swing.*;
@@ -8,7 +8,7 @@ import java.awt.*;
  *
  * @author smihalkova
  */
-public class IJustBought extends JFrame {
+public class JustBoughtView extends JFrame {
     
     private JPanel Panel1;
     private JPanel Panel2;
@@ -28,7 +28,7 @@ public class IJustBought extends JFrame {
     private JTextPane List;
 
 
-    public IJustBought() {
+    public JustBoughtView() {
         super();
         setSize(new Dimension(500, 500));
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);

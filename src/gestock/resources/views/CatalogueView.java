@@ -4,6 +4,7 @@ import gestock.Gestock;
 import gestock.controller.CatalogueController;
 import gestock.controller.ProductController;
 import gestock.entity.BaseProduct;
+import gestock.resources.views.components.ProductPanel;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -17,7 +18,7 @@ import java.util.List;
  */
 public class CatalogueView extends GFrame {
 
-    protected Gestock app;
+    protected Gestock model;
     protected CatalogueController catalogueController;
     protected List<BaseProduct> products;
     private JPanel main;
@@ -27,7 +28,7 @@ public class CatalogueView extends GFrame {
 
     public CatalogueView(Gestock app, CatalogueController catalogueController, List<BaseProduct> products) {
         super("Gestock - Catalogue");
-        this.app = app;
+        this.model = app;
         this.catalogueController = catalogueController;
         this.products = products;
 
@@ -86,5 +87,9 @@ public class CatalogueView extends GFrame {
                 content.add(productPanel);
             }
         }
+    }
+
+    public Gestock getModel() {
+        return this.model;
     }
 }
