@@ -73,9 +73,8 @@ public class User extends Observable {
         if (this.email != null) prop.setProperty("userEmail", this.email);
         if (this.password != null) prop.setProperty("password", this.password);
         if (this.cookie != null) prop.setProperty("cookie", this.cookie);
-        if (this.mobile != null && this.mobile.getUser().equals(""))
-            prop.setProperty("freeUsername", this.mobile.getUser());
-        if (this.name != null) prop.setProperty("freeSecret", this.mobile.getSecret());
+        if (this.mobile.isValid()) prop.setProperty("freeUsername", this.mobile.getUser());
+        if (this.mobile.isValid()) prop.setProperty("freeSecret", this.mobile.getSecret());
         setChanged();
         notifyObservers(Constants.OBSERVER_USER_UPDATED);
     }
