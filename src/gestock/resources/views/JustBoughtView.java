@@ -1,15 +1,22 @@
-
 package gestock.resources.views;
 
 
+import gestock.Gestock;
+import gestock.controller.BaseProductSearchController;
+import gestock.controller.JustBoughtController;
+
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+
 /**
- *
  * @author smihalkova
  */
-public class JustBoughtView extends JFrame {
-    
+public class JustBoughtView extends GFrame {
+
+    private Gestock model;
+    private JustBoughtController controller;
+
     private JPanel Panel1;
     private JPanel Panel2;
     private JPanel Panel3;
@@ -17,8 +24,8 @@ public class JustBoughtView extends JFrame {
     private JPanel order1;
     private JPanel order2;
     private JPanel order3;
-    
-    
+
+
     private JLabel Add;
     private JButton FirstTime;
     private JButton NotFirstTime;
@@ -28,15 +35,20 @@ public class JustBoughtView extends JFrame {
     private JTextPane List;
 
 
-    public JustBoughtView() {
-        super();
+    public JustBoughtView(Gestock app, JustBoughtController justBoughtController) {
+        super("");
+        this.model = app;
+        this.controller = justBoughtController;
         setSize(new Dimension(500, 500));
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
         Add = new JLabel("Ajouter produit");
         FirstTime = new JButton("Premiere fois");
         NotFirstTime = new JButton("Deja achete");
-        Addor = new JButton("Ajouter ou garde-manger");
+        NotFirstTime.addActionListener((ActionEvent ae) -> {
+            new BaseProductSearchController(model);
+        });
+        Addor = new JButton("Ajouter au garde-manger");
         DeleteLast = new JButton("Effacer Dernier");
         DeleteAll = new JButton("Effacer Tout");
         List = new JTextPane();

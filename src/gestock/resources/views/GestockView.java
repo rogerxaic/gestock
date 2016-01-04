@@ -1,10 +1,7 @@
 package gestock.resources.views;
 
 import gestock.Gestock;
-import gestock.controller.CatalogueController;
-import gestock.controller.LoginController;
-import gestock.controller.PantryController;
-import gestock.controller.ShoppingListController;
+import gestock.controller.*;
 import gestock.entity.User;
 import gestock.resources.views.components.MyRenderer;
 import gestock.resources.views.components.TableModel;
@@ -74,7 +71,7 @@ public class GestockView extends JFrame implements ActionListener {
         }
         bottomButton.setVerticalTextPosition(SwingConstants.BOTTOM);
         bottomButton.setHorizontalTextPosition(SwingConstants.CENTER);
-        bottomButton.addActionListener((ActionEvent ae) -> new JustBoughtView());
+        bottomButton.addActionListener((ActionEvent ae) -> new JustBoughtController(app));
 
 
         AbstractButton catalogue = new JButton("Catalogue");
