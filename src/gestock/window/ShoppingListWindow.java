@@ -10,7 +10,7 @@ import java.awt.*;
 import java.util.LinkedList;
 import java.io.*;
 import java.lang.Object;
-import gestock.baseProducts.*;
+import gestock.entity.*;
 import gestock.Gestock;
 
 /**
