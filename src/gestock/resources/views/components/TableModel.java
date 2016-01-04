@@ -1,7 +1,6 @@
-package gestock.window;
+package gestock.resources.views.components;
 
 import javax.swing.table.DefaultTableModel;
-import javax.swing.text.StringContent;
 
 /**
  * Created by Cristinuta on 12/5/2015.
@@ -13,7 +12,7 @@ public class TableModel extends DefaultTableModel{
 */
 
     public TableModel(String[] columnNames){
-        super(new String[20][3],columnNames);
+        super(new Object[0][3],columnNames);
     }
 
  /*   public int getColumnCount() {

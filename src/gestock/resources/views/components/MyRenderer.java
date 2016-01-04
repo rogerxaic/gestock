@@ -1,8 +1,8 @@
-package gestock.window;
+package gestock.resources.views.components;
 
 import javax.swing.*;
-import java.awt.*;
 import javax.swing.table.DefaultTableCellRenderer;
+import java.awt.*;
 
 
 public class MyRenderer extends DefaultTableCellRenderer {

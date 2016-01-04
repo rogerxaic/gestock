@@ -1,9 +1,8 @@
-package gestock.window;
+package gestock.resources.views;
 
-import gestock.Free;
-import gestock.User;
+import gestock.entity.Free;
+import gestock.entity.User;
 
-import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.WindowAdapter;
@@ -14,9 +13,9 @@ import static javax.swing.GroupLayout.Alignment.*;
 /**
  * Created by rogerxaic on 11/28/2015.
  */
-public class SettingsWindow extends JFrame {
+public class SettingsView extends GFrame {
     protected User user;
-    protected Interface main;
+    protected GestockView main;
     protected String initName;
     protected String initEmail;
     protected String initPassword;
@@ -39,7 +38,7 @@ public class SettingsWindow extends JFrame {
     private JButton exportButton;
     private JButton saveButton;
 
-    public SettingsWindow(Interface main, User user) {
+    public SettingsView(GestockView main, User user) {
         super("Gestock - Settings");
 
         this.main = main;
@@ -106,9 +105,7 @@ public class SettingsWindow extends JFrame {
         importButton = new JButton("Import");
         exportButton = new JButton("Export");
         saveButton = new JButton("Save user");
-        saveButton.addActionListener(e1 -> {
-            updateUser();
-        });
+        saveButton.addActionListener(e1 -> updateUser());
         buttonsPanel = new JPanel();
         buttonsPanel.setLayout(new BoxLayout(buttonsPanel, BoxLayout.X_AXIS));
         buttonsPanel.add(importButton);
@@ -138,12 +135,6 @@ public class SettingsWindow extends JFrame {
             }
         });
 
-        try {
-            Image img = ImageIO.read(getClass().getResource("../resources/gestock-blue.png"));
-            setIconImage(img);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
         setSize(600, 600);
         pack();
         setLocationRelativeTo(null);
@@ -164,7 +155,7 @@ public class SettingsWindow extends JFrame {
         Free free = new Free(freeUser, freeSecret);
         user.setFree(free);
 
-        user.update();
+        user.setUpdated();
         main.refresh();
     }
 
