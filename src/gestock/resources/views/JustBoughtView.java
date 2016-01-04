@@ -36,7 +36,7 @@ public class JustBoughtView extends GFrame {
 
 
     public JustBoughtView(Gestock app, JustBoughtController justBoughtController) {
-        super("");
+        super("Gestock - Je viens d'acheter");
         this.model = app;
         this.controller = justBoughtController;
         setSize(new Dimension(500, 500));

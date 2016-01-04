@@ -23,8 +23,8 @@ public class BaseProductSearchController implements KeyListener {
         view = new BaseProductSearchView(model, this);
     }
 
-    public List getSearchResults(String search) {
-        List l = new LinkedList();
+    public List<BaseProduct> getSearchResults(String search) {
+        List<BaseProduct> l = new LinkedList<>();
 
         LinkedList catalogue = model.getCatalogue();
         for (Object p : catalogue) {
@@ -45,11 +45,19 @@ public class BaseProductSearchController implements KeyListener {
 
     @Override
     public void keyPressed(KeyEvent e) {
-        List l = this.getSearchResults(view.getSearchTerm());
-        view.fill(l);
+        getAndFill();
     }
 
     @Override
     public void keyReleased(KeyEvent e) {
+        getAndFill();
+    }
+
+    public void getAndFill() {
+        List<BaseProduct> l = this.getSearchResults(view.getSearchTerm());
+        view.fill(l);
+        view.refresh(true);
+        view.putOriginalSize();
+        view.putInOriginalLocation();
     }
 }

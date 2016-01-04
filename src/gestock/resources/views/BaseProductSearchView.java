@@ -14,10 +14,12 @@ import java.util.List;
  */
 public class BaseProductSearchView extends GFrame {
 
+    private final Dimension ORIGINAL_SIZE;
+    private final Point ORIGINAL_LOCATION;
     private BaseProductSearchController controller;
     private Gestock model;
-
     private JPanel main;
+    private JScrollPane jScrollPane;
     private JPanel content;
     private JTextField searchField;
 
@@ -32,15 +34,20 @@ public class BaseProductSearchView extends GFrame {
 
         content = new JPanel();
         content.setLayout(new BoxLayout(content, BoxLayout.PAGE_AXIS));
+        jScrollPane = new JScrollPane();
+        jScrollPane.getViewport().add(content);
 
         main = new JPanel(new BorderLayout());
         main.add(searchField, BorderLayout.NORTH);
-        main.add(content, BorderLayout.CENTER);
+        main.add(jScrollPane, BorderLayout.CENTER);
 
         setResizable(false);
         setContentPane(main);
         setLocationRelativeTo(null);
+        setUndecorated(true);
         setVisible(true);
+        ORIGINAL_SIZE = new Dimension(300, 600);
+        ORIGINAL_LOCATION = this.getLocation();
     }
 
     public String getSearchTerm() {
@@ -53,10 +60,18 @@ public class BaseProductSearchView extends GFrame {
             BaseProduct bp = (BaseProduct) o;
             JButton b = new JButton(bp.getName());
             b.addActionListener((ActionEvent ae) -> {
-
+                System.out.println();
+                dispose();
             });
             content.add(b);
         }
     }
 
+    public void putOriginalSize() {
+        setSize(this.ORIGINAL_SIZE);
+    }
+
+    public void putInOriginalLocation() {
+        setLocation(this.ORIGINAL_LOCATION);
+    }
 }
