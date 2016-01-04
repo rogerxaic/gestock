@@ -12,6 +12,10 @@ public class BoughtProduct {
     //protected ShoppingList shoppingList;
     private BaseProduct baseProduct;
 
+    public BoughtProduct(BaseProduct baseProduct) {
+        this.baseProduct = baseProduct;
+    }
+
     public Calendar getExpirationDay() {
         return this.expirationDay;
     }

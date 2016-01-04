@@ -4,15 +4,18 @@ import gestock.Gestock;
 import gestock.entity.BaseProduct;
 import gestock.resources.views.BaseProductSearchView;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Observable;
 
 /**
  * Created by Roger on 1/4/2016.
  */
-public class BaseProductSearchController implements KeyListener {
+public class BaseProductSearchController extends Observable implements KeyListener, ActionListener {
 
     private Gestock model;
     private BaseProductSearchView view;
@@ -59,5 +62,13 @@ public class BaseProductSearchController implements KeyListener {
         view.refresh(true);
         view.putOriginalSize();
         view.putInOriginalLocation();
+    }
+
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        BaseProduct bp = view.getObp().get(e.getSource());
+        setChanged();
+        notifyObservers(bp);
+        view.dispose();
     }
 }

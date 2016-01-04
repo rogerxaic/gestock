@@ -6,7 +6,7 @@ import gestock.entity.BaseProduct;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -17,6 +17,7 @@ public class BaseProductSearchView extends GFrame {
     private final Dimension ORIGINAL_SIZE;
     private final Point ORIGINAL_LOCATION;
     private BaseProductSearchController controller;
+    private HashMap<Object, BaseProduct> obp;
     private Gestock model;
     private JPanel main;
     private JScrollPane jScrollPane;
@@ -48,6 +49,7 @@ public class BaseProductSearchView extends GFrame {
         setVisible(true);
         ORIGINAL_SIZE = new Dimension(300, 600);
         ORIGINAL_LOCATION = this.getLocation();
+        obp = new HashMap<>();
     }
 
     public String getSearchTerm() {
@@ -56,13 +58,12 @@ public class BaseProductSearchView extends GFrame {
 
     public void fill(List<BaseProduct> l) {
         content.removeAll();
+        obp = new HashMap<>();
         for (Object o : l) {
             BaseProduct bp = (BaseProduct) o;
             JButton b = new JButton(bp.getName());
-            b.addActionListener((ActionEvent ae) -> {
-                System.out.println();
-                dispose();
-            });
+            obp.put(b, bp);
+            b.addActionListener(controller);
             content.add(b);
         }
     }
@@ -73,5 +74,9 @@ public class BaseProductSearchView extends GFrame {
 
     public void putInOriginalLocation() {
         setLocation(this.ORIGINAL_LOCATION);
+    }
+
+    public HashMap<Object, BaseProduct> getObp() {
+        return obp;
     }
 }

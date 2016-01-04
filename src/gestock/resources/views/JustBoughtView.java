@@ -46,7 +46,8 @@ public class JustBoughtView extends GFrame {
         FirstTime = new JButton("Premiere fois");
         NotFirstTime = new JButton("Deja achete");
         NotFirstTime.addActionListener((ActionEvent ae) -> {
-            new BaseProductSearchController(model);
+            BaseProductSearchController bpsc = new BaseProductSearchController(model);
+            bpsc.addObserver(controller);
         });
         Addor = new JButton("Ajouter au garde-manger");
         DeleteLast = new JButton("Effacer Dernier");
