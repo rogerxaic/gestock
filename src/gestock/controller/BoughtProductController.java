@@ -1,6 +1,5 @@
 package gestock.controller;
 
-import com.sun.javaws.exceptions.InvalidArgumentException;
 import gestock.Gestock;
 import gestock.entity.BoughtProduct;
 import gestock.entity.Price;
@@ -33,7 +32,7 @@ public class BoughtProductController extends Observable implements ActionListene
             boughtProduct.setExpirationDay(view.getExpiry());
             try {
                 boughtProduct.setQuantity(view.getQuantity());
-            } catch (InvalidArgumentException e1) {
+            } catch (Exception e1) {
                 System.err.println(e1);
             }
 
