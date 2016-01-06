@@ -355,8 +355,4 @@ public class JDateChooser extends JPanel implements ActionListener, PropertyChan
             dateSpinner.setModel(model);
         // End Code change by Mark Brown
     }
-
-    public boolean isDateSelected() {
-        return dateSelected;
-    }
 }
