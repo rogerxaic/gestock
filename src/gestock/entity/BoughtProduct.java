@@ -1,7 +1,5 @@
 package gestock.entity;
 
-import com.sun.javaws.exceptions.InvalidArgumentException;
-
 import java.util.Date;
 
 public class BoughtProduct {
@@ -39,13 +37,12 @@ public class BoughtProduct {
         return this.quantity;
     }
 
-    public void setQuantity(int quantity) throws InvalidArgumentException {
+    public void setQuantity(int quantity) throws Exception {
         if (quantity >= 0) {
             this.quantity = quantity;
             this.remanentQuantity = quantity;
         } else {
-            String[] exceptionText = {"Quantity must be positive"};
-            throw new InvalidArgumentException(exceptionText);
+            throw new Exception("Quantity must be positive");
         }
     }
 
