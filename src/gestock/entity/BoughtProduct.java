@@ -1,13 +1,16 @@
 package gestock.entity;
 
-import java.util.Calendar;
+import com.sun.javaws.exceptions.InvalidArgumentException;
+
+import java.util.Date;
 
 public class BoughtProduct {
 
     protected User user;
-    private Calendar expirationDay;
-    private Calendar boughtDay;
-    private int quantity;
+    private Date expirationDay;
+    private Date boughtDay;
+    private int quantity; //original quantity
+    private int remanentQuantity; //original quantity
     private Price price;
     //protected ShoppingList shoppingList;
     private BaseProduct baseProduct;
@@ -16,19 +19,19 @@ public class BoughtProduct {
         this.baseProduct = baseProduct;
     }
 
-    public Calendar getExpirationDay() {
+    public Date getExpirationDay() {
         return this.expirationDay;
     }
 
-    public void setExpirationDay(Calendar expirationDay) {
+    public void setExpirationDay(Date expirationDay) {
         this.expirationDay = expirationDay;
     }
 
-    public Calendar getBoughtDay() {
+    public Date getBoughtDay() {
         return this.boughtDay;
     }
 
-    public void setBoughtDay(Calendar boughtDay) {
+    public void setBoughtDay(Date boughtDay) {
         this.boughtDay = boughtDay;
     }
 
@@ -36,8 +39,14 @@ public class BoughtProduct {
         return this.quantity;
     }
 
-    public void setQuantity(int quantity) {
-        this.quantity = quantity;
+    public void setQuantity(int quantity) throws InvalidArgumentException {
+        if (quantity >= 0) {
+            this.quantity = quantity;
+            this.remanentQuantity = quantity;
+        } else {
+            String[] exceptionText = {"Quantity must be positive"};
+            throw new InvalidArgumentException(exceptionText);
+        }
     }
 
     public Price getPrice() {
@@ -64,4 +73,18 @@ public class BoughtProduct {
         this.user = user;
     }
 
+    public boolean use() {
+        if (this.remanentQuantity > 0) {
+            this.remanentQuantity--;
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    @Override
+    public String toString() {
+        return baseProduct +
+                ", quantity:" + quantity;
+    }
 }

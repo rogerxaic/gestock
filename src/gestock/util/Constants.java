@@ -25,6 +25,8 @@ public final class Constants {
 
     public static final int OBSERVER_USER_UPDATED = 7;
 
+    public static final int OBSERVER_PANTRY_PRODUCT_CREATED = 9;
+
     /**
      * Don't let anyone instantiate this class.
      */

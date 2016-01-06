@@ -198,4 +198,10 @@ public class Gestock extends Observable {
     public void setPantry(List<BoughtProduct> pantry) {
         this.pantry = pantry;
     }
+
+    public void addToPantry(BoughtProduct bp) {
+        this.pantry.add(bp);
+        setChanged();
+        notifyObservers(Constants.OBSERVER_PANTRY_PRODUCT_CREATED);
+    }
 }

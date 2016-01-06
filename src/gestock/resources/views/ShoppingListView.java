@@ -1,6 +1,7 @@
 package gestock.resources.views;
 
 import gestock.Gestock;
+import gestock.controller.BaseProductSearchController;
 import gestock.controller.ShoppingListController;
 import gestock.entity.BaseProduct;
 import gestock.entity.Free;
@@ -22,6 +23,8 @@ import java.util.Map;
  */
 public class ShoppingListView extends GFrame {
 
+    private final Dimension ORIGINAL_SIZE;
+    private final Point ORIGINAL_LOCATION;
 
     private ShoppingListController controller;
     private ShoppingList shoppingList;
@@ -61,12 +64,14 @@ public class ShoppingListView extends GFrame {
                 clearSearchField();
                 fill();
                 refresh();
-                searchField.grabFocus();
             }
         });
         searchButton = new JButton("Chercher");
         searchButton.addActionListener((ActionEvent ae) -> {
-            //setEnabled(false);
+            BaseProductSearchController bpsc = new BaseProductSearchController(model);
+            bpsc.getAndFill(searchField.getText());
+            bpsc.addObserver(controller);
+            setEnabled(false);
         });
         headerPanel = new JPanel();
         headerPanel.setLayout(new BoxLayout(headerPanel, BoxLayout.LINE_AXIS));
@@ -123,10 +128,13 @@ public class ShoppingListView extends GFrame {
         setContentPane(main);
         setLocationRelativeTo(null);
         setVisible(true);
+        ORIGINAL_SIZE = new Dimension(600, 600);
+        ORIGINAL_LOCATION = this.getLocation();
     }
 
     public void clearSearchField() {
         this.searchField.setText("");
+        this.searchField.grabFocus();
     }
 
     public void addToShoppingList(Object o) {
@@ -137,7 +145,6 @@ public class ShoppingListView extends GFrame {
             BaseProduct bp = (BaseProduct) o;
             shoppingListTitles.put(bp, bp.getName() + " " + bp.getBrand());
         }
-        System.out.println(shoppingListTitles);
     }
 
     public void fill() {
@@ -176,7 +183,10 @@ public class ShoppingListView extends GFrame {
         shoppingListTitles.forEach((k, v) -> {
             if (k instanceof BaseProduct) {
                 BaseProduct bp = (BaseProduct) k;
-                price[0] += bp.getLatestPrice().getTotalPrice();
+                try {
+                    price[0] += bp.getLatestPrice().getTotalPrice();
+                } catch (NullPointerException ignored) {
+                }
             }
         });
         return price[0];
@@ -186,6 +196,15 @@ public class ShoppingListView extends GFrame {
     public void refresh() {
         price.setText("Prix pannier (approx.) : " + getPrice());
         super.refresh(true);
-        setSize(600, 600);
+        putOriginalSize();
+        putInOriginalLocation();
+    }
+
+    public void putOriginalSize() {
+        setSize(this.ORIGINAL_SIZE);
+    }
+
+    public void putInOriginalLocation() {
+        setLocation(this.ORIGINAL_LOCATION);
     }
 }

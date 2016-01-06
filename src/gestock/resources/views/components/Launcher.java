@@ -1,19 +1,17 @@
 package gestock.resources.views.components;
 
-import gestock.resources.views.GFrame;
-
 import javax.swing.*;
 import java.awt.*;
 
 /**
  * Created by Roger on 1/2/2016.
  */
-public class Launcher extends GFrame {
+public class Launcher extends JWindow {
 
     private JLabel text;
 
     public Launcher() {
-        super("");
+        super();
         setSize(300, 200);
         text = new JLabel("");
 
@@ -23,7 +21,7 @@ public class Launcher extends GFrame {
         panel.add(text, BorderLayout.SOUTH);
 
         setContentPane(panel);
-        setUndecorated(true);
+        //setUndecorated(true);
         setLocationRelativeTo(null);
         setVisible(true);
     }

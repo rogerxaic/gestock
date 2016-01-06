@@ -4,10 +4,12 @@ package gestock.resources.views;
 import gestock.Gestock;
 import gestock.controller.BaseProductSearchController;
 import gestock.controller.JustBoughtController;
+import gestock.entity.BoughtProduct;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
+import java.util.Stack;
 
 /**
  * @author smihalkova
@@ -50,8 +52,11 @@ public class JustBoughtView extends GFrame {
             bpsc.addObserver(controller);
         });
         Addor = new JButton("Ajouter au garde-manger");
+        Addor.addActionListener((ActionEvent ae) -> controller.addToPantry());
         DeleteLast = new JButton("Effacer Dernier");
+        DeleteLast.addActionListener((ActionEvent ae) -> controller.deleteLast());
         DeleteAll = new JButton("Effacer Tout");
+        DeleteAll.addActionListener((ActionEvent ae) -> controller.deleteAll());
         List = new JTextPane();
 
         Panel1 = new JPanel();
@@ -79,5 +84,14 @@ public class JustBoughtView extends GFrame {
         setContentPane(PanelMain);
         setLocationRelativeTo(null);
         setVisible(true);
+    }
+
+    public void fill(Stack<BoughtProduct> toAdd) {
+        StringBuilder sb = new StringBuilder();
+        for (BoughtProduct bp : toAdd) {
+            sb.append(bp.toString());
+            sb.append("\n");
+        }
+        this.List.setText(sb.toString());
     }
 }

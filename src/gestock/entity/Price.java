@@ -5,20 +5,19 @@
  */
 package gestock.entity;
 
-import java.util.Calendar;
+import java.util.Date;
 
 /**
- *
  * @author Roger
  */
 public class Price {
 
     protected double totalPrice;
-    protected Calendar date;
+    protected Date date;
     protected BoughtProduct boughtProduct;
     protected Shop shop;
 
-    public Price(double totalPrice, Calendar date) {
+    public Price(double totalPrice, Date date) {
         this.totalPrice = totalPrice;
         this.date = date;
     }
@@ -31,11 +30,11 @@ public class Price {
         this.totalPrice = totalPrice;
     }
 
-    public Calendar getDate() {
+    public Date getDate() {
         return date;
     }
 
-    public void setDate(Calendar date) {
+    public void setDate(Date date) {
         this.date = date;
     }
 

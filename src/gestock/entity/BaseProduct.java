@@ -144,4 +144,11 @@ public class BaseProduct extends Observable {
         setChanged();
         notifyObservers(Constants.OBSERVER_PRODUCT_UPDATED);
     }
+
+    @Override
+    public String toString() {
+        return "BaseProduct{" +
+                "name='" + name + '\'' +
+                '}';
+    }
 }
