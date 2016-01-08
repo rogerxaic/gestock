@@ -17,15 +17,17 @@ import java.util.Observable;
 
 public class GestockView extends JFrame implements ActionListener {
 
+    private Gestock model;
     private User user;
 
     private JLabel userName;
 
     public GestockView(Gestock app) {
-        super("gestock");
+        super(app.messages.getString("app.title"));
         setSize(1120, 750);
 
-        this.user = app.getUser();
+        this.model = app;
+        this.user = model.getUser();
 
         // The main panel
         JPanel mainPanel = new JPanel(new BorderLayout(5, 30));
@@ -54,7 +56,7 @@ public class GestockView extends JFrame implements ActionListener {
         space.setBackground(Color.white);
 
 
-        AbstractButton bottomButton = new JButton("Je viens d'acheter");
+        AbstractButton bottomButton = new JButton(model.messages.getString("justbought.title"));
         bottomButton.setBackground(Color.white);
         bottomButtonPanel.add(bottomButton, BorderLayout.WEST);
         bottomButton.setBackground(Color.WHITE);
@@ -74,7 +76,7 @@ public class GestockView extends JFrame implements ActionListener {
         bottomButton.addActionListener((ActionEvent ae) -> new JustBoughtController(app));
 
 
-        AbstractButton catalogue = new JButton("Catalogue");
+        AbstractButton catalogue = new JButton(model.messages.getString("catalogue.title"));
         menuUp.add(catalogue);
         catalogue.setBackground(Color.WHITE);
         catalogue.setContentAreaFilled(false);
@@ -93,7 +95,7 @@ public class GestockView extends JFrame implements ActionListener {
         catalogue.addActionListener((ActionEvent ae) -> new CatalogueController(app));
 
 
-        AbstractButton gardeManger = new JButton("Garde-manger");
+        AbstractButton gardeManger = new JButton(model.messages.getString("pantry.title"));
         menuUp.add(gardeManger);
         gardeManger.setBackground(Color.WHITE);
         gardeManger.setContentAreaFilled(false);
@@ -109,9 +111,7 @@ public class GestockView extends JFrame implements ActionListener {
         }
         gardeManger.setVerticalTextPosition(SwingConstants.BOTTOM);
         gardeManger.setHorizontalTextPosition(SwingConstants.CENTER);
-        gardeManger.addActionListener((ActionEvent ae) -> {
-            new PantryController(app);
-        });
+        gardeManger.addActionListener((ActionEvent ae) -> new PantryController(app));
 
 
         AbstractButton listeAchats = new JButton("Liste achats");
@@ -168,7 +168,7 @@ public class GestockView extends JFrame implements ActionListener {
         parametres.setVerticalTextPosition(SwingConstants.BOTTOM);
         parametres.setHorizontalTextPosition(SwingConstants.CENTER);
         parametres.addActionListener((ActionEvent ae) -> {
-            new SettingsView(this, user);
+            new SettingsView(model, this, user);
             setEnabled(false);
         });
 

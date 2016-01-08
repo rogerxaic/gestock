@@ -1,5 +1,6 @@
 package gestock.resources.views;
 
+import gestock.Gestock;
 import gestock.entity.Free;
 import gestock.entity.User;
 
@@ -14,6 +15,7 @@ import static javax.swing.GroupLayout.Alignment.*;
  * Created by rogerxaic on 11/28/2015.
  */
 public class SettingsView extends GFrame {
+    protected Gestock model;
     protected User user;
     protected GestockView main;
     protected String initName;
@@ -38,9 +40,10 @@ public class SettingsView extends GFrame {
     private JButton exportButton;
     private JButton saveButton;
 
-    public SettingsView(GestockView main, User user) {
-        super("Gestock - Settings");
+    public SettingsView(Gestock app, GestockView main, User user) {
+        super(app.messages.getString("app.title") + " - " + app.messages.getString("settings.title"));
 
+        this.model = app;
         this.main = main;
         this.user = user;
 
@@ -50,11 +53,11 @@ public class SettingsView extends GFrame {
         this.initFreeUser = user.getFree().getUser();
         this.initFreeSecret = user.getFree().getSecret();
 
-        nameLabel = new JLabel("Name");
-        emailLabel = new JLabel("Email");
-        passwordLabel = new JLabel("Password");
-        freeUserLabel = new JLabel("Free User Name");
-        freeSecretLabel = new JLabel("Free Secret");
+        nameLabel = new JLabel(model.messages.getString("settings.name"));
+        emailLabel = new JLabel(model.messages.getString("settings.email"));
+        passwordLabel = new JLabel(model.messages.getString("settings.password"));
+        freeUserLabel = new JLabel(model.messages.getString("settings.free.user"));
+        freeSecretLabel = new JLabel(model.messages.getString("settings.free.secret"));
         nameField = new JTextField(this.initName, 20);
         emailField = new JTextField(this.initEmail, 20);
         passwordField = new JPasswordField(this.initPassword, 20);

@@ -9,34 +9,35 @@ import gestock.util.Constants;
 import gestock.util.Curl;
 
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Observable;
 import java.util.Properties;
 
 /**
- *
  * @author Roger
  */
 public class User extends Observable {
-    
+
     protected String name;
     protected String password;
     protected String cookie;
     protected String email;
-    protected LinkedList<ShoppingList> shoppingList;
+    protected String country;
+    protected String language;
+    protected List<ShoppingList> shoppingList;
     protected Free mobile;
 
     protected Properties prop;
 
     public User(Properties prop) {
         this.prop = prop;
-        String userName = prop.getProperty("userName");
-        this.name = (userName != null) ? userName : System.getProperty("user.name");
-
-        String userEmail = prop.getProperty("userEmail");
-        this.email = userEmail != null ? userEmail : "";
-
-        String freeUsername = prop.getProperty("freeUsername");
-        String freeSecret = prop.getProperty("freeSecret");
+        this.name = prop.getProperty("user.name", System.getProperty("user.name"));
+        this.email = prop.getProperty("user.email", "");
+        this.country = prop.getProperty("user.country", System.getProperty("user.country"));
+        this.language = prop.getProperty("user.language", System.getProperty("user.language"));
+        this.shoppingList = new LinkedList<>();
+        String freeUsername = prop.getProperty("free.username");
+        String freeSecret = prop.getProperty("free.secret");
         if (freeUsername != null && freeSecret != null) {
             this.mobile = new Free(freeUsername, freeSecret);
         } else this.mobile = new Free("", "");
@@ -69,12 +70,14 @@ public class User extends Observable {
     }
 
     public void setUpdated() {
-        if (this.name != null) prop.setProperty("userName", this.name);
-        if (this.email != null) prop.setProperty("userEmail", this.email);
+        if (this.name != null) prop.setProperty("user.name", this.name);
+        if (this.email != null) prop.setProperty("user.email", this.email);
         if (this.password != null) prop.setProperty("password", this.password);
         if (this.cookie != null) prop.setProperty("cookie", this.cookie);
-        if (this.mobile.isValid()) prop.setProperty("freeUsername", this.mobile.getUser());
-        if (this.mobile.isValid()) prop.setProperty("freeSecret", this.mobile.getSecret());
+        if (this.country != null) prop.setProperty("user.country", this.country);
+        if (this.language != null) prop.setProperty("user.language", this.language);
+        if (this.mobile.isValid()) prop.setProperty("free.username", this.mobile.getUser());
+        if (this.mobile.isValid()) prop.setProperty("free.secret", this.mobile.getSecret());
         setChanged();
         notifyObservers(Constants.OBSERVER_USER_UPDATED);
     }

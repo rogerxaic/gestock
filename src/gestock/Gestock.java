@@ -30,24 +30,37 @@ import java.util.List;
 public class Gestock extends Observable {
 
     public User mainUser;
+    public ResourceBundle messages;
     private Properties prop;
     private String fs = System.getProperty("file.separator");
     private String filepath = System.getProperty("user.home") + fs
             + (Tools.isWindows() ? "AppData" + fs + "Roaming" + fs + "gestock" : ".config" + fs + "gestock");
-    private String filename = "config.properties";
+    private String configProperties = "config.properties";
     private LinkedList<BaseProduct> catalogue;
     private List<BoughtProduct> pantry;
 
     public Gestock() {
         Launcher launcher = new Launcher();
+
+        /**
+         * We fetch the user system's language and we instantiate the messages ResourceBundle
+         * in order to have the init messages
+         */
+        String language = (System.getProperty("user.language"));
+        String country = (System.getProperty("user.country"));
+        Locale.setDefault(new Locale(language, country));
+        messages = ResourceBundle.getBundle("gestock.resources.lang.MessagesBundle", Locale.getDefault());
+
         /**
          * Loading the properties if they exist, create a basic properties file otherwise.
          */
         if (!init()) {
             //gotta create it
-            List<String> props = Arrays.asList("userName:" + System.getProperty("user.name"));
+            List<String> props = Arrays.asList("user.name:" + System.getProperty("user.name"),
+                    "user.language" + language,
+                    "user.country" + country);
             try {
-                Files.write(Paths.get(filepath + fs + filename), props);
+                Files.write(Paths.get(filepath + fs + configProperties), props);
                 System.out.println("Created a basic properties file");
             } catch (IOException e) {
                 e.printStackTrace();
@@ -55,11 +68,19 @@ public class Gestock extends Observable {
         }
         try {
             System.out.println("Loading properties file...");
-            launcher.setText("Loading properties file...");
-            prop = getProperties(filepath + fs + filename);
+            launcher.setText(messages.getString("loadingProperties"));
+            prop = getProperties(filepath + fs + configProperties);
         } catch (IOException e) {
             e.printStackTrace();
         }
+
+        /**
+         * We fetch the actual user's language selection
+         */
+        language = prop.getProperty("user.language", System.getProperty("user.language"));
+        country = prop.getProperty("user.country", System.getProperty("user.country"));
+        Locale.setDefault(new Locale(language, country));
+        messages = ResourceBundle.getBundle("gestock.resources.lang.MessagesBundle", Locale.getDefault());
 
         mainUser = new User(prop);
         catalogue = new LinkedList<>();
@@ -71,11 +92,11 @@ public class Gestock extends Observable {
          */
         try {
             System.out.print("Fetching database content... ");
-            launcher.setText("Fetching database products from Internet...");
+            launcher.setText(messages.getString("internetProducts"));
             Curl curl = new Curl("http://gestock.xaic.cat/api/baseproducts");
             curl.run();
             JSONArray baseProductsArray = new JSONArray(curl.getResponse());
-            launcher.setText("Adding products to catalogue...");
+            launcher.setText(messages.getString("addingProductsCatalogue"));
             for (int i = 0; i < baseProductsArray.length(); i++) {
                 try {
                     launcher.setText("Adding product " + (i + 1) + " of " + baseProductsArray.length() + " to catalogue...");
@@ -90,7 +111,7 @@ public class Gestock extends Observable {
             System.out.println("\nThere has been a problem... Do you have an active internet connection?");
             e.printStackTrace();
         }
-        BaseProduct b = new MilkBaseProduct(0, "Lait 1.5L Candia", "", "", "Candia", new HashMap<>(), 1, 1);
+        BaseProduct b = new MilkBaseProduct(0, "Milk 1.5L", "", "", "Candia", new HashMap<>(), 1, 1);
         catalogue.add(b);
         launcher.dispose();
     }
@@ -133,18 +154,18 @@ public class Gestock extends Observable {
             e.printStackTrace();
         }
 
-        File configFile = new File(filepath + fs + filename);
+        File configFile = new File(filepath + fs + configProperties);
 
         return configFile.exists() && !configFile.isDirectory();
     }
 
-    private Properties getProperties(String filename) throws IOException {
+    private Properties getProperties(String configProperties) throws IOException {
         FileInputStream inputStream = null;
         Properties prop = new Properties();
         try {
 //            String propFileName = "config.properties";
 
-            inputStream = new FileInputStream(filename);
+            inputStream = new FileInputStream(configProperties);
 
             //                prop.load(inputStream);
             prop.load(inputStream);
@@ -162,7 +183,7 @@ public class Gestock extends Observable {
     public void saveProperties() {
         OutputStream outputStream = null;
         try {
-            outputStream = new FileOutputStream(filepath + fs + filename);
+            outputStream = new FileOutputStream(filepath + fs + configProperties);
             prop.store(outputStream, null);
         } catch (IOException e) {
             e.printStackTrace();
@@ -193,10 +214,6 @@ public class Gestock extends Observable {
 
     public List<BoughtProduct> getPantry() {
         return pantry;
-    }
-
-    public void setPantry(List<BoughtProduct> pantry) {
-        this.pantry = pantry;
     }
 
     public void addToPantry(BoughtProduct bp) {

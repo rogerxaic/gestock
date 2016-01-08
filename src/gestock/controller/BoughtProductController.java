@@ -33,7 +33,7 @@ public class BoughtProductController extends Observable implements ActionListene
             try {
                 boughtProduct.setQuantity(view.getQuantity());
             } catch (Exception e1) {
-                System.err.println(e1);
+                System.err.println(e1.getMessage());
             }
 
             setChanged();
