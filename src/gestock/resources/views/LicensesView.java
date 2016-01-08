@@ -59,7 +59,7 @@ public class LicensesView extends GFrame implements ActionListener {
     }
 
     private void initText() {
-        this.licenceText = new HashMap();
+        this.licenceText = new HashMap<>();
         this.licenceText.put("JSON in Java [package org.json]\n| (https://github.com/douglascrockford/JSON-java)", " Copyright (c) 2002 JSON.org\n\n"
                 + " Permission is hereby granted, free of charge, to any person obtaining a copy\n"
                 + " of this software and associated documentation files (the \"Software\"), to deal\n"
@@ -78,7 +78,9 @@ public class LicensesView extends GFrame implements ActionListener {
                 + " OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE\n"
                 + " SOFTWARE.");
         this.licenceText.put("Icons made by Freepik (http://www.freepik.com)\n| (http://www.flaticon.com)",
-                "Licensed under CC BY 3.0 (Creative Commons BY 3.0) \n http://creativecommons.org/licenses/by/3.0/");
+                "Licensed under CC BY 3.0 (Creative Commons BY 3.0)\nhttp://creativecommons.org/licenses/by/3.0/");
+        this.licenceText.put("JCalendar [package com.toedter.calendar]\n| (http://toedter.com/jcalendar/)",
+                "Licensed under a LGPL Licence\nhttps://www.gnu.org/licenses/lgpl.html");
     }
 
     private void addText() {
