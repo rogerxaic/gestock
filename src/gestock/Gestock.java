@@ -5,11 +5,8 @@
  */
 package gestock;
 
-import gestock.entity.BaseProduct;
-import gestock.entity.BoughtProduct;
-import gestock.entity.MilkBaseProduct;
-import gestock.entity.User;
-import gestock.resources.views.GestockView;
+import gestock.controller.GestockController;
+import gestock.entity.*;
 import gestock.resources.views.components.Launcher;
 import gestock.util.Constants;
 import gestock.util.Curl;
@@ -23,6 +20,7 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.*;
 import java.util.List;
+import java.util.stream.Stream;
 
 /**
  * @author rogerxaic
@@ -36,6 +34,8 @@ public class Gestock extends Observable {
     private String filepath = System.getProperty("user.home") + fs
             + (Tools.isWindows() ? "AppData" + fs + "Roaming" + fs + "gestock" : ".config" + fs + "gestock");
     private String configProperties = "config.properties";
+    private String baseFile = "baseproducts";
+    private String boughtFile = "boughtproducts";
     private LinkedList<BaseProduct> catalogue;
     private List<BoughtProduct> pantry;
 
@@ -54,7 +54,10 @@ public class Gestock extends Observable {
         /**
          * Loading the properties if they exist, create a basic properties file otherwise.
          */
-        if (!init()) {
+        File configFile = new File(filepath + fs + configProperties);
+
+        init();
+        if (!configFile.exists() || configFile.isDirectory()) {
             //gotta create it
             List<String> props = Arrays.asList("user.name:" + System.getProperty("user.name"),
                     "user.language" + language,
@@ -111,8 +114,68 @@ public class Gestock extends Observable {
             System.out.println("\nThere has been a problem... Do you have an active internet connection?");
             e.printStackTrace();
         }
-        BaseProduct b = new MilkBaseProduct(0, "Milk 1.5L", "", "", "Candia", new HashMap<>(), 1, 1);
-        catalogue.add(b);
+
+        /**
+         * Load the local products.
+         */
+        //BaseProducts
+        try (Stream<String> stream = Files.lines(Paths.get(filepath + fs + baseFile))) {
+            stream.forEach((k) -> {
+                if (k.length() > 10) {
+                    BaseProduct product;
+                    String[] fields = k.split("\t");
+
+                    HashMap<String, Double> nutritionFacts = newNutritionFacts(fields);
+
+                    char type = k.charAt(0);
+                    switch (type) {
+                        case '0': //BaseProduct
+                            product = new BaseProduct(fields, nutritionFacts);
+                            catalogue.add(product);
+                            break;
+                        case '1': //DairyBaseProduct
+                            product = new DairyBaseProduct(fields, nutritionFacts);
+                            catalogue.add(product);
+                            break;
+                        case '2': //MilkBaseProduct
+                            product = new MilkBaseProduct(fields, nutritionFacts);
+                            catalogue.add(product);
+                            break;
+                        case '3': //MeatBaseProduct
+                            product = new MeatBaseProduct(fields, nutritionFacts);
+                            catalogue.add(product);
+                            break;
+                        case '4': //FishBaseProduct
+                            product = new FishBaseProduct(fields, nutritionFacts);
+                            catalogue.add(product);
+                            break;
+                        default: //Not a product
+                            break;
+                    }
+                }
+            });
+
+        } catch (IOException ignored) {
+        }
+        //BaseProducts
+        try (Stream<String> stream = Files.lines(Paths.get(filepath + fs + boughtFile))) {
+            stream.forEach((k) -> {
+                if (k.length() > 5) {
+                    BoughtProduct product;
+                    String[] fields = k.split("\t");
+                    BaseProduct bp;
+                    if (Integer.parseInt(fields[5]) == 0) {
+                        bp = findBaseProductByReference(Integer.parseInt(fields[6]));
+                    } else {
+                        bp = findBaseProductById(Integer.parseInt(fields[5]));
+                    }
+                    product = new BoughtProduct(bp, fields);
+                    pantry.add(product);
+                }
+            });
+
+        } catch (IOException ignored) {
+        }
         launcher.dispose();
     }
 
@@ -129,16 +192,27 @@ public class Gestock extends Observable {
         } catch (Exception evt) {
             evt.printStackTrace();
         }
-        EventQueue.invokeLater(() -> new GestockView(app));
+        EventQueue.invokeLater(() -> new GestockController(app));
+    }
+
+    private HashMap<String, Double> newNutritionFacts(String[] fields) {
+        HashMap<String, Double> nutritionFacts = new HashMap<>();
+        nutritionFacts.put("Energy", (fields[8].equals("null")) ? 0.0 : Double.parseDouble(fields[8]));
+        nutritionFacts.put("Fats", (fields[9].equals("null")) ? 0.0 : Double.parseDouble(fields[9]));
+        nutritionFacts.put("Acids", (fields[10].equals("null")) ? 0.0 : Double.parseDouble(fields[10]));
+        nutritionFacts.put("Carbohydrates", (fields[11].equals("null")) ? 0.0 : Double.parseDouble(fields[11]));
+        nutritionFacts.put("Sugars", (fields[12].equals("null")) ? 0.0 : Double.parseDouble(fields[12]));
+        nutritionFacts.put("Fibers", (fields[13].equals("null")) ? 0.0 : Double.parseDouble(fields[13]));
+        nutritionFacts.put("Proteins", (fields[14].equals("null")) ? 0.0 : Double.parseDouble(fields[14]));
+        nutritionFacts.put("Salt", (fields[15].equals("null")) ? 0.0 : Double.parseDouble(fields[15]));
+        return nutritionFacts;
     }
 
     /**
      * Creates the filepath directory if it does not exist.
      * Checks if there's the properties file inside the directory.
-     *
-     * @return true if the file exists, else false.
      */
-    private boolean init() {
+    private void init() {
         File f;
         boolean bool = false;
         try {
@@ -153,10 +227,6 @@ public class Gestock extends Observable {
         } catch (Exception e) {
             e.printStackTrace();
         }
-
-        File configFile = new File(filepath + fs + configProperties);
-
-        return configFile.exists() && !configFile.isDirectory();
     }
 
     private Properties getProperties(String configProperties) throws IOException {
@@ -202,7 +272,7 @@ public class Gestock extends Observable {
         return mainUser;
     }
 
-    public LinkedList getCatalogue() {
+    public LinkedList<BaseProduct> getCatalogue() {
         return this.catalogue;
     }
 
@@ -220,5 +290,150 @@ public class Gestock extends Observable {
         this.pantry.add(bp);
         setChanged();
         notifyObservers(Constants.OBSERVER_PANTRY_PRODUCT_CREATED);
+    }
+
+    public BaseProduct findBaseProductById(int id) {
+        for (BaseProduct bp : catalogue) {
+            if (bp.getId() == id)
+                return bp;
+        }
+
+        return null;
+    }
+
+    public BaseProduct findBaseProductByReference(int reference) {
+        for (BaseProduct bp : catalogue) {
+            if (bp.getReference() == reference)
+                return bp;
+        }
+
+        return null;
+    }
+
+    public String saveBaseProducts() {
+        StringBuilder sb = new StringBuilder();
+        for (BaseProduct bp : catalogue) {
+            if (bp.getReference() == 0) { //No internet product
+                /**
+                 * Type of product, to process it later.
+                 */
+                if (bp instanceof MilkBaseProduct) {
+                    sb.append(2);
+                    sb.append("\t");
+                } else if (bp instanceof DairyBaseProduct) {
+                    sb.append(1);
+                    sb.append("\t");
+                } else if (bp instanceof MeatBaseProduct) {
+                    sb.append(3);
+                    sb.append("\t");
+                } else if (bp instanceof FishBaseProduct) {
+                    sb.append(4);
+                    sb.append("\t");
+                } else {
+                    sb.append(0);
+                    sb.append("\t");
+                }
+                sb.append(bp.getReference());
+                sb.append("\t");
+                sb.append(bp.getId());
+                sb.append("\t");
+                sb.append(bp.getCode());
+                sb.append("\t");
+                sb.append(bp.getName());
+                sb.append("\t");
+                sb.append(bp.getDescription());
+                sb.append("\t");
+                sb.append(bp.getTraces());
+                sb.append("\t");
+                sb.append(bp.getBrand());
+                sb.append("\t");
+                sb.append(bp.getNutritionFacts().get("Energy"));
+                sb.append("\t");
+                sb.append(bp.getNutritionFacts().get("Fats"));
+                sb.append("\t");
+                sb.append(bp.getNutritionFacts().get("Acids"));
+                sb.append("\t");
+                sb.append(bp.getNutritionFacts().get("Carbohydrates"));
+                sb.append("\t");
+                sb.append(bp.getNutritionFacts().get("Sugars"));
+                sb.append("\t");
+                sb.append(bp.getNutritionFacts().get("Fibers"));
+                sb.append("\t");
+                sb.append(bp.getNutritionFacts().get("Proteins"));
+                sb.append("\t");
+                sb.append(bp.getNutritionFacts().get("Salt"));
+
+                /**
+                 * Adding specific information on product.
+                 */
+                if (bp instanceof MilkBaseProduct) {
+                    MilkBaseProduct specificProduct = (MilkBaseProduct) bp;
+                    sb.append("\t");
+                    sb.append(specificProduct.getOriginAnimal());
+                    sb.append("\t");
+                    sb.append(specificProduct.getSkimmed());
+                } else if (bp instanceof DairyBaseProduct) {
+                    DairyBaseProduct specificProduct = (DairyBaseProduct) bp;
+                    sb.append("\t");
+                    sb.append(specificProduct.getOriginAnimal());
+                } else if (bp instanceof MeatBaseProduct) {
+                    MeatBaseProduct specificProduct = (MeatBaseProduct) bp;
+                    sb.append("\t");
+                    sb.append(specificProduct.isHalal());
+                } else if (bp instanceof FishBaseProduct) {
+                    FishBaseProduct specificProduct = (FishBaseProduct) bp;
+                    sb.append("\t");
+                    sb.append(specificProduct.isFresh());
+                }
+
+                sb.append(System.getProperty("line.separator"));
+            }
+        }
+        return (sb.toString());
+    }
+
+    public String saveBoughtProducts() {
+        StringBuilder sb = new StringBuilder();
+        for (BoughtProduct bp : pantry) {
+
+            sb.append(bp.getId());
+            sb.append("\t");
+            sb.append(bp.getExpirationDay().getTime());
+            sb.append("\t");
+            sb.append(bp.getBoughtDay().getTime());
+            sb.append("\t");
+            sb.append(bp.getQuantity());
+            sb.append("\t");
+            sb.append(bp.getRemanentQuantity());
+            sb.append("\t");
+            sb.append(bp.getBaseProduct().getId());
+            sb.append("\t");
+            sb.append(bp.getBaseProduct().getReference());
+
+            sb.append(System.getProperty("line.separator"));
+
+        }
+        return (sb.toString());
+    }
+
+    public void save() {
+        /**
+         * Save BaseProducts
+         */
+        this.saver(filepath + fs + baseFile, saveBaseProducts());
+
+        /**
+         * Save BoughtProducts
+         */
+        this.saver(filepath + fs + boughtFile, saveBoughtProducts());
+    }
+
+    private void saver(String where, String what) {
+        try (Writer writer = new BufferedWriter(new OutputStreamWriter(
+                new FileOutputStream(where), "utf-8"))) {
+            writer.write(what);
+            writer.write(System.lineSeparator());
+        } catch (Exception ignored) {
+        }
     }
 }

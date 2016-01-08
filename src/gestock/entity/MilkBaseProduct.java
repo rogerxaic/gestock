@@ -10,11 +10,20 @@ public class MilkBaseProduct extends DairyBaseProduct {
         this.skimmed = skimmed;
     }
 
+    public MilkBaseProduct(String[] fields, HashMap<String, Double> nutritionFacts) {
+        this(Long.parseLong(fields[3]), fields[4], fields[5], fields[6], fields[7], nutritionFacts, Integer.parseInt(fields[16]), Integer.parseInt(fields[17]));
+    }
+
     public int getSkimmed() {
         return skimmed;
     }
 
     public void setSkimmed(int skimmed) {
         this.skimmed = skimmed;
+    }
+
+    @Override
+    public String toString() {
+        return name + ' ' + getQuantity() / 1000 + "L";
     }
 }

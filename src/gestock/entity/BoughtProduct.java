@@ -4,7 +4,8 @@ import java.util.Date;
 
 public class BoughtProduct {
 
-    protected User user;
+    private static int counter = 0;
+    private int id;
     private Date expirationDay;
     private Date boughtDay;
     private int quantity; //original quantity
@@ -15,6 +16,19 @@ public class BoughtProduct {
 
     public BoughtProduct(BaseProduct baseProduct) {
         this.baseProduct = baseProduct;
+        baseProduct.boughtProducts.add(this);
+        counter++;
+        this.id = counter;
+    }
+
+    public BoughtProduct(BaseProduct baseProduct, String[] fields) {
+        this(baseProduct);
+        this.expirationDay = new Date(Long.parseLong(fields[1]));
+        this.boughtDay = new Date(Long.parseLong(fields[2]));
+        this.quantity = Integer.parseInt(fields[3]);
+        this.remanentQuantity = Integer.parseInt(fields[4]);
+        this.id = Integer.parseInt(fields[0]);
+        counter = id;
     }
 
     public Date getExpirationDay() {
@@ -62,14 +76,6 @@ public class BoughtProduct {
         this.baseProduct = baseProduct;
     }
 
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
-    }
-
     public boolean use() {
         if (this.remanentQuantity > 0) {
             this.remanentQuantity--;
@@ -83,5 +89,13 @@ public class BoughtProduct {
     public String toString() {
         return baseProduct +
                 ", quantity:" + quantity;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public int getRemanentQuantity() {
+        return remanentQuantity;
     }
 }

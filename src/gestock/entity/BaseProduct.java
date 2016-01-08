@@ -8,25 +8,29 @@ package gestock.entity;
 import gestock.util.Constants;
 import org.json.JSONObject;
 
-import java.util.HashMap;
-import java.util.Observable;
-import java.util.Stack;
+import java.util.*;
 
 /**
  * @author rmiretgine
  */
 public class BaseProduct extends Observable {
 
-    protected long id; //id in the database
+    protected static long counter = 0;
+    protected long reference; //id in the database
+    protected long id;
     protected long code; //barcode
+    protected int quantity;
     protected String name = "";
     protected String description = "";
     protected String traces = "";
     protected String brand = "";
-    protected Stack<Price> prices;
+    protected Stack<Price> prices = new Stack<>();
     protected HashMap<String, Double> nutritionFacts;
+    protected List<BoughtProduct> boughtProducts = new LinkedList<>();
 
     public BaseProduct() {
+        counter++;
+        this.id = counter;
         this.nutritionFacts = new HashMap<>();
     }
 
@@ -37,9 +41,13 @@ public class BaseProduct extends Observable {
         this.traces = traces;
         this.brand = brand;
         this.nutritionFacts = nutritionFacts;
+        this.reference = 0;
+        counter++;
+        this.id = counter;
     }
 
     public BaseProduct(Object JSON) throws Exception {
+        this.id = 0;
         JSONObject productJSON = (JSONObject) JSON;
         this.code = (long) productJSON.get("code");
         this.name = (String) productJSON.get("name");
@@ -63,7 +71,18 @@ public class BaseProduct extends Observable {
         this.nutritionFacts.put("Proteins", pr);
         this.nutritionFacts.put("Salt", sa);
 
-        this.id = (productJSON.get("id") instanceof Integer) ? (long) ((int) productJSON.get("id")) : (long) productJSON.get("id");
+        this.reference = (productJSON.get("id") instanceof Integer) ? (long) ((int) productJSON.get("id")) : (long) productJSON.get("id");
+    }
+
+    public BaseProduct(String[] fields, HashMap<String, Double> nutritionFacts) {
+        this(Long.parseLong(fields[3]), fields[4], fields[5], fields[6], fields[7], nutritionFacts);
+        this.reference = Long.parseLong(fields[1]);
+        this.id = Long.parseLong(fields[2]);
+        counter = id;
+    }
+
+    public long getId() {
+        return this.id;
     }
 
     public long getCode() {
@@ -91,7 +110,13 @@ public class BaseProduct extends Observable {
     }
 
     public Price getLatestPrice() {
-        return this.prices.peek();
+        if (!prices.isEmpty()) {
+            System.out.println("empty stack");
+            return this.prices.peek();
+        } else {
+            System.out.println("new price");
+            return new Price(0.0, null);
+        }
     }
 
     public double getPriceAverage() {
@@ -124,12 +149,8 @@ public class BaseProduct extends Observable {
         this.nutritionFacts = nutritionFacts;
     }
 
-    public long getId() {
-        return id;
-    }
-
-    public void setId(long id) {
-        this.id = id;
+    public long getReference() {
+        return reference;
     }
 
     public String getTraces() {
@@ -145,10 +166,38 @@ public class BaseProduct extends Observable {
         notifyObservers(Constants.OBSERVER_PRODUCT_UPDATED);
     }
 
+    public int getQuantity() {
+        return quantity;
+    }
+
+    public void setQuantity(int quantity) {
+        this.quantity = quantity;
+    }
+
     @Override
     public String toString() {
-        return "BaseProduct{" +
-                "name='" + name + '\'' +
-                '}';
+        return name + ' ' + getQuantity() + "u";
+    }
+
+    public int getQuantityInPantry() {
+        int q = 0;
+        for (BoughtProduct bp : boughtProducts) {
+            q += bp.getRemanentQuantity();
+        }
+        return q;
+    }
+
+    public BoughtProduct getOldestBoughtProduct() {
+        if (!boughtProducts.isEmpty()) {
+            BoughtProduct bp = new BoughtProduct(this);
+            bp.setExpirationDay(new Date());
+            for (BoughtProduct b : boughtProducts) {
+                if (b.getExpirationDay().compareTo(bp.getExpirationDay()) < 0)
+                    bp = b;
+            }
+            return bp;
+        } else {
+            return null;
+        }
     }
 }

@@ -2,6 +2,7 @@ package gestock.resources.views;
 
 import gestock.Gestock;
 import gestock.controller.*;
+import gestock.entity.BaseProduct;
 import gestock.entity.User;
 import gestock.resources.views.components.MyRenderer;
 import gestock.resources.views.components.TableModel;
@@ -13,6 +14,8 @@ import java.awt.*;
 import java.awt.event.*;
 import java.io.IOException;
 import java.util.Date;
+import java.util.List;
+import java.util.Map;
 import java.util.Observable;
 
 public class GestockView extends JFrame implements ActionListener {
@@ -22,7 +25,7 @@ public class GestockView extends JFrame implements ActionListener {
 
     private JLabel userName;
 
-    public GestockView(Gestock app) {
+    public GestockView(Gestock app, Map<BaseProduct, Integer> expireSoonProducts, List<BaseProduct> fewProducts) {
         super(app.messages.getString("app.title"));
         setSize(1120, 750);
 
@@ -234,11 +237,14 @@ public class GestockView extends JFrame implements ActionListener {
         perimPanel.setBackground(Color.white);
 
 
-        String[] columnNames1 = {"Nom", "Qte", "Date de Péremption"};
+        String[] columnNames1 = {"Nom", "Qte", model.messages.getString("gestock.expiry.date")};
         TableModel model1 = new TableModel(columnNames1);
         JTable perim = new JTable(model1);
         perimPanel.add(new JScrollPane(perim));
         perim.setEnabled(false);
+        expireSoonProducts.forEach((k, v) -> {
+            model1.addRow(new Object[]{k.toString(), v, k.getOldestBoughtProduct().getExpirationDay()});
+        });
         model1.addRow(new Object[]{"Prune", 15, new Date(2016, 1, 15)});
         model1.addRow(new Object[]{"Mure", 18, new Date(2015, 12, 27)});
         model1.addRow(new Object[]{"Lamai", 3, new Date(2015, 12, 19)});
@@ -266,6 +272,10 @@ public class GestockView extends JFrame implements ActionListener {
         JTable peu = new JTable(model2);
         peuPanel.add(new JScrollPane(peu));
         peu.setEnabled(false);
+        fewProducts.forEach((k) -> {
+            JButton add = new JButton("");
+            model2.addRow(new Object[]{k.toString(), k.getQuantityInPantry(), add});
+        });
         peu.setShowHorizontalLines(false);
         peu.setGridColor(Color.black);
         peu.setDefaultRenderer(Object.class, renderer);
@@ -293,6 +303,8 @@ public class GestockView extends JFrame implements ActionListener {
             @Override
             public void windowClosing(WindowEvent e) {
                 app.saveProperties();
+                model.saveBaseProducts();
+                model.save();
                 System.exit(0);
             }
         });

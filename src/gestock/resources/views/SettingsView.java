@@ -105,9 +105,9 @@ public class SettingsView extends GFrame {
                         .addComponent(freeSecretField))
         );
 
-        importButton = new JButton("Import");
-        exportButton = new JButton("Export");
-        saveButton = new JButton("Save user");
+        importButton = new JButton(model.messages.getString("settings.import"));
+        exportButton = new JButton(model.messages.getString("settings.export"));
+        saveButton = new JButton(model.messages.getString("settings.save.button"));
         saveButton.addActionListener(e1 -> updateUser());
         buttonsPanel = new JPanel();
         buttonsPanel.setLayout(new BoxLayout(buttonsPanel, BoxLayout.X_AXIS));
@@ -128,8 +128,8 @@ public class SettingsView extends GFrame {
                 main.setEnabled(true);
                 if (hasChanged()) {
                     int confirm = JOptionPane.showOptionDialog(
-                            null, "Do you want to save changes?",
-                            "Save changes", JOptionPane.YES_NO_OPTION,
+                            null, model.messages.getString("settings.save.message"),
+                            model.messages.getString("settings.save.title"), JOptionPane.YES_NO_OPTION,
                             JOptionPane.QUESTION_MESSAGE, null, null, null);
                     if (confirm == 0) {
                         updateUser();
@@ -141,8 +141,6 @@ public class SettingsView extends GFrame {
         setSize(600, 600);
         pack();
         setLocationRelativeTo(null);
-        //setDefaultCloseOperation(DISPOSE_ON_CLOSE);
-        //pack();
         setVisible(true);
     }
 
@@ -157,13 +155,13 @@ public class SettingsView extends GFrame {
         user.setEmail(email);
         Free free = new Free(freeUser, freeSecret);
         user.setFree(free);
+        user.setPassword(password);
 
         user.setUpdated();
         main.refresh();
     }
 
     private boolean hasChanged() {
-        //boolean changed = true;
         boolean changed = user.getName().equals(nameField.getText());
         changed &= user.getEmail().equals(emailField.getText());
         changed &= initPassword.equals(passwordField.getText());

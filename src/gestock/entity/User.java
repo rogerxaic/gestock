@@ -107,4 +107,8 @@ public class User extends Observable {
         this.password = null;
         this.setUpdated();
     }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
 }

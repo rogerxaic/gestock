@@ -29,7 +29,6 @@ public class JustBoughtController implements Observer {
             BaseProduct bp = (BaseProduct) arg;
             BoughtProduct boughtProduct = new BoughtProduct(bp);
             boughtProduct.setBaseProduct(bp);
-            boughtProduct.setUser(model.getUser());
             BoughtProductController boughtProductController = new BoughtProductController(model, boughtProduct);
             boughtProductController.addObserver(this);
         } else if (arg instanceof BoughtProduct) {
@@ -52,7 +51,6 @@ public class JustBoughtController implements Observer {
     public void addToPantry() {
         for (BoughtProduct bp : toAdd) {
             model.addToPantry(bp);
-            model.getPantry().add(bp);
         }
         view.dispose();
     }
