@@ -75,7 +75,7 @@ public class ProductView extends GFrame {
 
 
     public ProductView(Gestock app, ProductController productController, BaseProduct baseProd, boolean updt) {
-        super("Gestock - Product");
+        super(app.messages.getString("app.title") + " - " + app.messages.getString("baseproduct.title"));
         this.app = app;
         this.controller = productController;
         this.baseProduct = baseProd;
@@ -84,15 +84,15 @@ public class ProductView extends GFrame {
         setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 
         codeName = new JTextField(String.valueOf(baseProduct.getCode()), 20);
-        lookup = new JButton("Internet lookup");
+        lookup = new JButton(app.messages.getString("baseproduct.internetlookup"));
         lookup.addActionListener(new ButtonHandler());
 
         LinkedList<ProductType> llpt = new LinkedList<>();
-        llpt.add(new ProductType("Normal", "normal"));
-        llpt.add(new ProductType("Poisson", "fish"));
-        llpt.add(new ProductType("Viande", "meat"));
-        llpt.add(new ProductType("Produit Lacté", "DPS")); //PLS Produits Lactés, Dairy Products
-        llpt.add(new ProductType("Lait", "milk"));
+        llpt.add(new ProductType(app.messages.getString("baseproduct.type.normal"), "normal"));
+        llpt.add(new ProductType(app.messages.getString("baseproduct.type.fish"), "fish"));
+        llpt.add(new ProductType(app.messages.getString("baseproduct.type.meat"), "meat"));
+        llpt.add(new ProductType(app.messages.getString("baseproduct.type.dps"), "DPS")); //PLS Produits Lactés, Dairy Products
+        llpt.add(new ProductType(app.messages.getString("baseproduct.type.milk"), "milk"));
 
 
         productType = new JComboBox<>(llpt.toArray());
@@ -107,22 +107,22 @@ public class ProductView extends GFrame {
                 case "fish":
                     specificPanel.add(new JButton("fish"));
                     specificPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createLineBorder(Color.black),
-                            "Informations spécifiques du poisson"));
+                            app.messages.getString("baseproduct.infos.fish")));
                     break;
                 case "meat":
                     specificPanel.add(halal);
                     specificPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createLineBorder(Color.black),
-                            "Informations spécifiques de la viande"));
+                            app.messages.getString("baseproduct.infos.meat")));
                     break;
                 case "dps":
                     specificPanel.add(new JButton("dps"));
                     specificPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createLineBorder(Color.black),
-                            "Informations spécifiques des PLS"));
+                            app.messages.getString("baseproduct.infos.dps")));
                     break;
                 case "milk":
                     specificPanel.add(new JButton("milk"));
                     specificPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createLineBorder(Color.black),
-                            "Informations spécifiques du lait"));
+                            app.messages.getString("baseproduct.infos.milk")));
                     break;
                 default:
                     specificPanel.setBorder(null);
@@ -145,9 +145,9 @@ public class ProductView extends GFrame {
 
         }
         headPanel = new JPanel(new FlowLayout());
-        headPanel.add(new JLabel("Type"));
+        headPanel.add(new JLabel(app.messages.getString("baseproduct.labels.type")));
         headPanel.add(productType);
-        headPanel.add(new JLabel("Codi barres"));
+        headPanel.add(new JLabel(app.messages.getString("baseproduct.labels.code")));
         headPanel.add(codeName);
         headPanel.add(lookup);
 
@@ -161,14 +161,14 @@ public class ProductView extends GFrame {
         double fibersOriginal = nutritionHM.getOrDefault("Fibers", 0.0);
         double proteinsOriginal = nutritionHM.getOrDefault("Proteins", 0.0);
         double saltOriginal = nutritionHM.getOrDefault("Salt", 0.0);
-        energieLabel = new JLabel("Energie");
-        grassesLabel = new JLabel("Matières grasses");
-        acidesLabel = new JLabel("dont acides gras satures");
-        glucidesLabel = new JLabel("Glucides");
-        sucresLabel = new JLabel("dont sucres");
-        fibresLabel = new JLabel("Fibres alimentaires");
-        proteinesLabel = new JLabel("Proteines");
-        saltLabel = new JLabel("Sel - sodium");
+        energieLabel = new JLabel(app.messages.getString("baseproduct.nutrition.energy"));
+        grassesLabel = new JLabel(app.messages.getString("baseproduct.nutrition.fats"));
+        acidesLabel = new JLabel(app.messages.getString("baseproduct.nutrition.acids"));
+        glucidesLabel = new JLabel(app.messages.getString("baseproduct.nutrition.carbohydrates"));
+        sucresLabel = new JLabel(app.messages.getString("baseproduct.nutrition.sugars"));
+        fibresLabel = new JLabel(app.messages.getString("baseproduct.nutrition.fibers"));
+        proteinesLabel = new JLabel(app.messages.getString("baseproduct.nutrition.proteins"));
+        saltLabel = new JLabel(app.messages.getString("baseproduct.nutrition.salt"));
         energieTextField = new JTextField(String.valueOf(energyOriginal), 15);
         grassesTextField = new JTextField(String.valueOf(fatsOriginal), 15);
         acidesTextField = new JTextField(String.valueOf(acidsOriginal), 15);
@@ -182,7 +182,7 @@ public class ProductView extends GFrame {
         //getContentPane().setLayout(layout);
         nutritionPanel.setLayout(layout);
         nutritionPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createLineBorder(Color.black),
-                "Informations nutritionnelles - (pour 100 g/ 100 ml)"));
+                app.messages.getString("baseproduct.labels.nutritive")));
         layout.setAutoCreateGaps(true);
         layout.setAutoCreateContainerGaps(true);
 
@@ -236,10 +236,10 @@ public class ProductView extends GFrame {
         );
 
         {
-            nameLabel = new JLabel("Name");
-            descriptionLabel = new JLabel("Description");
-            tracesLabel = new JLabel("Traces");
-            brandLabel = new JLabel("Brand");
+            nameLabel = new JLabel(app.messages.getString("baseproduct.labels.name"));
+            descriptionLabel = new JLabel(app.messages.getString("baseproduct.labels.description"));
+            tracesLabel = new JLabel(app.messages.getString("baseproduct.labels.traces"));
+            brandLabel = new JLabel(app.messages.getString("baseproduct.labels.brand"));
             nameField = new JTextField(baseProduct.getName(), 10);
             descriptionArea = new JTextArea(baseProduct.getDescription());
             descriptionArea.setWrapStyleWord(true);
@@ -292,7 +292,8 @@ public class ProductView extends GFrame {
         centerPanel.add(infoPanel, BorderLayout.CENTER);
         centerPanel.add(specificPanel, BorderLayout.SOUTH);
 
-        JButton add = new JButton((update) ? "Mettre à jour" : "Ajouter");
+        JButton add = new JButton((update) ?
+                app.messages.getString("baseproduct.labels.update") : app.messages.getString("baseproduct.labels.add"));
         add.addActionListener((ActionEvent ae) -> {
             String codeBarres = codeName.getText();
             long code = codeBarres.equals("") ? 0 : Long.parseLong(codeBarres.trim());
