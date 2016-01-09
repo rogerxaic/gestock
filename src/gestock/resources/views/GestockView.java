@@ -68,7 +68,9 @@ public class GestockView extends JFrame implements ActionListener {
         bottomButton.setFont(new Font("Arial", Font.BOLD, 12));
         bottomButton.setPressedIcon(new ImageIcon());
         try {
-            Image img = ImageIO.read(getClass().getResource("../add64.png"));
+            Image img = ImageIO.read(getClass().getResource("/gestock/resources/add64.png"));
+            //Image img = ImageIO.read(getClass().getResource("gestock.resources.add64.png"));
+
             Image newImg = img.getScaledInstance(48, 48, Image.SCALE_SMOOTH);
             bottomButton.setIcon(new ImageIcon(newImg));
         } catch (IOException ex) {
@@ -87,7 +89,7 @@ public class GestockView extends JFrame implements ActionListener {
         catalogue.setFont(new Font("Arial", Font.BOLD, 12));
         catalogue.setPressedIcon(new ImageIcon());
         try {
-            Image img = ImageIO.read(getClass().getResource("../data110.png"));
+            Image img = ImageIO.read(getClass().getResource("/gestock/resources/data110.png"));
             Image newImg = img.getScaledInstance(48, 48, Image.SCALE_SMOOTH);
             catalogue.setIcon(new ImageIcon(newImg));
         } catch (IOException ex) {
@@ -106,7 +108,7 @@ public class GestockView extends JFrame implements ActionListener {
         gardeManger.setFont(new Font("Arial", Font.BOLD, 12));
         gardeManger.setPressedIcon(new ImageIcon());
         try {
-            Image img = ImageIO.read(getClass().getResource("../cutlery23.png"));
+            Image img = ImageIO.read(getClass().getResource("/gestock/resources/cutlery23.png"));
             Image newImg = img.getScaledInstance(48, 48, Image.SCALE_SMOOTH);
             gardeManger.setIcon(new ImageIcon(newImg));
         } catch (IOException ex) {
@@ -125,7 +127,7 @@ public class GestockView extends JFrame implements ActionListener {
         listeAchats.setPressedIcon(new ImageIcon());
         menuUp.add(listeAchats);
         try {
-            Image img = ImageIO.read(getClass().getResource("../shopping122.png"));
+            Image img = ImageIO.read(getClass().getResource("/gestock/resources/shopping122.png"));
             Image newImg = img.getScaledInstance(48, 48, Image.SCALE_SMOOTH);
             listeAchats.setIcon(new ImageIcon(newImg));
         } catch (IOException ex) {
@@ -143,7 +145,7 @@ public class GestockView extends JFrame implements ActionListener {
         chercher.setPressedIcon(new ImageIcon());
         menuUp.add(chercher);
         try {
-            Image img = ImageIO.read(getClass().getResource("../search100.png"));
+            Image img = ImageIO.read(getClass().getResource("/gestock/resources/search100.png"));
             Image newImg = img.getScaledInstance(48, 48, Image.SCALE_SMOOTH);
             chercher.setIcon(new ImageIcon(newImg));
         } catch (IOException ex) {
@@ -162,7 +164,7 @@ public class GestockView extends JFrame implements ActionListener {
         parametres.setPressedIcon(new ImageIcon());
         menuUp.add(parametres);
         try {
-            Image img = ImageIO.read(getClass().getResource("../network60.png"));
+            Image img = ImageIO.read(getClass().getResource("/gestock/resources/network60.png"));
             Image newImg = img.getScaledInstance(48, 48, Image.SCALE_SMOOTH);
             parametres.setIcon(new ImageIcon(newImg));
         } catch (IOException ex) {
@@ -197,7 +199,7 @@ public class GestockView extends JFrame implements ActionListener {
         log.add(loginout);
 
         try {
-            Image img = ImageIO.read(getClass().getResource("../logout20.png"));
+            Image img = ImageIO.read(getClass().getResource("/gestock/resources/logout20.png"));
             Image newImg = img.getScaledInstance(16, 16, Image.SCALE_SMOOTH);
             loginout.setIcon(new ImageIcon(newImg));
         } catch (IOException ex) {
@@ -291,7 +293,7 @@ public class GestockView extends JFrame implements ActionListener {
 
         createMenuBar();
         try {
-            Image img = ImageIO.read(getClass().getResource("../gestock-blue.png"));
+            Image img = ImageIO.read(getClass().getResource("/gestock/resources/gestock-blue.png"));
             setIconImage(img);
         } catch (Exception e) {
             e.printStackTrace();

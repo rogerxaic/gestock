@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="jar" build-on-make="true" name="gestock:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/gestock_jar</output-path>
+    <root id="archive" name="gestock.jar">
+      <element id="module-output" name="gestock" />
+    </root>
+  </artifact>
+</component>

@@ -43,7 +43,7 @@ public class CatalogueView extends GFrame {
         add.setFont(new Font("Arial", Font.BOLD, 12));
         add.setPressedIcon(new ImageIcon());
         try {
-            Image img = ImageIO.read(getClass().getResource("../add64.png"));
+            Image img = ImageIO.read(getClass().getResource("/gestock/resources/add64.png"));
             Image newImg = img.getScaledInstance(48, 48, Image.SCALE_SMOOTH);
             add.setIcon(new ImageIcon(newImg));
         } catch (IOException ex) {
