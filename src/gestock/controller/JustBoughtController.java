@@ -44,8 +44,10 @@ public class JustBoughtController implements Observer {
     }
 
     public void deleteLast() {
-        toAdd.pop();
-        view.fill(toAdd);
+        if (!toAdd.isEmpty()) {
+            toAdd.pop();
+            view.fill(toAdd);
+        }
     }
 
     public void addToPantry() {

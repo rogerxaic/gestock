@@ -66,6 +66,8 @@ public class BoughtProduct {
 
     public void setPrice(Price price) {
         this.price = price;
+        this.baseProduct.addPrice(this.price);
+        this.price.setBoughtProduct(this);
     }
 
     public BaseProduct getBaseProduct() {

@@ -36,6 +36,7 @@ public class Gestock extends Observable {
     private String configProperties = "config.properties";
     private String baseFile = "baseproducts";
     private String boughtFile = "boughtproducts";
+    private String shoppingPath = "shoppinglists";
     private LinkedList<BaseProduct> catalogue;
     private List<BoughtProduct> pantry;
 
@@ -155,7 +156,7 @@ public class Gestock extends Observable {
                 }
             });
 
-        } catch (IOException ignored) {
+        } catch (Exception ignored) {
         }
         //BaseProducts
         try (Stream<String> stream = Files.lines(Paths.get(filepath + fs + boughtFile))) {
@@ -174,7 +175,7 @@ public class Gestock extends Observable {
                 }
             });
 
-        } catch (IOException ignored) {
+        } catch (Exception ignored) {
         }
         launcher.dispose();
     }
@@ -188,7 +189,6 @@ public class Gestock extends Observable {
 
         try {
             UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-            UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
         } catch (Exception evt) {
             evt.printStackTrace();
         }
@@ -209,35 +209,18 @@ public class Gestock extends Observable {
     }
 
     /**
-     * Creates the filepath directory if it does not exist.
-     * Checks if there's the properties file inside the directory.
+     * Verifies if the directories exist. In case they don't, it creates them.
      */
     private void init() {
-        File f;
-        boolean bool = false;
-        try {
-            f = new File(filepath);
-            if (!f.exists() || (f.exists() && !f.isDirectory())) {
-                // create directory of app config parameters if it does not exist
-                bool = f.mkdirs();
-            }
-            // print status
-            System.out.println("Directory(" + filepath + ") created? " + bool);
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        Tools.createPath(filepath);
+        Tools.createPath(filepath + fs + shoppingPath);
     }
 
     private Properties getProperties(String configProperties) throws IOException {
         FileInputStream inputStream = null;
         Properties prop = new Properties();
         try {
-//            String propFileName = "config.properties";
-
             inputStream = new FileInputStream(configProperties);
-
-            //                prop.load(inputStream);
             prop.load(inputStream);
             // get the property value and print it out
         } catch (Exception e) {
@@ -420,20 +403,13 @@ public class Gestock extends Observable {
         /**
          * Save BaseProducts
          */
-        this.saver(filepath + fs + baseFile, saveBaseProducts());
+        Tools.saver(filepath + fs + baseFile, saveBaseProducts());
 
         /**
          * Save BoughtProducts
          */
-        this.saver(filepath + fs + boughtFile, saveBoughtProducts());
+        Tools.saver(filepath + fs + boughtFile, saveBoughtProducts());
     }
 
-    private void saver(String where, String what) {
-        try (Writer writer = new BufferedWriter(new OutputStreamWriter(
-                new FileOutputStream(where), "utf-8"))) {
-            writer.write(what);
-            writer.write(System.lineSeparator());
-        } catch (Exception ignored) {
-        }
-    }
+
 }

@@ -19,7 +19,7 @@ public class BaseProduct extends Observable {
     protected long reference; //id in the database
     protected long id;
     protected long code; //barcode
-    protected int quantity;
+    protected int quantity; //units, grams, millilitres
     protected String name = "";
     protected String description = "";
     protected String traces = "";
@@ -27,6 +27,7 @@ public class BaseProduct extends Observable {
     protected Stack<Price> prices = new Stack<>();
     protected HashMap<String, Double> nutritionFacts;
     protected List<BoughtProduct> boughtProducts = new LinkedList<>();
+    protected Map<BaseProduct, Integer> boughtTogether = new HashMap<>();
 
     public BaseProduct() {
         counter++;
@@ -111,7 +112,6 @@ public class BaseProduct extends Observable {
 
     public Price getLatestPrice() {
         if (!prices.isEmpty()) {
-            System.out.println("empty stack");
             return this.prices.peek();
         } else {
             System.out.println("new price");

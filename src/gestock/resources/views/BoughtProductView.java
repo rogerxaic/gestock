@@ -91,9 +91,6 @@ public class BoughtProductView extends GFrame {
         Stack<String> errors = new Stack<>();
         if (expiryDate.getDate().equals(testDate.getDate())) {
             errors.push("You must set an expiry date");
-            System.out.println(boughtOnDate.getDate());
-            System.out.println(expiryDate.getDate());
-            System.out.println(testDate.getDate());
         }
         if (priceField.getText().equals("")) {
             errors.push("You must set a price");

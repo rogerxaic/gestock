@@ -61,6 +61,7 @@ public class JustBoughtView extends GFrame {
 
         Panel1 = new JPanel();
         Panel2 = new JPanel();
+        Panel2.setBackground(Color.WHITE);
         Panel3 = new JPanel();
         Panel4 = new JPanel();
 
@@ -80,6 +81,7 @@ public class JustBoughtView extends GFrame {
         PanelMain.add(Panel1, BorderLayout.NORTH);
         PanelMain.add(Panel2, BorderLayout.CENTER);
         PanelMain.add(Panel3, BorderLayout.SOUTH);
+        PanelMain.setBackground(Color.WHITE);
 
         setContentPane(PanelMain);
         setLocationRelativeTo(null);
