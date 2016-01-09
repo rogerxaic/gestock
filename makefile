@@ -7,6 +7,7 @@ RUN=Gestock
 
 all:
 	@cd src; find org -name "*.java" | $(XARGS)
+	@cd src; find com -name "*.java" | $(XARGS)
 	@cd src; find gestock -name "*.java" | $(XARGS)
 	@echo ""
 	@echo "Vous devriez executer : "
@@ -19,6 +20,7 @@ run: install
 errors:
 	@cd src; find gestock -name "*.java" | $(XARGS) -Xlint
 	@cd src; find org -name "*.java" | $(XARGS)
+	@cd src; find com -name "*.java" | $(XARGS)
 
 install:
 	@echo "#!/bin/bash" > $(RUN);
