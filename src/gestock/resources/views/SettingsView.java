@@ -114,7 +114,8 @@ public class SettingsView extends GFrame {
             int rVal = c.showOpenDialog(this);
             if (rVal == JFileChooser.APPROVE_OPTION) {
                 String dir = c.getCurrentDirectory().toString();
-                Tools.unzip(model.getTemp(), dir + Constants.FS + "gestock.zip");
+                //dir + Constants.FS + "gestock.zip"
+                Tools.unzip(model.getTemp(), c.getSelectedFile() + "");
                 model.baseProductLoader(model.getTemp() + Constants.FS + "baseproducts");
                 model.boughtProductLoader(model.getTemp() + Constants.FS + "boughtproducts");
             }
@@ -126,10 +127,9 @@ public class SettingsView extends GFrame {
             });
             save.run();
             JFileChooser c = new JFileChooser();
+            c.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
             int rVal = c.showSaveDialog(SettingsView.this);
             if (rVal == JFileChooser.APPROVE_OPTION) {
-                String dir = c.getCurrentDirectory().toString();
-                String fs = System.getProperty("file.separator");
                 //("filename: " + c.getSelectedFile().getName());
                 //("dir : " + c.getCurrentDirectory().toString());
                 while (true) {
@@ -137,7 +137,7 @@ public class SettingsView extends GFrame {
                         break;
                     }
                 }
-                Tools.zip(model.getTemp(), dir + fs + "gestock.zip");
+                Tools.zip(model.getTemp(), c.getSelectedFile() + Constants.FS + "gestock.zip");
             }
         });
         saveButton = new JButton(model.messages.getString("settings.save.button"));
