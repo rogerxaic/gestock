@@ -30,7 +30,7 @@ public class ProductPanel extends JPanel implements MouseListener, Observer, Scr
         this.baseProduct = baseProduct;
         this.baseProduct.addObserver(this);
         this.defaultFontSize = new JLabel().getFont().getSize();
-        text = new JLabel(baseProduct.getName());
+        text = new JLabel(baseProduct.toString());
         text.setFont(new Font(text.getFont().getName(), Font.PLAIN, defaultFontSize));
         add(text, BorderLayout.NORTH);
         description = new JLabel(String.valueOf(baseProduct.getDescription()));

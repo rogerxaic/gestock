@@ -9,7 +9,7 @@ public class BoughtProduct {
     private Date expirationDay;
     private Date boughtDay;
     private int quantity; //original quantity
-    private int remanentQuantity; //original quantity
+    private int remainingQuantity; //original quantity
     private Price price;
     //protected ShoppingList shoppingList;
     private BaseProduct baseProduct;
@@ -26,7 +26,7 @@ public class BoughtProduct {
         this.expirationDay = new Date(Long.parseLong(fields[1]));
         this.boughtDay = new Date(Long.parseLong(fields[2]));
         this.quantity = Integer.parseInt(fields[3]);
-        this.remanentQuantity = Integer.parseInt(fields[4]);
+        this.remainingQuantity = Integer.parseInt(fields[4]);
         this.id = Integer.parseInt(fields[0]);
         counter = id;
     }
@@ -54,14 +54,18 @@ public class BoughtProduct {
     public void setQuantity(int quantity) throws Exception {
         if (quantity >= 0) {
             this.quantity = quantity;
-            this.remanentQuantity = quantity;
+            this.remainingQuantity = quantity;
         } else {
             throw new Exception("Quantity must be positive");
         }
     }
 
     public Price getPrice() {
-        return this.price;
+        if (this.price != null) {
+            return this.price;
+        } else {
+            return new Price(0.0, new Date());
+        }
     }
 
     public void setPrice(Price price) {
@@ -79,8 +83,8 @@ public class BoughtProduct {
     }
 
     public boolean use() {
-        if (this.remanentQuantity > 0) {
-            this.remanentQuantity--;
+        if (this.remainingQuantity > 0) {
+            this.remainingQuantity--;
             return true;
         } else {
             return false;
@@ -97,7 +101,7 @@ public class BoughtProduct {
         return id;
     }
 
-    public int getRemanentQuantity() {
-        return remanentQuantity;
+    public int getRemainingQuantity() {
+        return remainingQuantity;
     }
 }

@@ -19,7 +19,8 @@ public class BaseProduct extends Observable {
     protected long reference; //id in the database
     protected long id;
     protected long code; //barcode
-    protected int quantity; //units, grams, millilitres
+    protected Quantity quantity = new Quantity("0u"); //units, grams, millilitres
+    protected int alert = 5;
     protected String name = "";
     protected String description = "";
     protected String traces = "";
@@ -35,10 +36,12 @@ public class BaseProduct extends Observable {
         this.nutritionFacts = new HashMap<>();
     }
 
-    public BaseProduct(long code, String name, String description, String traces, String brand, HashMap<String, Double> nutritionFacts) {
+    public BaseProduct(long code, String name, String description, Quantity quantity, int alert, String traces, String brand, HashMap<String, Double> nutritionFacts) {
         this.code = code;
         this.name = name;
         this.description = description;
+        this.quantity = quantity;
+        this.alert = alert;
         this.traces = traces;
         this.brand = brand;
         this.nutritionFacts = nutritionFacts;
@@ -76,7 +79,7 @@ public class BaseProduct extends Observable {
     }
 
     public BaseProduct(String[] fields, HashMap<String, Double> nutritionFacts) {
-        this(Long.parseLong(fields[3]), fields[4], fields[5], fields[6], fields[7], nutritionFacts);
+        this(Long.parseLong(fields[3]), fields[4], fields[5], new Quantity(fields[6]), Integer.parseInt(fields[7]), fields[8], fields[9], nutritionFacts);
         this.reference = Long.parseLong(fields[1]);
         this.id = Long.parseLong(fields[2]);
         counter = id;
@@ -166,23 +169,23 @@ public class BaseProduct extends Observable {
         notifyObservers(Constants.OBSERVER_PRODUCT_UPDATED);
     }
 
-    public int getQuantity() {
+    public Quantity getQuantity() {
         return quantity;
     }
 
-    public void setQuantity(int quantity) {
+    public void setQuantity(Quantity quantity) {
         this.quantity = quantity;
     }
 
     @Override
     public String toString() {
-        return name + ' ' + getQuantity() + "u";
+        return name + ' ' + getQuantity();
     }
 
     public int getQuantityInPantry() {
         int q = 0;
         for (BoughtProduct bp : boughtProducts) {
-            q += bp.getRemanentQuantity();
+            q += bp.getRemainingQuantity();
         }
         return q;
     }
@@ -199,5 +202,13 @@ public class BaseProduct extends Observable {
         } else {
             return null;
         }
+    }
+
+    public int getAlert() {
+        return alert;
+    }
+
+    public void setAlert(int alert) {
+        this.alert = alert;
     }
 }
