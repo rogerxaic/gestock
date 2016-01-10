@@ -3,6 +3,7 @@ package gestock.resources.views;
 import gestock.Gestock;
 import gestock.entity.Free;
 import gestock.entity.User;
+import gestock.util.Constants;
 import gestock.util.Tools;
 
 import javax.swing.*;
@@ -108,6 +109,19 @@ public class SettingsView extends GFrame {
         );
 
         importButton = new JButton(model.messages.getString("settings.import"));
+        importButton.addActionListener((ActionEvent ae) -> {
+            JFileChooser c = new JFileChooser();
+            int rVal = c.showOpenDialog(this);
+            if (rVal == JFileChooser.APPROVE_OPTION) {
+                String dir = c.getCurrentDirectory().toString();
+                Tools.unzip(model.getTemp(), dir + Constants.FS + "gestock.zip");
+                try {
+                    throw new Exception("Import settings: still to be implemented");
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        });
         exportButton = new JButton(model.messages.getString("settings.export"));
         exportButton.addActionListener((ActionEvent ae) -> {
             Thread save = new Thread(() -> {

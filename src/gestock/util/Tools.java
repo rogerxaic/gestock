@@ -6,7 +6,9 @@
 package gestock.util;
 
 import java.io.*;
+import java.util.Enumeration;
 import java.util.zip.ZipEntry;
+import java.util.zip.ZipFile;
 import java.util.zip.ZipOutputStream;
 
 /**
@@ -109,10 +111,10 @@ public class Tools {
     /**
      * Creates a ZIP file with the files of the specified path.
      *
-     * @param input   The directory from which the files will be zipped.
+     * @param directory The directory from which the files will be zipped.
      * @param zipFile The zip file that will be created with the files from input.
      */
-    public static void zip(String input, String zipFile) {
+    public static void zip(String directory, String zipFile) {
         try {
             BufferedInputStream origin;
             FileOutputStream dest = new
@@ -122,14 +124,12 @@ public class Tools {
             //out.setMethod(ZipOutputStream.DEFLATED);
             byte data[] = new byte[Constants.BUFFER];
             // get a list of files from current directory
-            File f = new File(input);
+            File f = new File(directory);
             String files[] = f.list();
-            String fs = Constants.FS;
 
             for (String file : files) {
-                System.out.println("Adding: " + file);
                 FileInputStream fi = new
-                        FileInputStream(input + fs + file);
+                        FileInputStream(directory + Constants.FS + file);
                 origin = new
                         BufferedInputStream(fi, Constants.BUFFER);
                 ZipEntry entry = new ZipEntry(file);
@@ -142,6 +142,42 @@ public class Tools {
                 origin.close();
             }
             out.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * Unzips the specified file onto the specified directory.
+     *
+     * @param directory The directory where the ZIP file will be unzipped.
+     * @param zipFile   The ZIP file that will be unzipped.
+     */
+    public static void unzip(String directory, String zipFile) {
+        try {
+            BufferedOutputStream dest;
+            BufferedInputStream is;
+            ZipEntry entry;
+            ZipFile zipfile = new ZipFile(zipFile);
+            Enumeration e = zipfile.entries();
+            while (e.hasMoreElements()) {
+                entry = (ZipEntry) e.nextElement();
+                is = new BufferedInputStream
+                        (zipfile.getInputStream(entry));
+                int count;
+                byte data[] = new byte[Constants.BUFFER];
+                FileOutputStream fos = new
+                        FileOutputStream(directory + Constants.FS + entry.getName());
+                dest = new
+                        BufferedOutputStream(fos, Constants.BUFFER);
+                while ((count = is.read(data, 0, Constants.BUFFER))
+                        != -1) {
+                    dest.write(data, 0, count);
+                }
+                dest.flush();
+                dest.close();
+                is.close();
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
