@@ -13,7 +13,6 @@ import gestock.util.Curl;
 import gestock.util.Tools;
 import org.json.JSONArray;
 
-import javax.swing.*;
 import java.awt.*;
 import java.io.*;
 import java.nio.file.Files;
@@ -33,6 +32,7 @@ public class Gestock extends Observable {
     private String fs = System.getProperty("file.separator");
     private String filepath = System.getProperty("user.home") + fs
             + (Tools.isWindows() ? "AppData" + fs + "Roaming" + fs + "gestock" : ".config" + fs + "gestock");
+    private String tempPath = (Tools.isWindows() ? System.getProperty("user.home") + fs + "AppData" + fs + "Local" + fs + "Temp" : fs + "tmp") + fs + "gestock";
     private String configProperties = "config.properties";
     private String baseFile = "baseproducts";
     private String boughtFile = "boughtproducts";
@@ -126,6 +126,10 @@ public class Gestock extends Observable {
                     BaseProduct product;
                     String[] fields = k.split("\t");
 
+                    if (!fields[5].equals("")) {
+                        fields[5] = fields[5].replaceAll("\\\\n", System.lineSeparator()).replaceAll("\\\\t", "\t");
+                    }
+
                     HashMap<String, Double> nutritionFacts = newNutritionFacts(fields);
 
                     char type = k.charAt(0);
@@ -188,7 +192,7 @@ public class Gestock extends Observable {
         Gestock app = new Gestock();
 
         try {
-            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+            //UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
         } catch (Exception evt) {
             evt.printStackTrace();
         }
@@ -197,14 +201,14 @@ public class Gestock extends Observable {
 
     private HashMap<String, Double> newNutritionFacts(String[] fields) {
         HashMap<String, Double> nutritionFacts = new HashMap<>();
-        nutritionFacts.put("Energy", (fields[8].equals("null")) ? 0.0 : Double.parseDouble(fields[8]));
-        nutritionFacts.put("Fats", (fields[9].equals("null")) ? 0.0 : Double.parseDouble(fields[9]));
-        nutritionFacts.put("Acids", (fields[10].equals("null")) ? 0.0 : Double.parseDouble(fields[10]));
-        nutritionFacts.put("Carbohydrates", (fields[11].equals("null")) ? 0.0 : Double.parseDouble(fields[11]));
-        nutritionFacts.put("Sugars", (fields[12].equals("null")) ? 0.0 : Double.parseDouble(fields[12]));
-        nutritionFacts.put("Fibers", (fields[13].equals("null")) ? 0.0 : Double.parseDouble(fields[13]));
-        nutritionFacts.put("Proteins", (fields[14].equals("null")) ? 0.0 : Double.parseDouble(fields[14]));
-        nutritionFacts.put("Salt", (fields[15].equals("null")) ? 0.0 : Double.parseDouble(fields[15]));
+        nutritionFacts.put("Energy", (fields[10].equals("null")) ? 0.0 : Double.parseDouble(fields[10]));
+        nutritionFacts.put("Fats", (fields[11].equals("null")) ? 0.0 : Double.parseDouble(fields[11]));
+        nutritionFacts.put("Acids", (fields[12].equals("null")) ? 0.0 : Double.parseDouble(fields[12]));
+        nutritionFacts.put("Carbohydrates", (fields[13].equals("null")) ? 0.0 : Double.parseDouble(fields[13]));
+        nutritionFacts.put("Sugars", (fields[14].equals("null")) ? 0.0 : Double.parseDouble(fields[14]));
+        nutritionFacts.put("Fibers", (fields[15].equals("null")) ? 0.0 : Double.parseDouble(fields[15]));
+        nutritionFacts.put("Proteins", (fields[16].equals("null")) ? 0.0 : Double.parseDouble(fields[16]));
+        nutritionFacts.put("Salt", (fields[17].equals("null")) ? 0.0 : Double.parseDouble(fields[17]));
         return nutritionFacts;
     }
 
@@ -214,6 +218,7 @@ public class Gestock extends Observable {
     private void init() {
         Tools.createPath(filepath);
         Tools.createPath(filepath + fs + shoppingPath);
+        Tools.createPath(tempPath);
     }
 
     private Properties getProperties(String configProperties) throws IOException {
@@ -275,12 +280,19 @@ public class Gestock extends Observable {
         notifyObservers(Constants.OBSERVER_PANTRY_PRODUCT_CREATED);
     }
 
+    public BoughtProduct findBoughtProductById(int id) {
+        for (BoughtProduct bp : pantry) {
+            if (bp.getId() == id)
+                return bp;
+        }
+        return null;
+    }
+
     public BaseProduct findBaseProductById(int id) {
         for (BaseProduct bp : catalogue) {
             if (bp.getId() == id)
                 return bp;
         }
-
         return null;
     }
 
@@ -322,13 +334,17 @@ public class Gestock extends Observable {
                 sb.append("\t");
                 sb.append(bp.getCode());
                 sb.append("\t");
-                sb.append(bp.getName());
+                sb.append(Tools.escape(bp.getName()));
                 sb.append("\t");
-                sb.append(bp.getDescription());
+                sb.append(Tools.escape(bp.getDescription()));
                 sb.append("\t");
-                sb.append(bp.getTraces());
+                sb.append(bp.getQuantity().getSaveString());
                 sb.append("\t");
-                sb.append(bp.getBrand());
+                sb.append(bp.getAlert());
+                sb.append("\t");
+                sb.append(Tools.escape(bp.getTraces()));
+                sb.append("\t");
+                sb.append(Tools.escape(bp.getBrand()));
                 sb.append("\t");
                 sb.append(bp.getNutritionFacts().get("Energy"));
                 sb.append("\t");
@@ -387,7 +403,7 @@ public class Gestock extends Observable {
             sb.append("\t");
             sb.append(bp.getQuantity());
             sb.append("\t");
-            sb.append(bp.getRemanentQuantity());
+            sb.append(bp.getRemainingQuantity());
             sb.append("\t");
             sb.append(bp.getBaseProduct().getId());
             sb.append("\t");
@@ -399,17 +415,28 @@ public class Gestock extends Observable {
         return (sb.toString());
     }
 
-    public void save() {
+    public void save(String path) {
         /**
          * Save BaseProducts
          */
-        Tools.saver(filepath + fs + baseFile, saveBaseProducts());
+        Tools.saver(path + fs + baseFile, saveBaseProducts());
 
         /**
          * Save BoughtProducts
          */
-        Tools.saver(filepath + fs + boughtFile, saveBoughtProducts());
+        Tools.saver(path + fs + boughtFile, saveBoughtProducts());
+    }
+
+    public void save() {
+        save(filepath);
+    }
+
+    public void saveTemp() {
+        save(tempPath);
     }
 
 
+    public String getTemp() {
+        return tempPath;
+    }
 }
