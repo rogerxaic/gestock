@@ -6,28 +6,28 @@
 package gestock.util;
 
 import java.io.*;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipOutputStream;
 
 /**
  * @author Roger
  */
 public class Tools {
 
-    private static String OS = System.getProperty("os.name").toLowerCase();
-
     public static boolean isWindows() {
-        return (OS.contains("win"));
+        return (Constants.OS.contains("win"));
     }
 
     public static boolean isMac() {
-        return (OS.contains("mac"));
+        return (Constants.OS.contains("mac"));
     }
 
     public static boolean isUnix() {
-        return (OS.contains("nix") || OS.contains("nux") || OS.contains("aix"));
+        return (Constants.OS.contains("nix") || Constants.OS.contains("nux") || Constants.OS.contains("aix"));
     }
 
     public static boolean isSolaris() {
-        return (OS.contains("sunos"));
+        return (Constants.OS.contains("sunos"));
     }
 
     /**
@@ -77,6 +77,71 @@ public class Tools {
             // print status
             System.out.println("Directory(" + path + ") created? " + bool);
 
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * Re-maps a number from one range to another.
+     *
+     * @param x      variable to re-map
+     * @param inMin  in-range minimum
+     * @param inMax  in-range maximum
+     * @param outMin out-range minimum
+     * @param outMax out-range maximum
+     * @return re-mapped number
+     */
+    public static long map(long x, long inMin, long inMax, long outMin, long outMax) {
+        return (x - inMin) * (outMax - outMin) / (inMax - inMin) + outMin;
+    }
+
+    /**
+     * Replaces new lines and tabs for \n and \t respectively
+     *
+     * @param toEscape String that needs to be escaped
+     * @return escaped String
+     */
+    public static String escape(String toEscape) {
+        return toEscape.replaceAll("(\\r|\\n|\\r\\n)+", "\\\\n").replaceAll("(\\t)+", "\\\\t");
+    }
+
+    /**
+     * Creates a ZIP file with the files of the specified path.
+     *
+     * @param input   The directory from which the files will be zipped.
+     * @param zipFile The zip file that will be created with the files from input.
+     */
+    public static void zip(String input, String zipFile) {
+        try {
+            BufferedInputStream origin;
+            FileOutputStream dest = new
+                    FileOutputStream(zipFile);
+            ZipOutputStream out = new ZipOutputStream(new
+                    BufferedOutputStream(dest));
+            //out.setMethod(ZipOutputStream.DEFLATED);
+            byte data[] = new byte[Constants.BUFFER];
+            // get a list of files from current directory
+            File f = new File(input);
+            String files[] = f.list();
+            String fs = Constants.FS;
+
+            for (String file : files) {
+                System.out.println("Adding: " + file);
+                FileInputStream fi = new
+                        FileInputStream(input + fs + file);
+                origin = new
+                        BufferedInputStream(fi, Constants.BUFFER);
+                ZipEntry entry = new ZipEntry(file);
+                out.putNextEntry(entry);
+                int count;
+                while ((count = origin.read(data, 0,
+                        Constants.BUFFER)) != -1) {
+                    out.write(data, 0, count);
+                }
+                origin.close();
+            }
+            out.close();
         } catch (Exception e) {
             e.printStackTrace();
         }

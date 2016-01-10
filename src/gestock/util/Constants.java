@@ -5,6 +5,10 @@ package gestock.util;
  */
 public final class Constants {
 
+    public static final String OS = System.getProperty("os.name").toLowerCase();
+    public static final int BUFFER = 2048;
+    public static final String FS = System.getProperty("file.separator");
+
     /**
      * The {@code int} that represents the signal for added
      * products to the catalogue for the {@code Observable}.
