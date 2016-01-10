@@ -120,67 +120,9 @@ public class Gestock extends Observable {
          * Load the local products.
          */
         //BaseProducts
-        try (Stream<String> stream = Files.lines(Paths.get(filepath + fs + baseFile))) {
-            stream.forEach((k) -> {
-                if (k.length() > 10) {
-                    BaseProduct product;
-                    String[] fields = k.split("\t");
-
-                    if (!fields[5].equals("")) {
-                        fields[5] = fields[5].replaceAll("\\\\n", System.lineSeparator()).replaceAll("\\\\t", "\t");
-                    }
-
-                    HashMap<String, Double> nutritionFacts = newNutritionFacts(fields);
-
-                    char type = k.charAt(0);
-                    switch (type) {
-                        case '0': //BaseProduct
-                            product = new BaseProduct(fields, nutritionFacts);
-                            catalogue.add(product);
-                            break;
-                        case '1': //DairyBaseProduct
-                            product = new DairyBaseProduct(fields, nutritionFacts);
-                            catalogue.add(product);
-                            break;
-                        case '2': //MilkBaseProduct
-                            product = new MilkBaseProduct(fields, nutritionFacts);
-                            catalogue.add(product);
-                            break;
-                        case '3': //MeatBaseProduct
-                            product = new MeatBaseProduct(fields, nutritionFacts);
-                            catalogue.add(product);
-                            break;
-                        case '4': //FishBaseProduct
-                            product = new FishBaseProduct(fields, nutritionFacts);
-                            catalogue.add(product);
-                            break;
-                        default: //Not a product
-                            break;
-                    }
-                }
-            });
-
-        } catch (Exception ignored) {
-        }
+        baseProductLoader(filepath + fs + baseFile);
         //BaseProducts
-        try (Stream<String> stream = Files.lines(Paths.get(filepath + fs + boughtFile))) {
-            stream.forEach((k) -> {
-                if (k.length() > 5) {
-                    BoughtProduct product;
-                    String[] fields = k.split("\t");
-                    BaseProduct bp;
-                    if (Integer.parseInt(fields[5]) == 0) {
-                        bp = findBaseProductByReference(Integer.parseInt(fields[6]));
-                    } else {
-                        bp = findBaseProductById(Integer.parseInt(fields[5]));
-                    }
-                    product = new BoughtProduct(bp, fields);
-                    pantry.add(product);
-                }
-            });
-
-        } catch (Exception ignored) {
-        }
+        boughtProductLoader(filepath + fs + boughtFile);
         launcher.dispose();
     }
 
@@ -438,5 +380,71 @@ public class Gestock extends Observable {
 
     public String getTemp() {
         return tempPath;
+    }
+
+    public void baseProductLoader(String file) {
+        try (Stream<String> stream = Files.lines(Paths.get(file))) {
+            stream.forEach((k) -> {
+                if (k.length() > 10) {
+                    BaseProduct product;
+                    String[] fields = k.split("\t");
+
+                    if (!fields[5].equals("")) {
+                        fields[5] = fields[5].replaceAll("\\\\n", System.lineSeparator()).replaceAll("\\\\t", "\t");
+                    }
+
+                    HashMap<String, Double> nutritionFacts = newNutritionFacts(fields);
+
+                    char type = k.charAt(0);
+                    switch (type) {
+                        case '0': //BaseProduct
+                            product = new BaseProduct(fields, nutritionFacts);
+                            catalogue.add(product);
+                            break;
+                        case '1': //DairyBaseProduct
+                            product = new DairyBaseProduct(fields, nutritionFacts);
+                            catalogue.add(product);
+                            break;
+                        case '2': //MilkBaseProduct
+                            product = new MilkBaseProduct(fields, nutritionFacts);
+                            catalogue.add(product);
+                            break;
+                        case '3': //MeatBaseProduct
+                            product = new MeatBaseProduct(fields, nutritionFacts);
+                            catalogue.add(product);
+                            break;
+                        case '4': //FishBaseProduct
+                            product = new FishBaseProduct(fields, nutritionFacts);
+                            catalogue.add(product);
+                            break;
+                        default: //Not a product
+                            break;
+                    }
+                }
+            });
+
+        } catch (Exception ignored) {
+        }
+    }
+
+    public void boughtProductLoader(String file) {
+        try (Stream<String> stream = Files.lines(Paths.get(file))) {
+            stream.forEach((k) -> {
+                if (k.length() > 5) {
+                    BoughtProduct product;
+                    String[] fields = k.split("\t");
+                    BaseProduct bp;
+                    if (Integer.parseInt(fields[5]) == 0) {
+                        bp = findBaseProductByReference(Integer.parseInt(fields[6]));
+                    } else {
+                        bp = findBaseProductById(Integer.parseInt(fields[5]));
+                    }
+                    product = new BoughtProduct(bp, fields);
+                    pantry.add(product);
+                }
+            });
+
+        } catch (Exception ignored) {
+        }
     }
 }

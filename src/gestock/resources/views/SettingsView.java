@@ -115,11 +115,8 @@ public class SettingsView extends GFrame {
             if (rVal == JFileChooser.APPROVE_OPTION) {
                 String dir = c.getCurrentDirectory().toString();
                 Tools.unzip(model.getTemp(), dir + Constants.FS + "gestock.zip");
-                try {
-                    throw new Exception("Import settings: still to be implemented");
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
+                model.baseProductLoader(model.getTemp() + Constants.FS + "baseproducts");
+                model.boughtProductLoader(model.getTemp() + Constants.FS + "boughtproducts");
             }
         });
         exportButton = new JButton(model.messages.getString("settings.export"));
