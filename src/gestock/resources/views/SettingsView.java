@@ -3,9 +3,11 @@ package gestock.resources.views;
 import gestock.Gestock;
 import gestock.entity.Free;
 import gestock.entity.User;
+import gestock.util.Tools;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
@@ -107,6 +109,22 @@ public class SettingsView extends GFrame {
 
         importButton = new JButton(model.messages.getString("settings.import"));
         exportButton = new JButton(model.messages.getString("settings.export"));
+        exportButton.addActionListener((ActionEvent ae) -> {
+            Thread save = new Thread(() -> {
+                model.saveTemp();
+            });
+            save.run();
+            JFileChooser c = new JFileChooser();
+            int rVal = c.showSaveDialog(SettingsView.this);
+            if (rVal == JFileChooser.APPROVE_OPTION) {
+                String dir = c.getCurrentDirectory().toString();
+                String fs = System.getProperty("file.separator");
+                System.out.println("filename: " + c.getSelectedFile().getName());
+                System.out.println("dir : " + c.getCurrentDirectory().toString());
+                System.out.println(c.getSelectedFile().toString());
+                Tools.zip(model.getTemp(), dir + fs + "gestock.zip");
+            }
+        });
         saveButton = new JButton(model.messages.getString("settings.save.button"));
         saveButton.addActionListener(e1 -> updateUser());
         buttonsPanel = new JPanel();

@@ -23,7 +23,6 @@ public class GFrame extends JFrame {
         repaint();
         pack();
         if (relocate) setLocationRelativeTo(null);
-        setVisible(true);
     }
 
     public void refresh() {

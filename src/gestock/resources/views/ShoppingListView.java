@@ -38,8 +38,10 @@ public class ShoppingListView extends GFrame {
     private JButton addButton;
     private JButton searchButton;
     private JTextField searchField;
+    private JPanel centerPanel;
     private JScrollPane pannierPane;
     private JPanel pannier;
+    private JPanel suggestionsPanel;
     private JPanel footerPanel;
     private JButton deleteSelection;
     private JButton sendMessage;
@@ -85,6 +87,13 @@ public class ShoppingListView extends GFrame {
         pannierPane = new JScrollPane();
         pannierPane.getViewport().add(pannier);
 
+        suggestionsPanel = new JPanel();
+        suggestionsPanel.setLayout(new BoxLayout(suggestionsPanel, BoxLayout.PAGE_AXIS));
+
+        centerPanel = new JPanel(new GridLayout(1, 2));
+        centerPanel.add(pannierPane);
+        centerPanel.add(suggestionsPanel);
+
         deleteSelection = new JButton("Effacer selection");
         deleteSelection.addActionListener((ActionEvent ae) -> {
             shoppingListCheckBox.forEach((k, v) -> {
@@ -121,7 +130,7 @@ public class ShoppingListView extends GFrame {
 
         main = new JPanel(new BorderLayout());
         main.add(headerPanel, BorderLayout.NORTH);
-        main.add(pannierPane, BorderLayout.CENTER);
+        main.add(centerPanel, BorderLayout.CENTER);
         main.add(footerPanel, BorderLayout.SOUTH);
 
         setResizable(false);

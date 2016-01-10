@@ -25,7 +25,7 @@ public class BaseProductSearchView extends GFrame {
     private JTextField searchField;
 
     public BaseProductSearchView(Gestock app, BaseProductSearchController baseProductSearchController) {
-        super("Gestock - Chercher produit dans le catalogue");
+        super("Gestock - " + app.messages.getString("baseproduct.search.title"));
         this.model = app;
         this.controller = baseProductSearchController;
         setSize(300, 600);
@@ -45,7 +45,6 @@ public class BaseProductSearchView extends GFrame {
         setResizable(false);
         setContentPane(main);
         setLocationRelativeTo(null);
-        setUndecorated(true);
         setVisible(true);
         ORIGINAL_SIZE = new Dimension(300, 600);
         ORIGINAL_LOCATION = this.getLocation();

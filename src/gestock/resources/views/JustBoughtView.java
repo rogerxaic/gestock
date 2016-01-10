@@ -4,6 +4,8 @@ package gestock.resources.views;
 import gestock.Gestock;
 import gestock.controller.BaseProductSearchController;
 import gestock.controller.JustBoughtController;
+import gestock.controller.ProductController;
+import gestock.entity.BaseProduct;
 import gestock.entity.BoughtProduct;
 
 import javax.swing.*;
@@ -46,6 +48,10 @@ public class JustBoughtView extends GFrame {
 
         Add = new JLabel("Ajouter produit");
         FirstTime = new JButton("Premiere fois");
+        FirstTime.addActionListener((ActionEvent ae) -> {
+            ProductController pc = new ProductController(model, new BaseProduct());
+            pc.addObserver(controller);
+        });
         NotFirstTime = new JButton("Deja achete");
         NotFirstTime.addActionListener((ActionEvent ae) -> {
             BaseProductSearchController bpsc = new BaseProductSearchController(model);

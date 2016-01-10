@@ -42,10 +42,14 @@ public class ProductView extends GFrame {
     //*************** General product info
     private JLabel nameLabel;
     private JLabel descriptionLabel;
+    private JLabel quantityLabel;
+    private JLabel alertLabel;
     private JLabel tracesLabel;
     private JLabel brandLabel;
     private JTextField nameField;
     private JTextArea descriptionArea;
+    private JTextField quantityField;
+    private JTextField alertField;
     private JTextField tracesField;
     private JTextField brandField;
     //*************** Nutrition facts
@@ -238,12 +242,16 @@ public class ProductView extends GFrame {
         {
             nameLabel = new JLabel(app.messages.getString("baseproduct.labels.name"));
             descriptionLabel = new JLabel(app.messages.getString("baseproduct.labels.description"));
+            quantityLabel = new JLabel(app.messages.getString("baseproduct.labels.quantity"));
+            alertLabel = new JLabel(app.messages.getString("baseproduct.labels.alert"));
             tracesLabel = new JLabel(app.messages.getString("baseproduct.labels.traces"));
             brandLabel = new JLabel(app.messages.getString("baseproduct.labels.brand"));
             nameField = new JTextField(baseProduct.getName(), 10);
             descriptionArea = new JTextArea(baseProduct.getDescription());
             descriptionArea.setWrapStyleWord(true);
             descriptionArea.setLineWrap(true);
+            quantityField = new JTextField(baseProduct.getQuantity().toString(), 10);
+            alertField = new JTextField(String.valueOf(baseProduct.getAlert()), 10);
             tracesField = new JTextField(baseProduct.getTraces(), 10);
             brandField = new JTextField(baseProduct.getBrand(), 10);
         }
@@ -260,11 +268,15 @@ public class ProductView extends GFrame {
                         .addGroup(generalLayout.createParallelGroup(TRAILING)
                                 .addComponent(nameLabel)
                                 .addComponent(descriptionLabel)
+                                .addComponent(quantityLabel)
+                                .addComponent(alertLabel)
                                 .addComponent(tracesLabel)
                                 .addComponent(brandLabel))
                         .addGroup(generalLayout.createParallelGroup(LEADING)
                                 .addComponent(nameField)
                                 .addComponent(descriptionArea)
+                                .addComponent(quantityField)
+                                .addComponent(alertField)
                                 .addComponent(tracesField)
                                 .addComponent(brandField)))
         );
@@ -276,6 +288,12 @@ public class ProductView extends GFrame {
                 .addGroup(generalLayout.createParallelGroup(BASELINE)
                         .addComponent(descriptionLabel)
                         .addComponent(descriptionArea))
+                .addGroup(generalLayout.createParallelGroup(BASELINE)
+                        .addComponent(quantityLabel)
+                        .addComponent(quantityField))
+                .addGroup(generalLayout.createParallelGroup(BASELINE)
+                        .addComponent(alertLabel)
+                        .addComponent(alertField))
                 .addGroup(generalLayout.createParallelGroup(BASELINE)
                         .addComponent(tracesLabel)
                         .addComponent(tracesField))
@@ -297,6 +315,8 @@ public class ProductView extends GFrame {
         add.addActionListener((ActionEvent ae) -> {
             String codeBarres = codeName.getText();
             long code = codeBarres.equals("") ? 0 : Long.parseLong(codeBarres.trim());
+            String alertString = alertField.getText();
+            int alert = alertString.equals("") ? 0 : Integer.parseInt(alertString.trim());
             String energyString = energieTextField.getText();
             double energy = (energyString.equals("") ? 0 : Double.parseDouble(energyString));
             String fatsString = grassesTextField.getText();
@@ -328,6 +348,8 @@ public class ProductView extends GFrame {
                 baseProduct.setCode(code);
                 baseProduct.setName(nameField.getText());
                 baseProduct.setDescription(descriptionArea.getText());
+                baseProduct.setQuantity(new Quantity(quantityField.getText()));
+                baseProduct.setAlert(alert);
                 baseProduct.setBrand(brandField.getText());
                 baseProduct.setTraces(tracesField.getText());
                 baseProduct.setNutritionFacts(nutritionHashMap);
@@ -360,31 +382,29 @@ public class ProductView extends GFrame {
                 switch (type) {
                     case "normal":
                         finalBaseProduct = new BaseProduct(code, nameField.getText(), descriptionArea.getText(),
-                                tracesField.getText(), brandField.getText(), nutritionHashMap);
+                                new Quantity(quantityField.getText()), alert, tracesField.getText(), brandField.getText(), nutritionHashMap);
                         break;
                     case "fish":
                         finalBaseProduct = new FishBaseProduct(code, nameField.getText(), descriptionArea.getText(),
-                                tracesField.getText(), brandField.getText(), nutritionHashMap, true);
+                                new Quantity(quantityField.getText()), alert, tracesField.getText(), brandField.getText(), nutritionHashMap, true);
                         break;
                     case "meat":
                         finalBaseProduct = new MeatBaseProduct(code, nameField.getText(), descriptionArea.getText(),
-                                tracesField.getText(), brandField.getText(), nutritionHashMap, halal.isSelected());
+                                new Quantity(quantityField.getText()), alert, tracesField.getText(), brandField.getText(), nutritionHashMap, halal.isSelected());
                         break;
                     case "dps":
                         finalBaseProduct = new DairyBaseProduct(code, nameField.getText(), descriptionArea.getText(),
-                                tracesField.getText(), brandField.getText(), nutritionHashMap, 1);
+                                new Quantity(quantityField.getText()), alert, tracesField.getText(), brandField.getText(), nutritionHashMap, 1);
                         break;
                     case "milk":
                         finalBaseProduct = new MilkBaseProduct(code, nameField.getText(), descriptionArea.getText(),
-                                tracesField.getText(), brandField.getText(), nutritionHashMap, 1, 1);
+                                new Quantity(quantityField.getText()), alert, tracesField.getText(), brandField.getText(), nutritionHashMap, 1, 1);
                         break;
                     default:
                         finalBaseProduct = new BaseProduct();
                         break;
                 }
-                app.addToCatalogue(finalBaseProduct);
-                //new ProductView(app, finalBaseProduct, true);
-
+                controller.addToCatalogue(finalBaseProduct);
             }
             dispose();
         });
@@ -395,7 +415,6 @@ public class ProductView extends GFrame {
         mainPanel.add(headPanel, BorderLayout.NORTH);
         mainPanel.add(centerPanel, BorderLayout.CENTER);
         mainPanel.add(addPanel, BorderLayout.SOUTH);
-
 
 
         setContentPane(mainPanel);
@@ -429,6 +448,10 @@ public class ProductView extends GFrame {
                         }
                         try {
                             descriptionArea.setText((String) productArray.get("generic_name"));
+                        } catch (Exception ignored) {
+                        }
+                        try {
+                            quantityField.setText((String) productArray.get("quantity"));
                         } catch (Exception ignored) {
                         }
                         try {
