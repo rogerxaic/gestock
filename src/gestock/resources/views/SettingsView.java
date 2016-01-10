@@ -133,9 +133,8 @@ public class SettingsView extends GFrame {
             if (rVal == JFileChooser.APPROVE_OPTION) {
                 String dir = c.getCurrentDirectory().toString();
                 String fs = System.getProperty("file.separator");
-                System.out.println("filename: " + c.getSelectedFile().getName());
-                System.out.println("dir : " + c.getCurrentDirectory().toString());
-                System.out.println(c.getSelectedFile().toString());
+                //("filename: " + c.getSelectedFile().getName());
+                //("dir : " + c.getCurrentDirectory().toString());
                 Tools.zip(model.getTemp(), dir + fs + "gestock.zip");
             }
         });
