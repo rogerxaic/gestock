@@ -109,8 +109,31 @@ public class ShoppingListView extends GFrame {
         sendMessage.addActionListener((ActionEvent ae) -> {
             User u = model.getUser();
             Free f = u.getFree();
-            if (f.isValid()) {
+            if (f.isValid() && !getText().equals("")) {
                 f.sendMessage(getText());
+            } else {
+
+                JDialog jd = new JDialog();
+                jd.getContentPane().setLayout(new BoxLayout(jd.getContentPane(), BoxLayout.PAGE_AXIS));
+
+                JButton open = new JButton("Open");
+                open.addActionListener((ActionEvent e) -> new SettingsView(app));
+                JButton close = new JButton("Close");
+                close.addActionListener((ActionEvent e) -> jd.dispose());
+
+                JPanel buttons = new JPanel();
+                buttons.add(open);
+                buttons.add(close);
+
+                JLabel alert = new JLabel("You must set a Free username and secret in order to send SMS");
+                alert.setAlignmentX(Component.CENTER_ALIGNMENT);
+
+                jd.add(alert);
+                jd.add(buttons);
+
+                jd.pack();
+                jd.setLocationRelativeTo(null);
+                jd.setVisible(true);
             }
         });
         copyText = new JButton("Copier texte");

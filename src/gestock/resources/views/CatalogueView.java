@@ -4,7 +4,7 @@ import gestock.Gestock;
 import gestock.controller.CatalogueController;
 import gestock.controller.ProductController;
 import gestock.entity.BaseProduct;
-import gestock.resources.views.ProductPanel;
+import gestock.resources.views.components.ProductPanel;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;

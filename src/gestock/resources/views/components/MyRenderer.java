@@ -1,9 +1,8 @@
-package gestock.window;
+package gestock.resources.views.components;
 
-import javax.swing.JTable;
-import java.awt.Component;
-import java.awt.Color;
+import javax.swing.*;
 import javax.swing.table.DefaultTableCellRenderer;
+import java.awt.*;
 
 public class MyRenderer extends DefaultTableCellRenderer {
 

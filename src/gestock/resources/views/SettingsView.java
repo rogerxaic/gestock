@@ -43,12 +43,12 @@ public class SettingsView extends GFrame {
     private JButton exportButton;
     private JButton saveButton;
 
-    public SettingsView(Gestock app, GestockView main, User user) {
+    public SettingsView(Gestock app) {
         super(app.messages.getString("app.title") + " - " + app.messages.getString("settings.title"));
 
         this.model = app;
-        this.main = main;
-        this.user = user;
+        //this.main = main;
+        this.user = app.getUser();
 
         this.initName = user.getName();
         this.initEmail = user.getEmail();
@@ -158,7 +158,7 @@ public class SettingsView extends GFrame {
 
             @Override
             public void windowClosing(WindowEvent e) {
-                main.setEnabled(true);
+                //main.setEnabled(true);
                 if (hasChanged()) {
                     int confirm = JOptionPane.showOptionDialog(
                             null, model.messages.getString("settings.save.message"),

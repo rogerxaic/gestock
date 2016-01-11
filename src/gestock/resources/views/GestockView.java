@@ -4,7 +4,7 @@ import gestock.Gestock;
 import gestock.controller.*;
 import gestock.entity.BaseProduct;
 import gestock.entity.User;
-import gestock.window.MyRenderer;
+import gestock.resources.views.components.MyRenderer;
 import gestock.resources.views.components.TableModel;
 import gestock.util.Constants;
 
@@ -173,8 +173,8 @@ public class GestockView extends JFrame implements ActionListener {
         parametres.setVerticalTextPosition(SwingConstants.BOTTOM);
         parametres.setHorizontalTextPosition(SwingConstants.CENTER);
         parametres.addActionListener((ActionEvent ae) -> {
-            new SettingsView(model, this, user);
-            setEnabled(false);
+            new SettingsView(model);
+            //setEnabled(false);
         });
 
         JPanel log = new JPanel();
