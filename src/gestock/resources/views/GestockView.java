@@ -251,7 +251,8 @@ public class GestockView extends JFrame implements ActionListener {
         model1.addRow(new Object[]{"Mure", 18, new Date(2015, 12, 27)});
         model1.addRow(new Object[]{"Lamai", 3, new Date(2015, 12, 19)});
         perim.setGridColor(Color.black);
-        perim.setDefaultRenderer(Object.class, renderer);
+        perim.setDefaultRenderer(Integer.class, renderer);
+        perim.setDefaultRenderer(String.class, renderer);
         perim.setShowHorizontalLines(false);
         perim.setRowHeight(25);
         perim.getColumnModel().getColumn(0).setPreferredWidth(200);
@@ -280,7 +281,8 @@ public class GestockView extends JFrame implements ActionListener {
         });
         peu.setShowHorizontalLines(false);
         peu.setGridColor(Color.black);
-        peu.setDefaultRenderer(Object.class, renderer);
+        peu.setDefaultRenderer(Integer.class, renderer);
+        peu.setDefaultRenderer(String.class, renderer);
         peu.setRowHeight(25);
         peu.getColumnModel().getColumn(0).setPreferredWidth(200);
         peu.getColumnModel().getColumn(1).setPreferredWidth(70);

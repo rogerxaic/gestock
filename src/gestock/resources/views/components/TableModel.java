@@ -1,7 +1,7 @@
 package gestock.resources.views.components;
 
 import javax.swing.table.DefaultTableModel;
-
+import gestock.window.MyRenderer;
 /**
  * Created by Cristinuta on 12/5/2015.
  */
