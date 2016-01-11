@@ -4,7 +4,7 @@ import gestock.Gestock;
 import gestock.controller.*;
 import gestock.entity.BaseProduct;
 import gestock.entity.User;
-import gestock.resources.views.components.MyRenderer;
+import gestock.window.MyRenderer;
 import gestock.resources.views.components.TableModel;
 import gestock.util.Constants;
 
@@ -319,19 +319,31 @@ public class GestockView extends JFrame implements ActionListener {
 
         JMenu fileMenu = new JMenu("File");
         JMenu helpMenu = new JMenu("Help");
+        JMenu toolsMenu = new JMenu("Tools");
+
         fileMenu.setMnemonic(KeyEvent.VK_F);
         helpMenu.setMnemonic(KeyEvent.VK_H);
+        toolsMenu.setMnemonic(KeyEvent.VK_T);
 
         JMenuItem exit = new JMenuItem("Exit");
         JMenuItem licences = new JMenuItem("Licences");
+        JMenu languages = new JMenu("Languages");
         exit.addActionListener((ActionEvent e) -> System.exit(0));
         licences.addActionListener((ActionEvent e) -> new LicensesView());
 
+        JMenuItem english = new JMenuItem("English");
+        JMenuItem french = new JMenuItem("French");
+
+        languages.add(english);
+        languages.add(french);
+
         fileMenu.add(exit);
         helpMenu.add(licences);
+        toolsMenu.add(languages);
 
         menubar.add(fileMenu);
         menubar.add(helpMenu);
+        menubar.add(toolsMenu);
 
         setJMenuBar(menubar);
     }
