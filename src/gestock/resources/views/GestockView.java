@@ -7,6 +7,7 @@ import gestock.entity.User;
 import gestock.resources.views.components.MyRenderer;
 import gestock.resources.views.components.TableModel;
 import gestock.util.Constants;
+import sun.util.calendar.BaseCalendar;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -368,6 +369,9 @@ public class GestockView extends GFrame implements ActionListener {
         setJMenuBar(menubar);
     }
 
+    public String changeDateInString(Date date){
+        return String.format("%1$td-%1$tm-%1$tY", date);
+    }
     public void refresh() {
         this.userName.setText(user.getName());
     }
