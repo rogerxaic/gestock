@@ -4,7 +4,7 @@ import gestock.Gestock;
 import gestock.controller.*;
 import gestock.entity.BaseProduct;
 import gestock.entity.User;
-import gestock.resources.views.components.MyRenderer;
+import gestock.window.MyRenderer;
 import gestock.resources.views.components.TableModel;
 import gestock.util.Constants;
 
@@ -251,7 +251,8 @@ public class GestockView extends JFrame implements ActionListener {
         model1.addRow(new Object[]{"Mure", 18, new Date(2015, 12, 27)});
         model1.addRow(new Object[]{"Lamai", 3, new Date(2015, 12, 19)});
         perim.setGridColor(Color.black);
-        perim.setDefaultRenderer(Object.class, renderer);
+        perim.setDefaultRenderer(Integer.class, renderer);
+        perim.setDefaultRenderer(String.class, renderer);
         perim.setShowHorizontalLines(false);
         perim.setRowHeight(25);
         perim.getColumnModel().getColumn(0).setPreferredWidth(200);
@@ -280,7 +281,8 @@ public class GestockView extends JFrame implements ActionListener {
         });
         peu.setShowHorizontalLines(false);
         peu.setGridColor(Color.black);
-        peu.setDefaultRenderer(Object.class, renderer);
+        peu.setDefaultRenderer(Integer.class, renderer);
+        peu.setDefaultRenderer(String.class, renderer);
         peu.setRowHeight(25);
         peu.getColumnModel().getColumn(0).setPreferredWidth(200);
         peu.getColumnModel().getColumn(1).setPreferredWidth(70);
@@ -319,19 +321,31 @@ public class GestockView extends JFrame implements ActionListener {
 
         JMenu fileMenu = new JMenu("File");
         JMenu helpMenu = new JMenu("Help");
+        JMenu toolsMenu = new JMenu("Tools");
+
         fileMenu.setMnemonic(KeyEvent.VK_F);
         helpMenu.setMnemonic(KeyEvent.VK_H);
+        toolsMenu.setMnemonic(KeyEvent.VK_T);
 
         JMenuItem exit = new JMenuItem("Exit");
         JMenuItem licences = new JMenuItem("Licences");
+        JMenu languages = new JMenu("Languages");
         exit.addActionListener((ActionEvent e) -> System.exit(0));
         licences.addActionListener((ActionEvent e) -> new LicensesView());
 
+        JMenuItem english = new JMenuItem("English");
+        JMenuItem french = new JMenuItem("French");
+
+        languages.add(english);
+        languages.add(french);
+
         fileMenu.add(exit);
         helpMenu.add(licences);
+        toolsMenu.add(languages);
 
         menubar.add(fileMenu);
         menubar.add(helpMenu);
+        menubar.add(toolsMenu);
 
         setJMenuBar(menubar);
     }
