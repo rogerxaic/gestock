@@ -53,6 +53,11 @@ public class Gestock extends Observable {
         messages = ResourceBundle.getBundle("gestock.resources.lang.MessagesBundle", Locale.getDefault());
 
         /**
+         * JUST TESTING
+         */
+
+
+        /**
          * Loading the properties if they exist, create a basic properties file otherwise.
          */
         File configFile = new File(filepath + fs + configProperties);

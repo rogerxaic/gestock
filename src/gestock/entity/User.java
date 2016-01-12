@@ -8,10 +8,7 @@ package gestock.entity;
 import gestock.util.Constants;
 import gestock.util.Curl;
 
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Observable;
-import java.util.Properties;
+import java.util.*;
 
 /**
  * @author Roger
@@ -110,5 +107,10 @@ public class User extends Observable {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public void setLocale(Locale locale) {
+        this.language = locale.getLanguage();
+        this.country = locale.getCountry();
     }
 }

@@ -13,17 +13,20 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.IOException;
-import java.util.Date;
+import java.util.*;
 import java.util.List;
-import java.util.Map;
-import java.util.Observable;
 
-public class GestockView extends JFrame implements ActionListener {
+public class GestockView extends GFrame implements ActionListener {
 
     private Gestock model;
     private User user;
 
     private JLabel userName;
+
+    private AbstractButton bottomButton;
+    private AbstractButton parametres;
+    private AbstractButton chercher;
+    private AbstractButton catalogue;
 
     public GestockView(Gestock app, Map<BaseProduct, Integer> expireSoonProducts, List<BaseProduct> fewProducts) {
         super(app.messages.getString("app.title"));
@@ -59,7 +62,7 @@ public class GestockView extends JFrame implements ActionListener {
         space.setBackground(Color.white);
 
 
-        AbstractButton bottomButton = new JButton(model.messages.getString("justbought.title"));
+        bottomButton = new JButton(model.messages.getString("justbought.title"));
         bottomButton.setBackground(Color.white);
         bottomButtonPanel.add(bottomButton, BorderLayout.WEST);
         bottomButton.setBackground(Color.WHITE);
@@ -81,7 +84,7 @@ public class GestockView extends JFrame implements ActionListener {
         bottomButton.addActionListener((ActionEvent ae) -> new JustBoughtController(app));
 
 
-        AbstractButton catalogue = new JButton(model.messages.getString("catalogue.title"));
+        catalogue = new JButton(model.messages.getString("catalogue.title"));
         menuUp.add(catalogue);
         catalogue.setBackground(Color.WHITE);
         catalogue.setContentAreaFilled(false);
@@ -137,7 +140,7 @@ public class GestockView extends JFrame implements ActionListener {
         listeAchats.setHorizontalTextPosition(SwingConstants.CENTER);
         listeAchats.addActionListener((ActionEvent ae) -> new ShoppingListController(app));
 
-        AbstractButton chercher = new JButton("Chercher");
+        chercher = new JButton(model.messages.getString("search.title"));
         chercher.setBackground(Color.WHITE);
         chercher.setContentAreaFilled(false);
         chercher.setOpaque(true);
@@ -156,7 +159,7 @@ public class GestockView extends JFrame implements ActionListener {
 
         menuUp.add(Box.createHorizontalGlue());
 
-        AbstractButton parametres = new JButton("Parametres");
+        parametres = new JButton("Parametres");
         parametres.setBackground(Color.WHITE);
         parametres.setContentAreaFilled(false);
         parametres.setOpaque(true);
@@ -225,7 +228,6 @@ public class GestockView extends JFrame implements ActionListener {
                     refresh();
                 }
             }
-            System.out.println(o.getClass());
         });
 
         tables.add(Box.createRigidArea(new Dimension((int) (Toolkit.getDefaultToolkit().getScreenSize().getWidth() / 30), 0)));
@@ -333,11 +335,27 @@ public class GestockView extends JFrame implements ActionListener {
         exit.addActionListener((ActionEvent e) -> System.exit(0));
         licences.addActionListener((ActionEvent e) -> new LicensesView());
 
-        JMenuItem english = new JMenuItem("English");
-        JMenuItem french = new JMenuItem("French");
-
-        languages.add(english);
-        languages.add(french);
+        Set<ResourceBundle> resourceBundles = new HashSet<>();
+        for (Locale locale : Locale.getAvailableLocales()) {
+            try {
+                ResourceBundle rb = ResourceBundle.getBundle("gestock.resources.lang.MessagesBundle", locale);
+                if (!rb.getLocale().getDisplayLanguage().equals(""))
+                    resourceBundles.add(rb);
+            } catch (MissingResourceException ex) {
+                // ...
+            }
+        }
+        resourceBundles.forEach((k) -> {
+            Locale l = k.getLocale();
+            JMenuItem jmi = new JMenuItem(l.getDisplayLanguage(l));
+            languages.add(jmi);
+            jmi.addActionListener((ActionEvent ae) -> {
+                model.messages = ResourceBundle.getBundle("gestock.resources.lang.MessagesBundle", l);
+                model.getUser().setLocale(l);
+                model.getUser().setUpdated();
+                this.updateLocale();
+            });
+        });
 
         fileMenu.add(exit);
         helpMenu.add(licences);
@@ -357,5 +375,12 @@ public class GestockView extends JFrame implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
         System.out.println(e.getSource());
+    }
+
+    public void updateLocale() {
+        bottomButton.setText(model.messages.getString("justbought.title"));
+        parametres.setText("settings.title");
+        chercher.setText(model.messages.getString("search.title"));
+        catalogue.setText(model.messages.getString("catalogue.title"));
     }
 }
