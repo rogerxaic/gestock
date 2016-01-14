@@ -1,6 +1,8 @@
 package gestock.resources.views.components;
 
 import javax.swing.table.DefaultTableModel;
+import java.util.Date;
+
 /**
  * Created by Cristinuta on 12/5/2015.
  */
@@ -11,6 +13,12 @@ public class TableModel extends DefaultTableModel {
     }
 
     public Class<?> getColumnClass(int columnIndex) {
-        return columnIndex == 1 ? Integer.class : String.class;
+        if(columnIndex == 1){
+            return Integer.class;
+        } else {
+            if (columnIndex == 3){
+                return Date.class;
+            } else {return String.class;}
+        }
     }
 }
