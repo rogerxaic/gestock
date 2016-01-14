@@ -13,6 +13,7 @@ import gestock.util.Curl;
 import gestock.util.Tools;
 import org.json.JSONArray;
 
+import javax.swing.*;
 import java.awt.*;
 import java.io.*;
 import java.nio.file.Files;
@@ -51,11 +52,6 @@ public class Gestock extends Observable {
         String country = (System.getProperty("user.country"));
         Locale.setDefault(new Locale(language, country));
         messages = ResourceBundle.getBundle("gestock.resources.lang.MessagesBundle", Locale.getDefault());
-
-        /**
-         * JUST TESTING
-         */
-
 
         /**
          * Loading the properties if they exist, create a basic properties file otherwise.
@@ -139,7 +135,16 @@ public class Gestock extends Observable {
         Gestock app = new Gestock();
 
         try {
-            //UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+            if (Tools.isWindows()) {
+                UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
+            } else if (Tools.isMac()) {
+                System.setProperty("apple.laf.useScreenMenuBar", "true");
+                System.setProperty("com.apple.mrj.application.apple.menu.about.name", "Gestock");
+                UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+            } else {
+                UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+            }
+
         } catch (Exception evt) {
             evt.printStackTrace();
         }
@@ -375,6 +380,7 @@ public class Gestock extends Observable {
     }
 
     public void save() {
+        saveProperties();
         save(filepath);
     }
 

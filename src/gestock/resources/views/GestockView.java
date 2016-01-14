@@ -11,12 +11,15 @@ import gestock.util.Constants;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.KeyEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.io.IOException;
 import java.util.*;
 import java.util.List;
 
-public class GestockView extends GFrame implements ActionListener {
+public class GestockView extends GFrame {
 
     private Gestock model;
     private User user;
@@ -27,6 +30,17 @@ public class GestockView extends GFrame implements ActionListener {
     private AbstractButton parametres;
     private AbstractButton chercher;
     private AbstractButton catalogue;
+    private AbstractButton gardeManger;
+    private AbstractButton listeAchats;
+    private AbstractButton loginout;
+
+    private JPanel peuPanel;
+    private JPanel perimPanel;
+
+    private JTable perim;
+    private String[] expiryColumns;
+    private JTable peu;
+    private String[] fewColumns;
 
     public GestockView(Gestock app, Map<BaseProduct, Integer> expireSoonProducts, List<BaseProduct> fewProducts) {
         super(app.messages.getString("app.title"));
@@ -34,6 +48,13 @@ public class GestockView extends GFrame implements ActionListener {
 
         this.model = app;
         this.user = model.getUser();
+
+        expiryColumns = new String[]{model.messages.getString("app.table.expiresoon.name"),
+                model.messages.getString("app.table.expiresoon.quantity"),
+                model.messages.getString("app.table.expiresoon.date")};
+        fewColumns = new String[]{model.messages.getString("app.table.fewproducts.name"),
+                model.messages.getString("app.table.fewproducts.quantity"),
+                model.messages.getString("app.table.fewproducts.add")};
 
         // The main panel
         JPanel mainPanel = new JPanel(new BorderLayout(5, 30));
@@ -103,7 +124,7 @@ public class GestockView extends GFrame implements ActionListener {
         catalogue.addActionListener((ActionEvent ae) -> new CatalogueController(app));
 
 
-        AbstractButton gardeManger = new JButton(model.messages.getString("pantry.title"));
+        gardeManger = new JButton(model.messages.getString("pantry.title"));
         menuUp.add(gardeManger);
         gardeManger.setBackground(Color.WHITE);
         gardeManger.setContentAreaFilled(false);
@@ -122,7 +143,7 @@ public class GestockView extends GFrame implements ActionListener {
         gardeManger.addActionListener((ActionEvent ae) -> new PantryController(app));
 
 
-        AbstractButton listeAchats = new JButton("Liste achats");
+        listeAchats = new JButton(model.messages.getString("shoppinglist.title"));
         listeAchats.setBackground(Color.WHITE);
         listeAchats.setContentAreaFilled(false);
         listeAchats.setOpaque(true);
@@ -159,7 +180,7 @@ public class GestockView extends GFrame implements ActionListener {
 
         menuUp.add(Box.createHorizontalGlue());
 
-        parametres = new JButton("Parametres");
+        parametres = new JButton(model.messages.getString("settings.title"));
         parametres.setBackground(Color.WHITE);
         parametres.setContentAreaFilled(false);
         parametres.setOpaque(true);
@@ -192,8 +213,9 @@ public class GestockView extends GFrame implements ActionListener {
         userName.setAlignmentX(SwingConstants.CENTER);
         userName.setFont(new Font("Arial", Font.ITALIC, 14));
 
-        String[] loginoutText = {"Login", "Logout"};
-        AbstractButton loginout = new JButton((user.isLoggedIn()) ? loginoutText[1] : loginoutText[0]);
+        String[] loginoutText = {model.messages.getString("user.state.login"),
+                model.messages.getString("user.state.logout")};
+        loginout = new JButton((user.isLoggedIn()) ? loginoutText[1] : loginoutText[0]);
         loginout.setBackground(Color.WHITE);
         loginout.setContentAreaFilled(false);
         loginout.setOpaque(true);
@@ -234,24 +256,20 @@ public class GestockView extends GFrame implements ActionListener {
 
         MyRenderer renderer = new MyRenderer();
 
-        JPanel perimPanel = new JPanel();
+        perimPanel = new JPanel();
         perimPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createLineBorder(Color.black),
-                "Produits qui périment bientôt"));
+                model.messages.getString("app.table.expiresoon.title")));
         tables.add(perimPanel);
         perimPanel.setBackground(Color.white);
 
 
-        String[] columnNames1 = {"Nom", "Qte", model.messages.getString("gestock.expiry.date")};
-        TableModel model1 = new TableModel(columnNames1);
-        JTable perim = new JTable(model1);
+        TableModel model1 = new TableModel(expiryColumns);
+        perim = new JTable(model1);
         perimPanel.add(new JScrollPane(perim));
         perim.setEnabled(false);
         expireSoonProducts.forEach((k, v) -> {
             model1.addRow(new Object[]{k.toString(), v, k.getOldestBoughtProduct().getExpirationDay()});
         });
-        model1.addRow(new Object[]{"Prune", 15, new Date(2016, 1, 15)});
-        model1.addRow(new Object[]{"Mure", 18, new Date(2015, 12, 27)});
-        model1.addRow(new Object[]{"Lamai", 3, new Date(2015, 12, 19)});
         perim.setGridColor(Color.black);
         perim.setDefaultRenderer(Integer.class, renderer);
         perim.setDefaultRenderer(String.class, renderer);
@@ -265,16 +283,15 @@ public class GestockView extends GFrame implements ActionListener {
 
         tables.add(Box.createRigidArea(new Dimension((int) (Toolkit.getDefaultToolkit().getScreenSize().getWidth() / 30), 0)));
 
-        JPanel peuPanel = new JPanel();
+        peuPanel = new JPanel();
         peuPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createLineBorder(Color.black),
-                "Peu d'existences"));
+                model.messages.getString("app.table.fewproducts.title")));
         tables.add(peuPanel);
         peuPanel.setBackground(Color.white);
 
 
-        String[] columnNames2 = {"Nom", "Qte", "Ajouter L.A."};
-        TableModel model2 = new TableModel(columnNames2);
-        JTable peu = new JTable(model2);
+        TableModel model2 = new TableModel(fewColumns);
+        peu = new JTable(model2);
         peuPanel.add(new JScrollPane(peu));
         peu.setEnabled(false);
         fewProducts.forEach((k) -> {
@@ -308,8 +325,6 @@ public class GestockView extends GFrame implements ActionListener {
 
             @Override
             public void windowClosing(WindowEvent e) {
-                app.saveProperties();
-                model.saveBaseProducts();
                 model.save();
                 System.exit(0);
             }
@@ -321,18 +336,21 @@ public class GestockView extends GFrame implements ActionListener {
 
         JMenuBar menubar = new JMenuBar();
 
-        JMenu fileMenu = new JMenu("File");
-        JMenu helpMenu = new JMenu("Help");
-        JMenu toolsMenu = new JMenu("Tools");
+        JMenu fileMenu = new JMenu(model.messages.getString("app.menu.file"));
+        JMenu helpMenu = new JMenu(model.messages.getString("app.menu.help"));
+        JMenu toolsMenu = new JMenu(model.messages.getString("app.menu.tools"));
 
         fileMenu.setMnemonic(KeyEvent.VK_F);
         helpMenu.setMnemonic(KeyEvent.VK_H);
         toolsMenu.setMnemonic(KeyEvent.VK_T);
 
-        JMenuItem exit = new JMenuItem("Exit");
-        JMenuItem licences = new JMenuItem("Licences");
-        JMenu languages = new JMenu("Languages");
-        exit.addActionListener((ActionEvent e) -> System.exit(0));
+        JMenuItem exit = new JMenuItem(model.messages.getString("app.menu.file.exit"));
+        JMenuItem licences = new JMenuItem(model.messages.getString("app.menu.help.licences"));
+        JMenu languages = new JMenu(model.messages.getString("app.menu.tools.languages"));
+        exit.addActionListener((ActionEvent e) -> {
+            model.save();
+            System.exit(0);
+        });
         licences.addActionListener((ActionEvent e) -> new LicensesView());
 
         Set<ResourceBundle> resourceBundles = new HashSet<>();
@@ -350,10 +368,12 @@ public class GestockView extends GFrame implements ActionListener {
             JMenuItem jmi = new JMenuItem(l.getDisplayLanguage(l));
             languages.add(jmi);
             jmi.addActionListener((ActionEvent ae) -> {
+                Locale.setDefault(l);
                 model.messages = ResourceBundle.getBundle("gestock.resources.lang.MessagesBundle", l);
                 model.getUser().setLocale(l);
                 model.getUser().setUpdated();
-                this.updateLocale();
+                Thread t = new Thread(this::updateLocale);
+                t.run();
             });
         });
 
@@ -370,17 +390,46 @@ public class GestockView extends GFrame implements ActionListener {
 
     public void refresh() {
         this.userName.setText(user.getName());
-    }
-
-    @Override
-    public void actionPerformed(ActionEvent e) {
-        System.out.println(e.getSource());
+        super.refresh();
     }
 
     public void updateLocale() {
         bottomButton.setText(model.messages.getString("justbought.title"));
-        parametres.setText("settings.title");
+        parametres.setText(model.messages.getString("settings.title"));
         chercher.setText(model.messages.getString("search.title"));
         catalogue.setText(model.messages.getString("catalogue.title"));
+        gardeManger.setText(model.messages.getString("pantry.title"));
+        listeAchats.setText(model.messages.getString("shoppinglist.title"));
+        String[] loginoutText = {model.messages.getString("user.state.login"),
+                model.messages.getString("user.state.logout")};
+        loginout.setText((user.isLoggedIn()) ? loginoutText[1] : loginoutText[0]);
+
+        peuPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createLineBorder(Color.black),
+                model.messages.getString("app.table.fewproducts.title")));
+        perimPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createLineBorder(Color.black),
+                model.messages.getString("app.table.expiresoon.title")));
+        expiryColumns = new String[]{model.messages.getString("app.table.expiresoon.name"),
+                model.messages.getString("app.table.expiresoon.quantity"),
+                model.messages.getString("app.table.expiresoon.date")};
+        fewColumns = new String[]{model.messages.getString("app.table.fewproducts.name"),
+                model.messages.getString("app.table.fewproducts.quantity"),
+                model.messages.getString("app.table.fewproducts.add")};
+    }
+
+    public void fillExpireSoon(Map<BaseProduct, Integer> expireSoonProducts) {
+        TableModel tm = new TableModel(expiryColumns);
+        perim.setModel(tm);
+        expireSoonProducts.forEach((k, v) -> {
+            tm.addRow(new Object[]{k.toString(), v, k.getOldestBoughtProduct().getExpirationDay()});
+        });
+    }
+
+    public void fillFewProducts(List<BaseProduct> baseProducts) {
+        TableModel tm = new TableModel(fewColumns);
+        peu.setModel(tm);
+        baseProducts.forEach((k) -> {
+            JButton add = new JButton("");
+            tm.addRow(new Object[]{k.toString(), k.getQuantityInPantry(), add});
+        });
     }
 }
