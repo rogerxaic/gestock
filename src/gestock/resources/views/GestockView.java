@@ -248,11 +248,8 @@ public class GestockView extends GFrame implements ActionListener {
         perimPanel.add(new JScrollPane(perim));
         perim.setEnabled(false);
         expireSoonProducts.forEach((k, v) -> {
-            model1.addRow(new Object[]{k.toString(), v, k.getOldestBoughtProduct().getExpirationDay()});
+            model1.addRow(new Object[]{k.toString(), v, String.format("%1$td-%1$tm-%1$tY", k.getOldestBoughtProduct().getExpirationDay())});
         });
-        model1.addRow(new Object[]{"Prune", 15, new Date(2016, 1, 15)});
-        model1.addRow(new Object[]{"Mure", 18, new Date(2015, 12, 27)});
-        model1.addRow(new Object[]{"Lamai", 3, new Date(2015, 12, 19)});
         perim.setGridColor(Color.black);
         perim.setDefaultRenderer(Integer.class, renderer);
         perim.setDefaultRenderer(String.class, renderer);
