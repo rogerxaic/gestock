@@ -4,6 +4,7 @@ import gestock.Gestock;
 import gestock.entity.BaseProduct;
 import gestock.entity.BoughtProduct;
 import gestock.resources.views.GestockView;
+import gestock.util.Constants;
 
 import java.util.*;
 
@@ -17,6 +18,7 @@ public class GestockController implements Observer {
     public GestockController(Gestock model) {
         this.model = model;
         this.view = new GestockView(this.model, expireSoonProducts(), fewProducts());
+        this.model.addObserver(this);
     }
 
     public List<BaseProduct> fewProducts() {
@@ -50,6 +52,13 @@ public class GestockController implements Observer {
 
     @Override
     public void update(Observable o, Object arg) {
-
+        if (arg != null && arg instanceof Integer) {
+            int ar = (int) arg;
+            if (ar == Constants.OBSERVER_PANTRY_PRODUCT_CREATED) {
+                view.fillExpireSoon(this.expireSoonProducts());
+                view.fillFewProducts(this.fewProducts());
+                view.refresh();
+            }
+        }
     }
 }

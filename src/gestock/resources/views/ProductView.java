@@ -18,6 +18,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.HashMap;
 import java.util.LinkedList;
+import java.util.Vector;
 
 import static javax.swing.GroupLayout.Alignment.*;
 
@@ -70,7 +71,10 @@ public class ProductView extends GFrame {
     private JTextField proteinesTextField;
     private JTextField saltTextField;
     //*************** Specific information
-    private JCheckBox halal = new JCheckBox("Halal");
+    private JComboBox<String> origin;
+    private JComboBox skimmed;
+    private JCheckBox halal;
+    private JCheckBox fresh;
 
     //ProductView View
     private ProductController controller;
@@ -99,6 +103,7 @@ public class ProductView extends GFrame {
         llpt.add(new ProductType(app.messages.getString("baseproduct.type.milk"), "milk"));
 
 
+
         productType = new JComboBox<>(llpt.toArray());
         productType.addActionListener((ActionEvent ae) -> {
             String type = ((ProductType) productType.getSelectedItem()).getBackendName().toLowerCase();
@@ -109,22 +114,44 @@ public class ProductView extends GFrame {
                     specificPanel.setBorder(null);
                     break;
                 case "fish":
-                    specificPanel.add(new JButton("fish"));
+                    fresh = new JCheckBox(app.messages.getString("baseproduct.infos.fish.fresh"));
+                    specificPanel.add(fresh);
                     specificPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createLineBorder(Color.black),
                             app.messages.getString("baseproduct.infos.fish")));
                     break;
                 case "meat":
+                    halal = new JCheckBox(app.messages.getString("baseproduct.infos.meat.halal"));
                     specificPanel.add(halal);
                     specificPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createLineBorder(Color.black),
                             app.messages.getString("baseproduct.infos.meat")));
                     break;
                 case "dps":
-                    specificPanel.add(new JButton("dps"));
+                    Vector<String> content = new Vector<String>();
+                    for (String s : DairyBaseProduct.getComboboxContent()) {
+                        content.add(app.messages.getString(s));
+                    }
+                    origin = new JComboBox<>(content);
+                    specificPanel.add(origin);
                     specificPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createLineBorder(Color.black),
                             app.messages.getString("baseproduct.infos.dps")));
                     break;
                 case "milk":
-                    specificPanel.add(new JButton("milk"));
+                    Vector<String> milkOrigin = new Vector<>();
+                    for (String s : DairyBaseProduct.getComboboxContent()) {
+                        milkOrigin.add(app.messages.getString(s));
+                    }
+                    origin = new JComboBox<>(milkOrigin);
+
+                    Vector<String> skimType = new Vector<>();
+                    for (String s : MilkBaseProduct.getComboboxContent()) {
+                        skimType.add(app.messages.getString(s));
+                    }
+                    skimmed = new JComboBox<>(skimType);
+
+                    specificPanel.add(new JLabel(app.messages.getString("baseproduct.infos.dps.origin")));
+                    specificPanel.add(origin);
+                    specificPanel.add(new JLabel(app.messages.getString("baseproduct.infos.milk.type")));
+                    specificPanel.add(skimmed);
                     specificPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createLineBorder(Color.black),
                             app.messages.getString("baseproduct.infos.milk")));
                     break;
@@ -138,13 +165,17 @@ public class ProductView extends GFrame {
             productType.setEnabled(false);
             if (baseProduct instanceof FishBaseProduct) {
                 productType.setSelectedItem(new ProductType("", "fish"));
+                fresh.setSelected(((FishBaseProduct) baseProduct).isFresh());
             } else if (baseProduct instanceof MeatBaseProduct) {
                 productType.setSelectedItem(new ProductType("", "meat"));
                 halal.setSelected(((MeatBaseProduct) baseProduct).isHalal());
             } else if (baseProduct instanceof MilkBaseProduct) {
                 productType.setSelectedItem(new ProductType("", "milk"));
+                origin.setSelectedIndex(((MilkBaseProduct) baseProduct).getOriginAnimal());
+                skimmed.setSelectedIndex(((MilkBaseProduct) baseProduct).getSkimmed());
             } else if (baseProduct instanceof DairyBaseProduct) {
                 productType.setSelectedItem(new ProductType("", "DPS"));
+                origin.setSelectedIndex(((DairyBaseProduct) baseProduct).getOriginAnimal());
             }
 
         }
@@ -366,12 +397,12 @@ public class ProductView extends GFrame {
                         break;
                     case "dps":
                         DairyBaseProduct dairyBaseProduct = (DairyBaseProduct) baseProduct;
-                        dairyBaseProduct.setOriginAnimal(1);
+                        dairyBaseProduct.setOriginAnimal(origin.getSelectedIndex());
                         break;
                     case "milk":
                         MilkBaseProduct milkBaseProduct = (MilkBaseProduct) baseProduct;
-                        milkBaseProduct.setOriginAnimal(1);
-                        milkBaseProduct.setSkimmed(1);
+                        milkBaseProduct.setOriginAnimal(origin.getSelectedIndex());
+                        milkBaseProduct.setSkimmed(skimmed.getSelectedIndex());
                         break;
                     default:
                         break;
@@ -394,11 +425,11 @@ public class ProductView extends GFrame {
                         break;
                     case "dps":
                         finalBaseProduct = new DairyBaseProduct(code, nameField.getText(), descriptionArea.getText(),
-                                new Quantity(quantityField.getText()), alert, tracesField.getText(), brandField.getText(), nutritionHashMap, 1);
+                                new Quantity(quantityField.getText()), alert, tracesField.getText(), brandField.getText(), nutritionHashMap, origin.getSelectedIndex());
                         break;
                     case "milk":
                         finalBaseProduct = new MilkBaseProduct(code, nameField.getText(), descriptionArea.getText(),
-                                new Quantity(quantityField.getText()), alert, tracesField.getText(), brandField.getText(), nutritionHashMap, 1, 1);
+                                new Quantity(quantityField.getText()), alert, tracesField.getText(), brandField.getText(), nutritionHashMap, origin.getSelectedIndex(), skimmed.getSelectedIndex());
                         break;
                     default:
                         finalBaseProduct = new BaseProduct();
