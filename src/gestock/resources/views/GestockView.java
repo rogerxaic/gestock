@@ -11,6 +11,8 @@ import sun.util.calendar.BaseCalendar;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
+import javax.swing.table.TableCellRenderer;
+import javax.swing.table.TableRowSorter;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
@@ -281,6 +283,33 @@ public class GestockView extends GFrame {
         perim.getColumnModel().getColumn(2).setPreferredWidth(500);
         perim.setAutoCreateRowSorter(true);
         perim.setFillsViewportHeight(true);
+        TableRowSorter<TableModel> sorter = new TableRowSorter<>(model1);
+        sorter.setComparator(2, new Comparator<String>() {
+
+            @Override
+            public int compare(String date1, String date2) {
+                if (date1.equals(date2)){
+                    return 0;
+                } else if (Integer.parseInt(date1.substring(6))<Integer.parseInt(date2.substring(6))) {
+                    return 1;
+                    } else if(Integer.parseInt(date1.substring(6))>Integer.parseInt(date2.substring(6))){
+                        return -1;
+                        } else if (Integer.parseInt(date1.substring(3,5))<Integer.parseInt(date2.substring(3,5))){
+                        return 1;
+                            } else if (Integer.parseInt(date1.substring(3,5))>Integer.parseInt(date2.substring(3,5))){
+                                return -1;
+                                }else if (Integer.parseInt(date1.substring(0,2))<Integer.parseInt(date2.substring(0,2))){
+                                    return 1;
+                                    } else if (Integer.parseInt(date1.substring(0,2))>Integer.parseInt(date2.substring(0,2))){
+                                        return -1;
+                                        } else {
+                                            return 0;
+                                            }
+
+
+            }
+        });
+
 
         tables.add(Box.createRigidArea(new Dimension((int) (Toolkit.getDefaultToolkit().getScreenSize().getWidth() / 30), 0)));
 
@@ -389,13 +418,6 @@ public class GestockView extends GFrame {
         setJMenuBar(menubar);
     }
 
-    public String changeDateInString(Date date){
-        return String.format("%1$td-%1$tm-%1$tY", date);
-    }
-    public void refresh() {
-        this.userName.setText(user.getName());
-        super.refresh();
-    }
 
     public void updateLocale() {
         bottomButton.setText(model.messages.getString("justbought.title"));
@@ -437,3 +459,4 @@ public class GestockView extends GFrame {
         });
     }
 }
+
