@@ -5,23 +5,24 @@
  */
 package gestock.entity;
 
-import java.util.LinkedList;
-
 /**
  *
  * @author Roger
  */
 public class Shop {
 
+    private static int counter = 0;
+    protected int id;
     protected String name;
     protected String location;
     protected String url;
-    protected LinkedList<Price> prices;
 
     public Shop(String name, String location, String url) {
         this.name = name;
         this.location = location;
         this.url = url;
+        counter++;
+        this.id = counter;
     }
 
     public String getName() {
@@ -48,8 +49,7 @@ public class Shop {
         this.url = url;
     }
 
-    public void addPrice(Price price) {
-        this.prices.add(price);
+    public int getId() {
+        return id;
     }
-
 }

@@ -46,7 +46,6 @@ public class GestockController implements Observer {
                 }
             }
         }
-
         return expireSoon;
     }
 

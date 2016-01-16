@@ -37,9 +37,11 @@ public class Gestock extends Observable {
     private String configProperties = "config.properties";
     private String baseFile = "baseproducts";
     private String boughtFile = "boughtproducts";
+    private String shopsFile = "shops";
     private String shoppingPath = "shoppinglists";
     private LinkedList<BaseProduct> catalogue;
     private List<BoughtProduct> pantry;
+    private List<Shop> shops;
 
     public Gestock() {
         Launcher launcher = new Launcher();
@@ -90,6 +92,7 @@ public class Gestock extends Observable {
         mainUser = new User(prop);
         catalogue = new LinkedList<>();
         pantry = new LinkedList<>();
+        shops = new LinkedList<>();
 
         /**
          * We fetch the products from the database using the gestock api. Created /w Symfony 2.
@@ -367,11 +370,34 @@ public class Gestock extends Observable {
         return (sb.toString());
     }
 
+    public String saveShops() {
+        StringBuilder sb = new StringBuilder();
+        for (Shop s : shops) {
+
+            sb.append(s.getId());
+            sb.append("\t");
+            sb.append(Tools.escape(s.getName()));
+            sb.append("\t");
+            sb.append(Tools.escape(s.getLocation()));
+            sb.append("\t");
+            sb.append(Tools.escape(s.getUrl()));
+
+            sb.append(System.getProperty("line.separator"));
+
+        }
+        return (sb.toString());
+    }
+
     public void save(String path) {
         /**
          * Save BaseProducts
          */
         Tools.saver(path + fs + baseFile, saveBaseProducts());
+
+        /**
+         * Save shops
+         */
+        Tools.saver(path + fs + shopsFile, saveShops());
 
         /**
          * Save BoughtProducts

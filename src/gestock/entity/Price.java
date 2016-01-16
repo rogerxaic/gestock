@@ -15,7 +15,10 @@ public class Price {
     protected double totalPrice;
     protected Date date;
     protected BoughtProduct boughtProduct;
-    protected Shop shop;
+
+    public Price(double totalPrice) {
+        this(totalPrice, new Date());
+    }
 
     public Price(double totalPrice, Date date) {
         this.totalPrice = totalPrice;
@@ -45,13 +48,4 @@ public class Price {
     public void setBoughtProduct(BoughtProduct boughtProduct) {
         this.boughtProduct = boughtProduct;
     }
-
-    public Shop getShop() {
-        return shop;
-    }
-
-    public void setShop(Shop shop) {
-        this.shop = shop;
-    }
-
 }
