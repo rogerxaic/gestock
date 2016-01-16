@@ -7,7 +7,6 @@ import gestock.entity.User;
 import gestock.resources.views.components.MyRenderer;
 import gestock.resources.views.components.TableModel;
 import gestock.util.Constants;
-import sun.util.calendar.BaseCalendar;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -180,14 +179,14 @@ public class GestockView extends GFrame {
         chercher.setHorizontalTextPosition(SwingConstants.CENTER);
 
         consommer = new JButton(model.messages.getString("consume.title"));
-        menuUp.add(consommer);
+        bottomButtonPanel.add(consommer, BorderLayout.EAST);
         consommer.setBackground(Color.WHITE);
         consommer.setContentAreaFilled(false);
         consommer.setOpaque(true);
         consommer.setFont(new Font("Arial", Font.BOLD, 12));
         consommer.setPressedIcon(new ImageIcon());
         try {
-            Image img = ImageIO.read(getClass().getResource("/gestock/resources/cutlery23.png"));
+            Image img = ImageIO.read(getClass().getResource("/gestock/resources/cutlery23.png")); //minus24.png
             Image newImg = img.getScaledInstance(48, 48, Image.SCALE_SMOOTH);
             consommer.setIcon(new ImageIcon(newImg));
         } catch (IOException ex) {
@@ -195,6 +194,7 @@ public class GestockView extends GFrame {
         }
         consommer.setVerticalTextPosition(SwingConstants.BOTTOM);
         consommer.setHorizontalTextPosition(SwingConstants.CENTER);
+        consommer.addActionListener((ActionEvent ae) -> new JustConsumedController(model));
 
         menuUp.add(Box.createHorizontalGlue());
 
@@ -303,23 +303,23 @@ public class GestockView extends GFrame {
 
             @Override
             public int compare(String date1, String date2) {
-                if (date1.equals(date2)){
+                if (date1.equals(date2)) {
                     return 0;
-                } else if (Integer.parseInt(date1.substring(6))<Integer.parseInt(date2.substring(6))) {
+                } else if (Integer.parseInt(date1.substring(6)) < Integer.parseInt(date2.substring(6))) {
                     return 1;
-                    } else if(Integer.parseInt(date1.substring(6))>Integer.parseInt(date2.substring(6))){
-                        return -1;
-                        } else if (Integer.parseInt(date1.substring(3,5))<Integer.parseInt(date2.substring(3,5))){
-                        return 1;
-                            } else if (Integer.parseInt(date1.substring(3,5))>Integer.parseInt(date2.substring(3,5))){
-                                return -1;
-                                }else if (Integer.parseInt(date1.substring(0,2))<Integer.parseInt(date2.substring(0,2))){
-                                    return 1;
-                                    } else if (Integer.parseInt(date1.substring(0,2))>Integer.parseInt(date2.substring(0,2))){
-                                        return -1;
-                                        } else {
-                                            return 0;
-                                            }
+                } else if (Integer.parseInt(date1.substring(6)) > Integer.parseInt(date2.substring(6))) {
+                    return -1;
+                } else if (Integer.parseInt(date1.substring(3, 5)) < Integer.parseInt(date2.substring(3, 5))) {
+                    return 1;
+                } else if (Integer.parseInt(date1.substring(3, 5)) > Integer.parseInt(date2.substring(3, 5))) {
+                    return -1;
+                } else if (Integer.parseInt(date1.substring(0, 2)) < Integer.parseInt(date2.substring(0, 2))) {
+                    return 1;
+                } else if (Integer.parseInt(date1.substring(0, 2)) > Integer.parseInt(date2.substring(0, 2))) {
+                    return -1;
+                } else {
+                    return 0;
+                }
 
 
             }
