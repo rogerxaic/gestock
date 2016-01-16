@@ -195,7 +195,6 @@ public class GestockView extends GFrame {
         }
         consommer.setVerticalTextPosition(SwingConstants.BOTTOM);
         consommer.setHorizontalTextPosition(SwingConstants.CENTER);
-        consommer.addActionListener(new JustConsumedController());
 
         menuUp.add(Box.createHorizontalGlue());
 
@@ -495,7 +494,7 @@ class ButtonRenderer extends JButton implements TableCellRenderer {
 
     public ButtonRenderer() {
         setOpaque(true);
-        
+
     }
 
     public Component getTableCellRendererComponent(JTable table, Object value,
