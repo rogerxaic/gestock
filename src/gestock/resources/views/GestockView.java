@@ -35,6 +35,7 @@ public class GestockView extends GFrame {
     private AbstractButton catalogue;
     private AbstractButton gardeManger;
     private AbstractButton listeAchats;
+    private AbstractButton consommer;
     private AbstractButton loginout;
 
     private JPanel peuPanel;
@@ -180,6 +181,24 @@ public class GestockView extends GFrame {
         }
         chercher.setVerticalTextPosition(SwingConstants.BOTTOM);
         chercher.setHorizontalTextPosition(SwingConstants.CENTER);
+
+        consommer = new JButton(model.messages.getString("consume.title"));
+        menuUp.add(consommer);
+        consommer.setBackground(Color.WHITE);
+        consommer.setContentAreaFilled(false);
+        consommer.setOpaque(true);
+        consommer.setFont(new Font("Arial", Font.BOLD, 12));
+        consommer.setPressedIcon(new ImageIcon());
+        try {
+            Image img = ImageIO.read(getClass().getResource("/gestock/resources/cutlery23.png"));
+            Image newImg = img.getScaledInstance(48, 48, Image.SCALE_SMOOTH);
+            consommer.setIcon(new ImageIcon(newImg));
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
+        consommer.setVerticalTextPosition(SwingConstants.BOTTOM);
+        consommer.setHorizontalTextPosition(SwingConstants.CENTER);
+        consommer.addActionListener(new JustConsumedController());
 
         menuUp.add(Box.createHorizontalGlue());
 
