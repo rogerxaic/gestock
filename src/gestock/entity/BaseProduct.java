@@ -23,6 +23,7 @@ public class BaseProduct extends Observable {
     protected int alert = 5;
     protected String name = "";
     protected String description = "";
+    protected String ingredients = "";
     protected String traces = "";
     protected String brand = "";
     protected Stack<Price> prices = new Stack<>();
@@ -83,6 +84,7 @@ public class BaseProduct extends Observable {
         this.reference = Long.parseLong(fields[1]);
         this.id = Long.parseLong(fields[2]);
         counter = id;
+        System.out.println(this.toJSONString());
     }
 
     public long getId() {
@@ -210,5 +212,39 @@ public class BaseProduct extends Observable {
 
     public void setAlert(int alert) {
         this.alert = alert;
+    }
+
+    public JSONObject getJSON() {
+        JSONObject object = new JSONObject();
+        object.put("code", this.getCode());
+        object.put("name", this.getName());
+        object.put("description", this.getDescription());
+        object.put("brand", this.getBrand());
+        object.put("energy", this.getNutritionFacts().get("Energy"));
+        object.put("fats", this.getNutritionFacts().get("Fats"));
+        object.put("acids", this.getNutritionFacts().get("Acids"));
+        object.put("carbohydrates", this.getNutritionFacts().get("Carbohydrates"));
+        object.put("sugars", this.getNutritionFacts().get("Sugars"));
+        object.put("fibers", this.getNutritionFacts().get("Fibers"));
+        object.put("proteins", this.getNutritionFacts().get("Proteins"));
+        object.put("salt", this.getNutritionFacts().get("Salt"));
+        object.put("quantity", this.getQuantity().toString());
+        object.put("traces", this.getTraces());
+        object.put("ingredients", this.getIngredients());
+        return object;
+    }
+
+    public JSONObject getCompleteJSON() {
+        JSONObject object = this.getJSON();
+        object.put("id", this.getReference());
+        return object;
+    }
+
+    public String toJSONString() {
+        return this.getJSON().toString();
+    }
+
+    public String getIngredients() {
+        return ingredients;
     }
 }

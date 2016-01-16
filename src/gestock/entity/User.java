@@ -113,4 +113,8 @@ public class User extends Observable {
         this.language = locale.getLanguage();
         this.country = locale.getCountry();
     }
+
+    public String getCookies() {
+        return cookie;
+    }
 }

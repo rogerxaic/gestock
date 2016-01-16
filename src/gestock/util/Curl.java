@@ -3,6 +3,7 @@ package gestock.util;
 import javax.net.ssl.HttpsURLConnection;
 import javax.net.ssl.SSLSession;
 import java.io.BufferedReader;
+import java.io.DataOutputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -20,6 +21,9 @@ public class Curl {
     private boolean isSecure;
     private String cookieHeader;
     private URLConnection authCon;
+    private String requestMethod = "GET";
+    private String postParameters;
+    private boolean connected = false;
 
     public Curl(String url) {
         this(url, null);
@@ -38,10 +42,13 @@ public class Curl {
     }
 
     public void run() throws Exception {
-        if (isSecure) {
-            runHttps();
-        } else {
-            runHttp();
+        if (!connected) {
+            connected = true;
+            if (isSecure) {
+                runHttps();
+            } else {
+                runHttp();
+            }
         }
     }
 
@@ -50,8 +57,16 @@ public class Curl {
         authCon = obj.openConnection();
         HttpURLConnection con = (HttpURLConnection) authCon;
 
-        // optional default is GET
-        con.setRequestMethod("GET");
+        con.setRequestMethod(requestMethod);
+
+        if (requestMethod.equals("POST")) {
+            con.setDoOutput(true);
+            DataOutputStream wr = new DataOutputStream(con.getOutputStream());
+            wr.writeBytes(postParameters);
+            wr.flush();
+            wr.close();
+
+        }
 
         //add request header
         con.setRequestProperty("User-Agent", USER_AGENT);
@@ -77,8 +92,16 @@ public class Curl {
         URL obj = new URL(this.url);
         HttpsURLConnection con = (HttpsURLConnection) obj.openConnection();
 
-        // optional default is GET
-        con.setRequestMethod("GET");
+        con.setRequestMethod(requestMethod);
+
+        if (requestMethod.equals("POST")) {
+            con.setDoOutput(true);
+            DataOutputStream wr = new DataOutputStream(con.getOutputStream());
+            wr.writeBytes(postParameters);
+            wr.flush();
+            wr.close();
+
+        }
 
         //add request header
         con.setRequestProperty("User-Agent", USER_AGENT);
@@ -126,5 +149,13 @@ public class Curl {
             }
         }
         return sb.toString();
+    }
+
+    public void setRequestMethod(String requestMethod) {
+        this.requestMethod = requestMethod;
+    }
+
+    public void setPostParameters(String postParameters) {
+        this.postParameters = postParameters;
     }
 }
