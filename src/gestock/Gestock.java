@@ -221,16 +221,7 @@ public class Gestock extends Observable {
 
     public void addToCatalogue(BaseProduct baseProduct) {
         this.catalogue.add(baseProduct);
-        Thread t = new Thread(() -> {
-            Curl c = new Curl("http://gestock.xaic.cat/api/baseproducts", mainUser.getCookies());
-            c.setRequestMethod("POST");
-            c.setPostParameters(baseProduct.toJSONString());
-            try {
-                c.run();
-            } catch (Exception ignored) {
-            }
-        });
-        t.run();
+        baseProduct.createInDB(mainUser.getCookies());
         setChanged();
         notifyObservers(Constants.OBSERVER_PRODUCT_CREATED);
     }

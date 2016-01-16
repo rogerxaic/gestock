@@ -6,6 +6,7 @@
 package gestock.entity;
 
 import gestock.util.Constants;
+import gestock.util.Curl;
 import org.json.JSONObject;
 
 import java.util.*;
@@ -84,7 +85,6 @@ public class BaseProduct extends Observable {
         this.reference = Long.parseLong(fields[1]);
         this.id = Long.parseLong(fields[2]);
         counter = id;
-        System.out.println(this.toJSONString());
     }
 
     public long getId() {
@@ -246,5 +246,18 @@ public class BaseProduct extends Observable {
 
     public String getIngredients() {
         return ingredients;
+    }
+
+    public void createInDB(String session) {
+        Thread t = new Thread(() -> {
+            Curl c = new Curl("http://gestock.xaic.cat/api/baseproducts", session);
+            c.setRequestMethod("POST");
+            c.setPostParameters(this.toJSONString());
+            try {
+                c.run();
+            } catch (Exception ignored) {
+            }
+        });
+        t.run();
     }
 }
