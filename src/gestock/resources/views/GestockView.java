@@ -7,15 +7,14 @@ import gestock.entity.User;
 import gestock.resources.views.components.MyRenderer;
 import gestock.resources.views.components.TableModel;
 import gestock.util.Constants;
+import sun.util.calendar.BaseCalendar;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
+import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableRowSorter;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.KeyEvent;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
+import java.awt.event.*;
 import java.io.IOException;
 import java.util.*;
 import java.util.List;
@@ -181,14 +180,14 @@ public class GestockView extends GFrame {
         chercher.setHorizontalTextPosition(SwingConstants.CENTER);
 
         consommer = new JButton(model.messages.getString("consume.title"));
-        bottomButtonPanel.add(consommer, BorderLayout.EAST);
+        menuUp.add(consommer);
         consommer.setBackground(Color.WHITE);
         consommer.setContentAreaFilled(false);
         consommer.setOpaque(true);
         consommer.setFont(new Font("Arial", Font.BOLD, 12));
         consommer.setPressedIcon(new ImageIcon());
         try {
-            Image img = ImageIO.read(getClass().getResource("/gestock/resources/minus24.png"));
+            Image img = ImageIO.read(getClass().getResource("/gestock/resources/cutlery23.png"));
             Image newImg = img.getScaledInstance(48, 48, Image.SCALE_SMOOTH);
             consommer.setIcon(new ImageIcon(newImg));
         } catch (IOException ex) {
@@ -196,7 +195,6 @@ public class GestockView extends GFrame {
         }
         consommer.setVerticalTextPosition(SwingConstants.BOTTOM);
         consommer.setHorizontalTextPosition(SwingConstants.CENTER);
-        consommer.addActionListener((ActionEvent ae) -> new JustConsumedController(model));
 
         menuUp.add(Box.createHorizontalGlue());
 
@@ -354,7 +352,20 @@ public class GestockView extends GFrame {
         peu.getColumnModel().getColumn(1).setPreferredWidth(70);
         peu.getColumnModel().getColumn(2).setPreferredWidth(120);
         peu.setFillsViewportHeight(true);
-        peu.setAutoCreateRowSorter(true);
+        TableRowSorter<TableModel> sorter1 = new TableRowSorter<TableModel>(model2);
+        peu.setRowSorter(sorter1);
+        sorter1.setComparator(0, new Comparator<String>() {
+
+            @Override
+            public int compare(String name1, String name2) {
+                return name1.compareTo(name2);
+            }
+        });
+        sorter1.setSortable(2, false);
+
+        peu.getColumn(model.messages.getString("app.table.fewproducts.add")).setCellRenderer(new ButtonRenderer());
+        peu.getColumn(model.messages.getString("app.table.fewproducts.add")).setCellEditor(
+                new ButtonEditor(new JCheckBox()));
 
 
         tables.add(Box.createRigidArea(new Dimension((int) (Toolkit.getDefaultToolkit().getScreenSize().getWidth() / 30), 0)));
@@ -476,4 +487,82 @@ public class GestockView extends GFrame {
         });
     }
 }
+
+
+// Roger, regarde http://www.java2s.com/Code/Java/Swing-Components/ButtonTableExample.htm  Moi, je n'arrive pas a le faire marcher. Cristina
+class ButtonRenderer extends JButton implements TableCellRenderer {
+
+    public ButtonRenderer() {
+        setOpaque(true);
+
+    }
+
+    public Component getTableCellRendererComponent(JTable table, Object value,
+                                                   boolean isSelected, boolean hasFocus, int row, int column) {
+        if (isSelected) {
+            setForeground(table.getSelectionForeground());
+            setBackground(table.getSelectionBackground());
+        } else {
+            setForeground(table.getForeground());
+            setBackground(UIManager.getColor("Button.background"));
+        }
+        setText((value == null) ? "" : value.toString());
+        return this;
+    }
+}
+
+class ButtonEditor extends DefaultCellEditor {
+    protected JButton button;
+
+    private String label;
+
+    private boolean isPushed;
+
+    public ButtonEditor(JCheckBox checkBox) {
+        super(checkBox);
+        button = new JButton();
+        button.setOpaque(true);
+        button.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                fireEditingStopped();
+            }
+        });
+    }
+
+    public Component getTableCellEditorComponent(JTable table, Object value,
+                                                 boolean isSelected, int row, int column) {
+        if (isSelected) {
+            button.setForeground(table.getSelectionForeground());
+            button.setBackground(table.getSelectionBackground());
+        } else {
+            button.setForeground(table.getForeground());
+            button.setBackground(table.getBackground());
+        }
+        label = (value == null) ? "" : value.toString();
+        button.setText(label);
+        isPushed = true;
+        return button;
+    }
+
+    public Object getCellEditorValue() {
+        if (isPushed) {
+            //
+            //
+            JOptionPane.showMessageDialog(button, label + ": Ouch!");
+            // System.out.println(label + ": Ouch!");
+        }
+        isPushed = false;
+        return new String(label);
+    }
+
+    public boolean stopCellEditing() {
+        isPushed = false;
+        return super.stopCellEditing();
+    }
+
+    protected void fireEditingStopped() {
+        super.fireEditingStopped();
+    }
+}
+
 
