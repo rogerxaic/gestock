@@ -103,3 +103,4 @@ public class JustBoughtView extends GFrame {
         this.List.setText(sb.toString());
     }
 }
+
