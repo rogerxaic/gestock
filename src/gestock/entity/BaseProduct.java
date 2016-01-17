@@ -55,7 +55,7 @@ public class BaseProduct extends Observable {
     public BaseProduct(Object JSON) throws Exception {
         this.id = 0;
         JSONObject productJSON = (JSONObject) JSON;
-        this.code = (long) productJSON.get("code");
+        this.code = (productJSON.get("code") instanceof Integer) ? ((Integer) productJSON.get("code")).longValue() : (long) productJSON.get("code");
         this.name = (String) productJSON.get("name");
         this.description = (String) productJSON.get("description");
         this.brand = (String) productJSON.get("brand");
@@ -78,6 +78,7 @@ public class BaseProduct extends Observable {
         this.nutritionFacts.put("Salt", sa);
 
         this.reference = (productJSON.get("id") instanceof Integer) ? (long) ((int) productJSON.get("id")) : (long) productJSON.get("id");
+        this.quantity = productJSON.has("quantity") ? new Quantity((String) productJSON.get("quantity")) : new Quantity("0u");
     }
 
     public BaseProduct(String[] fields, HashMap<String, Double> nutritionFacts) {
@@ -105,6 +106,7 @@ public class BaseProduct extends Observable {
 
     public void setName(String name) {
         this.name = name;
+        System.out.println(this.toJSONString());
     }
 
     public String getDescription() {
@@ -250,12 +252,23 @@ public class BaseProduct extends Observable {
 
     public void createInDB(String session) {
         Thread t = new Thread(() -> {
-            Curl c = new Curl("http://gestock.xaic.cat/api/baseproducts", session);
+            String url = "http://gestock.xaic.cat/api/baseproducts";
+            Curl c = (session == null) ? new Curl(url) : new Curl(url, session);
             c.setRequestMethod("POST");
+            c.setContentType("application/json; charset=utf-8");
             c.setPostParameters(this.toJSONString());
             try {
                 c.run();
+                System.out.println(c.getResponseCode());
+                System.out.println(c.getResponse());
+                if (c.getResponseCode() == 201) {
+                    JSONObject response = new JSONObject(c.getResponse());
+                    Integer i = (Integer) response.get("id");
+                    this.reference = i.longValue();
+                    this.id = 0;
+                }
             } catch (Exception ignored) {
+                ignored.printStackTrace();
             }
         });
         t.run();

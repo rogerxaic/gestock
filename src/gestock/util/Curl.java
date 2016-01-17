@@ -23,6 +23,7 @@ public class Curl {
     private URLConnection authCon;
     private String requestMethod = "GET";
     private String postParameters;
+    private String contentType;
     private boolean connected = false;
 
     public Curl(String url) {
@@ -58,8 +59,16 @@ public class Curl {
         HttpURLConnection con = (HttpURLConnection) authCon;
 
         con.setRequestMethod(requestMethod);
+        //add request header
+        con.setRequestProperty("User-Agent", USER_AGENT);
+        if (cookieHeader != null) con.setRequestProperty("Cookie", cookieHeader);
+        if (contentType != null) con.setRequestProperty("Content-Type", contentType);
+        con.setRequestProperty("Accept-Charset", "UTF-8");
+
 
         if (requestMethod.equals("POST")) {
+
+            System.out.println(postParameters);
             con.setDoOutput(true);
             DataOutputStream wr = new DataOutputStream(con.getOutputStream());
             wr.writeBytes(postParameters);
@@ -67,10 +76,6 @@ public class Curl {
             wr.close();
 
         }
-
-        //add request header
-        con.setRequestProperty("User-Agent", USER_AGENT);
-        if (cookieHeader != null) con.setRequestProperty("Cookie", cookieHeader);
 
         int responseCodeUrl = con.getResponseCode();
 
@@ -93,20 +98,22 @@ public class Curl {
         HttpsURLConnection con = (HttpsURLConnection) obj.openConnection();
 
         con.setRequestMethod(requestMethod);
+        //add request header
+        con.setRequestProperty("User-Agent", USER_AGENT);
+        con.setHostnameVerifier((String arg0, SSLSession arg1) -> true);
+        if (cookieHeader != null) con.setRequestProperty("Cookie", cookieHeader);
+        if (contentType != null) con.setRequestProperty("Content-Type", contentType);
+        con.setRequestProperty("Accept-Charset", "UTF-8");
 
         if (requestMethod.equals("POST")) {
             con.setDoOutput(true);
             DataOutputStream wr = new DataOutputStream(con.getOutputStream());
             wr.writeBytes(postParameters);
+            System.out.println(wr.toString());
             wr.flush();
             wr.close();
 
         }
-
-        //add request header
-        con.setRequestProperty("User-Agent", USER_AGENT);
-        con.setHostnameVerifier((String arg0, SSLSession arg1) -> true);
-        if (cookieHeader != null) con.setRequestProperty("Cookie", cookieHeader);
 
         int responseCodeUrl = con.getResponseCode();
 
@@ -157,5 +164,9 @@ public class Curl {
 
     public void setPostParameters(String postParameters) {
         this.postParameters = postParameters;
+    }
+
+    public void setContentType(String contentType) {
+        this.contentType = contentType;
     }
 }
