@@ -254,7 +254,9 @@ public class BaseProduct extends Observable {
             String url = "http://gestock.xaic.cat/api/baseproducts";
             Curl c = (session == null) ? new Curl(url) : new Curl(url, session);
             c.setRequestMethod("POST");
-            c.setContentType("application/json; charset=utf-8");
+            c.getProperties().put("Content-Type", "application/json; charset=utf-8");
+            c.getProperties().put("Accept-Encoding", "gzip, deflate, compress");
+            c.getProperties().put("Accept", "application/json");
             c.setPostParameters(this.toJSONString());
             try {
                 c.run();
@@ -270,6 +272,6 @@ public class BaseProduct extends Observable {
                 ignored.printStackTrace();
             }
         });
-        t.run();
+        t.start();
     }
 }

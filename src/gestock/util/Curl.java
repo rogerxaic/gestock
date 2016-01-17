@@ -8,6 +8,7 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLConnection;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -25,6 +26,7 @@ public class Curl {
     private String postParameters;
     private String contentType;
     private boolean connected = false;
+    private HashMap<String, String> properties;
 
     public Curl(String url) {
         this(url, null);
@@ -40,6 +42,7 @@ public class Curl {
         } else {
             throw new IllegalArgumentException("String has to start /w http or https");
         }
+        this.properties = new HashMap<>();
     }
 
     public void run() throws Exception {
@@ -60,11 +63,12 @@ public class Curl {
 
         con.setRequestMethod(requestMethod);
         //add request header
-        con.setRequestProperty("User-Agent", USER_AGENT);
+
         if (cookieHeader != null) con.setRequestProperty("Cookie", cookieHeader);
         if (contentType != null) con.setRequestProperty("Content-Type", contentType);
         con.setRequestProperty("Accept-Charset", "UTF-8");
-
+        this.properties.forEach((k, v) -> con.setRequestProperty(k, v));
+        con.setRequestProperty("User-Agent", USER_AGENT);
 
         if (requestMethod.equals("POST")) {
 
@@ -103,6 +107,7 @@ public class Curl {
         con.setHostnameVerifier((String arg0, SSLSession arg1) -> true);
         if (cookieHeader != null) con.setRequestProperty("Cookie", cookieHeader);
         if (contentType != null) con.setRequestProperty("Content-Type", contentType);
+        this.properties.forEach((k, v) -> con.setRequestProperty(k, v));
         con.setRequestProperty("Accept-Charset", "UTF-8");
 
         if (requestMethod.equals("POST")) {
@@ -166,7 +171,7 @@ public class Curl {
         this.postParameters = postParameters;
     }
 
-    public void setContentType(String contentType) {
-        this.contentType = contentType;
+    public HashMap<String, String> getProperties() {
+        return properties;
     }
 }
