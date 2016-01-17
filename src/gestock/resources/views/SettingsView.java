@@ -125,7 +125,7 @@ public class SettingsView extends GFrame {
             Thread save = new Thread(() -> {
                 model.saveTemp();
             });
-            save.run();
+            save.start();
             JFileChooser c = new JFileChooser();
             c.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
             int rVal = c.showSaveDialog(SettingsView.this);

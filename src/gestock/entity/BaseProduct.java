@@ -274,4 +274,9 @@ public class BaseProduct extends Observable {
         });
         t.start();
     }
+
+    public void consume() {
+        BoughtProduct bp = getOldestBoughtProduct();
+        bp.consume();
+    }
 }

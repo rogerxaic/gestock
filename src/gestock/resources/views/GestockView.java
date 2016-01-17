@@ -431,7 +431,7 @@ public class GestockView extends GFrame {
                 model.getUser().setLocale(l);
                 model.getUser().setUpdated();
                 Thread t = new Thread(this::updateLocale);
-                t.run();
+                t.start();
             });
         });
 

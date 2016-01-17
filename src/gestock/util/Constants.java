@@ -31,6 +31,8 @@ public final class Constants {
 
     public static final int OBSERVER_PANTRY_PRODUCT_CREATED = 9;
 
+    public static final int OBSERVER_SHOP_CREATED = 13;
+
     /**
      * Don't let anyone instantiate this class.
      */

@@ -104,4 +104,10 @@ public class BoughtProduct {
     public int getRemainingQuantity() {
         return remainingQuantity;
     }
+
+    public void consume() {
+        if (getRemainingQuantity() > 0) {
+            this.remainingQuantity--;
+        }
+    }
 }

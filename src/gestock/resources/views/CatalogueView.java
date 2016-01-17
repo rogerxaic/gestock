@@ -3,6 +3,7 @@ package gestock.resources.views;
 import gestock.Gestock;
 import gestock.controller.CatalogueController;
 import gestock.controller.ProductController;
+import gestock.controller.ShopController;
 import gestock.entity.BaseProduct;
 import gestock.resources.views.components.ProductPanel;
 
@@ -53,6 +54,24 @@ public class CatalogueView extends GFrame {
         add.setHorizontalTextPosition(SwingConstants.CENTER);
         add.addActionListener((ActionEvent ae) -> new ProductController(app, new BaseProduct()));
         header.add(new JLabel("Add"));
+        AbstractButton mag = new JButton("Magasins");
+        mag.setBackground(Color.white);
+        header.add(mag);
+        mag.setBackground(Color.WHITE);
+        mag.setContentAreaFilled(false);
+        mag.setOpaque(true);
+        mag.setFont(new Font("Arial", Font.BOLD, 12));
+        mag.setPressedIcon(new ImageIcon());
+        try {
+            Image img = ImageIO.read(getClass().getResource("/gestock/resources/add64.png"));
+            Image newImg = img.getScaledInstance(48, 48, Image.SCALE_SMOOTH);
+            mag.setIcon(new ImageIcon(newImg));
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
+        mag.setVerticalTextPosition(SwingConstants.BOTTOM);
+        mag.setHorizontalTextPosition(SwingConstants.CENTER);
+        mag.addActionListener((ActionEvent ae) -> new ShopController(model));
         header.add(new JLabel("Magasins"));
 
         container = new JScrollPane();

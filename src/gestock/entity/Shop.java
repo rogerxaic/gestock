@@ -18,11 +18,17 @@ public class Shop {
     protected String url;
 
     public Shop(String name, String location, String url) {
+        init(name, location, url);
+        autoSetId();
+    }
+
+    public Shop() {
+    }
+
+    public void init(String name, String location, String url) {
         this.name = name;
         this.location = location;
         this.url = url;
-        counter++;
-        this.id = counter;
     }
 
     public String getName() {
@@ -51,5 +57,19 @@ public class Shop {
 
     public int getId() {
         return id;
+    }
+
+    public boolean isValid() {
+        return name != null;
+    }
+
+    @Override
+    public String toString() {
+        return name;
+    }
+
+    public void autoSetId() {
+        counter++;
+        this.id = counter;
     }
 }

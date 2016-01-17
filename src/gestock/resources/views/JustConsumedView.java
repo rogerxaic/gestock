@@ -19,8 +19,13 @@ public class JustConsumedView extends GFrame {
     private final JustConsumedController controller;
     private JPanel main;
     private JPanel search;
+    private JScrollPane searchListPane;
+    private JPanel searchList;
     private JPanel list;
+    private JPanel footer;
+    private JPanel right;
     private JTextField searchField;
+    private JButton consume;
 
     private HashMap<JCheckBox, BaseProduct> relation;
 
@@ -32,16 +37,37 @@ public class JustConsumedView extends GFrame {
         this.controller = justConsumedController;
         this.relation = new HashMap<>();
 
+        searchList = new JPanel();
+        searchList.setLayout(new BoxLayout(searchList, BoxLayout.PAGE_AXIS));
+        searchListPane = new JScrollPane();
+        searchListPane.getViewport().add(searchList);
+
         searchField = new JTextField();
+        searchField.addKeyListener(controller);
         search = new JPanel(new BorderLayout());
         search.add(searchField, BorderLayout.NORTH);
+        search.add(searchListPane, BorderLayout.CENTER);
 
+        consume = new JButton(model.messages.getString("shop.button.consume"));
+        consume.addActionListener((ActionEvent ae) -> {
+            relation.forEach((k, v) -> {
+                if (k.isSelected()) {
+                    v.consume();
+                }
+                this.dispose();
+            });
+        });
+        footer = new JPanel();
+        footer.add(consume);
         list = new JPanel();
         list.setLayout(new BoxLayout(list, BoxLayout.PAGE_AXIS));
+        right = new JPanel(new BorderLayout());
+        right.add(list, BorderLayout.CENTER);
+        right.add(footer, BorderLayout.SOUTH);
 
         main = new JPanel(new GridLayout(1, 2));
         main.add(search);
-        main.add(list);
+        main.add(right);
 
         fillSearch(controller.getProductsInPantry());
 
@@ -50,26 +76,37 @@ public class JustConsumedView extends GFrame {
         setVisible(true);
     }
 
-    public void fillList(List<BaseProduct> baseProducts) {
+    public void fillList() {
         list.removeAll();
-        relation.forEach((k, v) -> {
-            this.list.add(k);
-        });
+        relation.forEach((k, v) -> this.list.add(k));
     }
 
     public void fillSearch(List<BaseProduct> baseProducts) {
-        search.removeAll();
+        searchList.removeAll();
         for (BaseProduct baseProduct : baseProducts) {
             String text = baseProduct.toString() + " : " + baseProduct.getQuantityInPantry();
             JButton b = new JButton(text);
             b.addActionListener((ActionEvent ae) -> {
                 JCheckBox cb = new JCheckBox(text);
+                cb.setSelected(true);
                 relation.put(cb, baseProduct);
                 searchField.setText("");
-                search.removeAll();
-                refresh();
+                searchList.removeAll();
+
+                fillList();
+
+                list.revalidate();
+                list.repaint();
+                searchList.revalidate();
+                searchList.repaint();
             });
-            search.add(b);
+            searchList.add(b);
         }
+        searchList.revalidate();
+        searchList.repaint();
+    }
+
+    public String getSearchTerm() {
+        return this.searchField.getText();
     }
 }
