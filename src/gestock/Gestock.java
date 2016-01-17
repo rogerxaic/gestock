@@ -152,6 +152,18 @@ public class Gestock extends Observable {
             evt.printStackTrace();
         }
         EventQueue.invokeLater(() -> new GestockController(app));
+        Thread t = new Thread(() -> {
+            while (true) {
+                System.out.println("hola");
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                    break;
+                }
+            }
+        });
+        //t.start();
     }
 
     private HashMap<String, Double> newNutritionFacts(String[] fields) {
@@ -234,6 +246,12 @@ public class Gestock extends Observable {
         this.pantry.add(bp);
         setChanged();
         notifyObservers(Constants.OBSERVER_PANTRY_PRODUCT_CREATED);
+    }
+
+    public void addToShops(Shop shop) {
+        this.shops.add(shop);
+        setChanged();
+        notifyObservers(Constants.OBSERVER_SHOP_CREATED);
     }
 
     public BoughtProduct findBoughtProductById(int id) {

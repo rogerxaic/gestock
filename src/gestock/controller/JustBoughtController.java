@@ -53,6 +53,10 @@ public class JustBoughtController implements Observer {
     public void addToPantry() {
         for (BoughtProduct bp : toAdd) {
             model.addToPantry(bp);
+            BaseProduct baseProduct = bp.getBaseProduct();
+            for (BoughtProduct boughtProduct : toAdd) {
+                baseProduct.addBoughtTogether(boughtProduct.getBaseProduct(), boughtProduct.getQuantity());
+            }
         }
         view.dispose();
     }

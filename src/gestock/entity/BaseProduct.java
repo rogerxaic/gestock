@@ -279,4 +279,15 @@ public class BaseProduct extends Observable {
         BoughtProduct bp = getOldestBoughtProduct();
         bp.consume();
     }
+
+    public void addBoughtTogether(BaseProduct baseProduct, int quantity) {
+        if (baseProduct != this) {
+            if (boughtTogether.containsKey(baseProduct)) {
+                int oldQuantity = boughtTogether.get(baseProduct);
+                boughtTogether.put(baseProduct, quantity + oldQuantity);
+            } else {
+                boughtTogether.put(baseProduct, quantity);
+            }
+        }
+    }
 }
