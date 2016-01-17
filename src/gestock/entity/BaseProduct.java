@@ -121,7 +121,6 @@ public class BaseProduct extends Observable {
         if (!prices.isEmpty()) {
             return this.prices.peek();
         } else {
-            System.out.println("new price");
             return new Price(0.0, null);
         }
     }

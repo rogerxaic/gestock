@@ -457,6 +457,7 @@ public class GestockView extends GFrame {
         String[] loginoutText = {model.messages.getString("user.state.login"),
                 model.messages.getString("user.state.logout")};
         loginout.setText((user.isLoggedIn()) ? loginoutText[1] : loginoutText[0]);
+        consommer.setText(model.messages.getString("consume.title"));
 
         peuPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createLineBorder(Color.black),
                 model.messages.getString("app.table.fewproducts.title")));

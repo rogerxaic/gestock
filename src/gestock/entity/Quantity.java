@@ -7,8 +7,8 @@ import gestock.util.Tools;
  */
 public class Quantity {
 
-    private static String[] liquidUnits = {"mL", "cL", "dL", "L", "daL", "hL", "kL"};
-    private static String[] weigthUnits = {"mg", "cg", "dg", "g", "dag", "hg", "kg"};
+    private final static String[] liquidUnits = {"mL", "cL", "dL", "L", "daL", "hL", "kL"};
+    private final static String[] weigthUnits = {"mg", "cg", "dg", "g", "dag", "hg", "kg"};
 
     protected double quantity;
     protected double smallestUnitQuantity; //in mg, ml
@@ -18,7 +18,19 @@ public class Quantity {
     public Quantity(String text) {
         if (text.contains(" ") && text.split(" ").length == 2) {
             String[] toParse = text.split(" ");
-            this.quantity = Double.parseDouble(toParse[0]);
+            if (Tools.isNumeric(toParse[0])) {
+                this.quantity = Double.parseDouble(toParse[0]);
+            } else {
+                int lastIndex = 0;
+                for (int i = 0; i < toParse[0].length(); i++) {
+                    if (Tools.isNumeric(toParse[0].substring(0, i))) {
+                        lastIndex = i;
+                    }
+                }
+                this.quantity = 0;
+                this.quantity = Double.parseDouble(toParse[0].substring(0, lastIndex));
+                this.quantity += Double.parseDouble("0." + toParse[0].substring(lastIndex));
+            }
             this.unit = toParse[1];
         } else if (!text.contains(" ")) {
             int lastIndex = 0;
@@ -73,11 +85,6 @@ public class Quantity {
                 }
             }
         }
-    }
-
-    public static void main(String[] args) {
-        Quantity q = new Quantity("2 4 5 m l 6");
-        System.out.println(q);
     }
 
     private Integer difference(String[] array, String in, String out) {
