@@ -7,6 +7,8 @@ package gestock.entity;
 
 import gestock.util.Constants;
 import gestock.util.Curl;
+import org.apache.commons.lang3.StringEscapeUtils;
+import org.json.JSONObject;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 
@@ -158,5 +160,26 @@ public class User extends Observable {
 
     public void setCookie(String cookie) {
         this.cookie = cookie;
+    }
+
+    public void loadFromInternet() {
+        if(isLoggedIn()) {
+            Curl load = new Curl("http://gestock.xaic.cat/api/users", cookie);
+            load.getProperties().put("Content-Type", "application/x-www-form-urlencoded");
+            load.getProperties().put("Accept-Encoding", "gzip, deflate");
+            load.getProperties().put("Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8");
+            try {
+                load.run();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            JSONObject user = new JSONObject(load.getResponse());
+            String freeuser = user.getString("freeusername");
+            String freesecret = user.getString("freesecret");
+            this.setFree(new Free(freeuser, freesecret));
+            this.setName(user.getString("name"));
+            this.country = user.getString("country");
+            this.language = user.getString("language");
+        }
     }
 }

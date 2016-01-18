@@ -51,6 +51,7 @@ public class LoginView extends GFrame {
             u.setPassword(String.valueOf(Pass.getPassword()));
             u.login();
             if (u.isLoggedIn()) {
+                u.loadFromInternet();
                 u.setUpdated();
                 dispose();
             }
