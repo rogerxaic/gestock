@@ -29,6 +29,7 @@ public class BoughtProduct {
         this.quantity = Integer.parseInt(fields[3]);
         this.remainingQuantity = Integer.parseInt(fields[4]);
         this.id = Integer.parseInt(fields[0]);
+        this.price = Double.parseDouble(fields[7]);
         counter = id;
     }
 
