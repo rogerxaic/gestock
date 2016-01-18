@@ -290,4 +290,8 @@ public class BaseProduct extends Observable {
             }
         }
     }
+
+    public Map<BaseProduct, Integer> getBoughtTogether() {
+        return boughtTogether;
+    }
 }

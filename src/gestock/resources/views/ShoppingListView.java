@@ -13,10 +13,8 @@ import java.awt.*;
 import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.StringSelection;
 import java.awt.event.ActionEvent;
-import java.util.HashMap;
-import java.util.LinkedList;
+import java.util.*;
 import java.util.List;
-import java.util.Map;
 
 /**
  * Created by Roger on 1/2/2016.
@@ -49,8 +47,8 @@ public class ShoppingListView extends GFrame {
     private JLabel price;
 
     public ShoppingListView(Gestock app, ShoppingListController shoppingListController, ShoppingList shoppingList) {
-        super("Gestock - Liste d'achats");
-        setSize(600, 600);
+        super(app.messages.getString("app.title") + " - " + app.messages.getString("shoppinglist.title"));
+        setSize(700, 600);
         this.model = app;
         this.controller = shoppingListController;
         this.shoppingList = shoppingList;
@@ -89,6 +87,7 @@ public class ShoppingListView extends GFrame {
 
         suggestionsPanel = new JPanel();
         suggestionsPanel.setLayout(new BoxLayout(suggestionsPanel, BoxLayout.PAGE_AXIS));
+        fillSuggestions(controller.suggestions(getShoppingList()));
 
         centerPanel = new JPanel(new GridLayout(1, 2));
         centerPanel.add(pannierPane);
@@ -235,5 +234,27 @@ public class ShoppingListView extends GFrame {
 
     public void putInOriginalLocation() {
         setLocation(this.ORIGINAL_LOCATION);
+    }
+
+    public List<BaseProduct> getShoppingList() {
+        List<BaseProduct> l = new LinkedList<>();
+        shoppingListTitles.forEach((k, v) -> {
+            if (k instanceof BaseProduct) {
+                l.add((BaseProduct) k);
+            }
+        });
+        return l;
+    }
+
+    public void fillSuggestions(List<BaseProduct> suggestions) {
+        suggestionsPanel.removeAll();
+        suggestions.forEach((k)->{
+            JButton b = new JButton(k.toString());
+            Observable o = new Observable();
+            b.addActionListener((ActionEvent ae) -> {
+                controller.update(o, k);
+            });
+            suggestionsPanel.add(b);
+        });
     }
 }
