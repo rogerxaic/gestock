@@ -1,6 +1,7 @@
 package gestock.resources.views;
 
 import gestock.Gestock;
+import gestock.controller.BoughtProductController;
 import gestock.controller.ProductController;
 import gestock.controller.SearchController;
 import gestock.entity.BaseProduct;
@@ -94,6 +95,7 @@ public class SearchView extends GFrame {
             JButton b = new JButton(k.toString());
             b.addActionListener((ActionEvent ae) -> {
                 //new ProductController(model, k);
+                new BoughtProductController(model, k);
             });
             pantryProducts.add(b);
         });

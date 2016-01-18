@@ -3,22 +3,29 @@ package gestock.controller;
 import gestock.Gestock;
 import gestock.entity.BaseProduct;
 import gestock.entity.BoughtProduct;
+import gestock.entity.ShoppingList;
 import gestock.resources.views.GestockView;
 import gestock.util.Constants;
 
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
+import javax.swing.table.TableModel;
 import java.util.*;
 
 /**
  * Created by Roger on 1/8/2016.
  */
-public class GestockController implements Observer {
+public class GestockController implements Observer, ListSelectionListener {
     private Gestock model;
     private GestockView view;
 
+    private LinkedList<BaseProduct> l;
+
     public GestockController(Gestock model) {
         this.model = model;
-        this.view = new GestockView(this.model, expireSoonProducts(), fewProducts());
+        this.view = new GestockView(this.model, this, expireSoonProducts(), fewProducts());
         this.model.addObserver(this);
+        this.l = new LinkedList<>();
     }
 
     public List<BaseProduct> fewProducts() {
@@ -55,5 +62,31 @@ public class GestockController implements Observer {
                 view.refresh();
             }
         }
+    }
+
+    @Override
+    public void valueChanged(ListSelectionEvent e) {
+        int[] selRows;
+
+
+        if (!e.getValueIsAdjusting()) {
+            selRows = view.getTable().getSelectedRows();
+            System.out.println(selRows.length);
+
+            if (selRows.length > 0) {
+                l = new LinkedList<>();
+
+                TableModel tm = view.getTable().getModel();
+                for (int i = 0; i < selRows.length; i++) {
+                    BaseProduct b;
+                    b = model.searchBaseProducts((String) tm.getValueAt(selRows[i], 0)).get(0);
+                    l.add(b);
+                }
+            }
+        }
+    }
+
+    public LinkedList<BaseProduct> getL() {
+        return l;
     }
 }

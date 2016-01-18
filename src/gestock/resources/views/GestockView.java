@@ -3,6 +3,7 @@ package gestock.resources.views;
 import gestock.Gestock;
 import gestock.controller.*;
 import gestock.entity.BaseProduct;
+import gestock.entity.ShoppingList;
 import gestock.entity.User;
 import gestock.resources.views.components.MyRenderer;
 import gestock.resources.views.components.TableModel;
@@ -33,6 +34,7 @@ public class GestockView extends GFrame {
     private AbstractButton listeAchats;
     private AbstractButton consommer;
     private AbstractButton loginout;
+    private JButton addToShoppingList;
 
     private JPanel peuPanel;
     private JPanel perimPanel;
@@ -42,13 +44,13 @@ public class GestockView extends GFrame {
     private JTable peu;
     private String[] fewColumns;
 
-    public GestockView(Gestock app, List<BaseProduct> expireSoonProducts, List<BaseProduct> fewProducts) {
+    public GestockView(Gestock app, GestockController controller, List<BaseProduct> expireSoonProducts, List<BaseProduct> fewProducts) {
         super(app.messages.getString("app.title"));
         setSize(1120, 750);
 
         this.model = app;
         this.user = model.getUser();
-        user.addObserver((o, arg)-> {
+        user.addObserver((o, arg) -> {
             this.userName.setText(user.getName());
         });
 
@@ -56,8 +58,7 @@ public class GestockView extends GFrame {
                 model.messages.getString("app.table.expiresoon.quantity"),
                 model.messages.getString("app.table.expiresoon.date")};
         fewColumns = new String[]{model.messages.getString("app.table.fewproducts.name"),
-                model.messages.getString("app.table.fewproducts.quantity"),
-                model.messages.getString("app.table.fewproducts.add")};
+                model.messages.getString("app.table.fewproducts.quantity")};
 
         // The main panel
         JPanel mainPanel = new JPanel(new BorderLayout(5, 30));
@@ -332,9 +333,18 @@ public class GestockView extends GFrame {
         });
 
 
+        addToShoppingList = new JButton("Ajouter à une liste d'achats");
+        addToShoppingList.addActionListener((ActionEvent ae) -> {
+
+
+            ShoppingList s = new ShoppingList();
+            s.setProducts(controller.getL());
+            new ShoppingListController(model, s);
+        });
+
         tables.add(Box.createRigidArea(new Dimension((int) (Toolkit.getDefaultToolkit().getScreenSize().getWidth() / 30), 0)));
 
-        peuPanel = new JPanel();
+        peuPanel = new JPanel(new BorderLayout());
         peuPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createLineBorder(Color.black),
                 model.messages.getString("app.table.fewproducts.title")));
         tables.add(peuPanel);
@@ -343,8 +353,9 @@ public class GestockView extends GFrame {
 
         TableModel model2 = new TableModel(fewColumns);
         peu = new JTable(model2);
-        peuPanel.add(new JScrollPane(peu));
-        peu.setEnabled(false);
+        peuPanel.add(new JScrollPane(peu), BorderLayout.CENTER);
+        peuPanel.add(addToShoppingList, BorderLayout.SOUTH);
+        //peu.setEnabled(false);
         fewProducts.forEach((k) -> {
             JButton add = new JButton("");
             model2.addRow(new Object[]{k.toString(), k.getQuantityInPantry(), add});
@@ -356,7 +367,6 @@ public class GestockView extends GFrame {
         peu.setRowHeight(25);
         peu.getColumnModel().getColumn(0).setPreferredWidth(200);
         peu.getColumnModel().getColumn(1).setPreferredWidth(70);
-        peu.getColumnModel().getColumn(2).setPreferredWidth(120);
         peu.setFillsViewportHeight(true);
         TableRowSorter<TableModel> sorter1 = new TableRowSorter<TableModel>(model2);
         peu.setRowSorter(sorter1);
@@ -367,11 +377,13 @@ public class GestockView extends GFrame {
                 return name1.compareTo(name2);
             }
         });
-        sorter1.setSortable(2, false);
+        ListSelectionModel listMod = peu.getSelectionModel();
+        listMod.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
+        listMod.addListSelectionListener(controller);
 
-        peu.getColumn(model.messages.getString("app.table.fewproducts.add")).setCellRenderer(new ButtonRenderer());
-        peu.getColumn(model.messages.getString("app.table.fewproducts.add")).setCellEditor(
-                new ButtonEditor(new JCheckBox()));
+        //peu.getColumn(model.messages.getString("app.table.fewproducts.add")).setCellRenderer(new ButtonRenderer());
+        //peu.getColumn(model.messages.getString("app.table.fewproducts.add")).setCellEditor(
+        //        new ButtonEditor(new JCheckBox()));
 
 
         tables.add(Box.createRigidArea(new Dimension((int) (Toolkit.getDefaultToolkit().getScreenSize().getWidth() / 30), 0)));
@@ -489,9 +501,23 @@ public class GestockView extends GFrame {
         TableModel tm = new TableModel(fewColumns);
         peu.setModel(tm);
         baseProducts.forEach((k) -> {
-            JButton add = new JButton("");
-            tm.addRow(new Object[]{k.toString(), k.getQuantityInPantry(), add});
+            try {
+                tm.addRow(new Object[]{k.toString(), k.getQuantityInPantry()});
+            } catch (Exception e) {
+            }
         });
+    }
+
+    public JTable getTable() {
+        return peu;
+    }
+
+    public JButton getEnableButton() {
+        return this.addToShoppingList;
+    }
+
+    public void setEnabledButton(JButton b) {
+        this.addToShoppingList = b;
     }
 }
 

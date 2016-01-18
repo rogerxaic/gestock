@@ -177,7 +177,9 @@ public class User extends Observable {
             String freeuser = user.getString("freeusername");
             String freesecret = user.getString("freesecret");
             this.setFree(new Free(freeuser, freesecret));
-            this.setName(user.getString("name"));
+            try {
+                this.setName(user.getString("name"));
+            } catch (Exception ignored) {}
             this.country = user.getString("country");
             this.language = user.getString("language");
         }

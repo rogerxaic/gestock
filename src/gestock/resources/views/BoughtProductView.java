@@ -54,7 +54,7 @@ public class BoughtProductView extends GFrame {
             priceField = new JTextField(10);
         }
         try {
-            String quantity = String.valueOf(boughtProduct.getPrice());
+            String quantity = String.valueOf(boughtProduct.getQuantity());
             quantityField = new JTextField(quantity, 10);
         } catch (Exception e) {
             quantityField = new JTextField(10);

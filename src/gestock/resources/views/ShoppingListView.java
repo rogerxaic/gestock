@@ -56,6 +56,11 @@ public class ShoppingListView extends GFrame {
         this.shoppingListCheckBox = new HashMap<JCheckBox, Object>();
         this.selectedCheckBox = new LinkedList<>();
 
+        shoppingList.getProducts().forEach((k) -> {
+            this.addToShoppingList(k);
+        });
+
+
         searchField = new JTextField(20);
         addButton = new JButton(model.messages.getString("shoppinglist.add"));
         addButton.addActionListener((ActionEvent ae) -> {
@@ -154,6 +159,8 @@ public class ShoppingListView extends GFrame {
         main.add(headerPanel, BorderLayout.NORTH);
         main.add(centerPanel, BorderLayout.CENTER);
         main.add(footerPanel, BorderLayout.SOUTH);
+
+        fill();
 
         setResizable(false);
         setContentPane(main);

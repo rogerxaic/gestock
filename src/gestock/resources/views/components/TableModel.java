@@ -7,7 +7,7 @@ import javax.swing.table.DefaultTableModel;
 public class TableModel extends DefaultTableModel {
 
     public TableModel(String[] columnNames){
-        super(new Object[0][3],columnNames);
+        super(new Object[0][2],columnNames);
     }
 
     public Class<?> getColumnClass(int columnIndex) {

@@ -21,8 +21,12 @@ public class ShoppingListController implements Observer {
     private ShoppingListView view;
 
     public ShoppingListController(Gestock app) {
+        this(app, new ShoppingList());
+    }
+
+    public ShoppingListController(Gestock app, ShoppingList s) {
         this.model = app;
-        view = new ShoppingListView(model, this, new ShoppingList());
+        view = new ShoppingListView(model, this, s);
     }
 
     @Override
