@@ -2,9 +2,11 @@ package gestock.resources.views;
 
 import gestock.Gestock;
 import gestock.controller.LoginController;
+import gestock.entity.User;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
 
 public class LoginView extends GFrame {
 
@@ -42,6 +44,16 @@ public class LoginView extends GFrame {
         Pass = new JPasswordField(10);
         btnSignup = new JButton("Signup");
         btnSignin = new JButton("Signin");
+        btnSignin.addActionListener((ActionEvent ae) -> {
+            User u = model.getUser();
+            u.setEmail(Mail.getText());
+            u.setPassword(String.valueOf(Pass.getPassword()));
+            u.login();
+            if(u.isLoggedIn()) {
+                u.setUpdated();
+                dispose();
+            }
+        });
 
         
       

@@ -9,6 +9,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -21,6 +22,7 @@ public class Curl {
     private String response;
     private boolean isSecure;
     private String cookieHeader;
+    private List<String> cookies;
     private URLConnection authCon;
     private String requestMethod = "GET";
     private String postParameters;
@@ -60,6 +62,7 @@ public class Curl {
         URL obj = new URL(url);
         authCon = obj.openConnection();
         HttpURLConnection con = (HttpURLConnection) authCon;
+        con.setInstanceFollowRedirects(false);
 
         con.setRequestMethod(requestMethod);
         //add request header
@@ -67,12 +70,10 @@ public class Curl {
         if (cookieHeader != null) con.setRequestProperty("Cookie", cookieHeader);
         if (contentType != null) con.setRequestProperty("Content-Type", contentType);
         con.setRequestProperty("Accept-Charset", "UTF-8");
-        this.properties.forEach((k, v) -> con.setRequestProperty(k, v));
+        this.properties.forEach(con::setRequestProperty);
         con.setRequestProperty("User-Agent", USER_AGENT);
 
         if (requestMethod.equals("POST")) {
-
-            System.out.println(postParameters);
             con.setDoOutput(true);
             DataOutputStream wr = new DataOutputStream(con.getOutputStream());
             wr.writeBytes(postParameters);
@@ -100,6 +101,7 @@ public class Curl {
     private void runHttps() throws Exception {
         URL obj = new URL(this.url);
         HttpsURLConnection con = (HttpsURLConnection) obj.openConnection();
+        con.setInstanceFollowRedirects(false);
 
         con.setRequestMethod(requestMethod);
         //add request header
@@ -107,7 +109,7 @@ public class Curl {
         con.setHostnameVerifier((String arg0, SSLSession arg1) -> true);
         if (cookieHeader != null) con.setRequestProperty("Cookie", cookieHeader);
         if (contentType != null) con.setRequestProperty("Content-Type", contentType);
-        this.properties.forEach((k, v) -> con.setRequestProperty(k, v));
+        this.properties.forEach(con::setRequestProperty);
         con.setRequestProperty("Accept-Charset", "UTF-8");
 
         if (requestMethod.equals("POST")) {
@@ -161,6 +163,10 @@ public class Curl {
             }
         }
         return sb.toString();
+    }
+
+    private void addCookies(List<String> cookies) {
+        this.cookies.addAll(cookies);
     }
 
     public void setRequestMethod(String requestMethod) {

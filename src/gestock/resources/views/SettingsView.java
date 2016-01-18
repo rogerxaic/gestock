@@ -20,7 +20,6 @@ import static javax.swing.GroupLayout.Alignment.*;
 public class SettingsView extends GFrame {
     protected Gestock model;
     protected User user;
-    protected GestockView main;
     protected String initName;
     protected String initEmail;
     protected String initPassword;
@@ -47,7 +46,6 @@ public class SettingsView extends GFrame {
         super(app.messages.getString("app.title") + " - " + app.messages.getString("settings.title"));
 
         this.model = app;
-        //this.main = main;
         this.user = app.getUser();
 
         this.initName = user.getName();
@@ -113,8 +111,6 @@ public class SettingsView extends GFrame {
             JFileChooser c = new JFileChooser();
             int rVal = c.showOpenDialog(this);
             if (rVal == JFileChooser.APPROVE_OPTION) {
-                String dir = c.getCurrentDirectory().toString();
-                //dir + Constants.FS + "gestock.zip"
                 Tools.unzip(model.getTemp(), c.getSelectedFile() + "");
                 model.baseProductLoader(model.getTemp() + Constants.FS + "baseproducts");
                 model.boughtProductLoader(model.getTemp() + Constants.FS + "boughtproducts");
@@ -166,6 +162,7 @@ public class SettingsView extends GFrame {
                             JOptionPane.QUESTION_MESSAGE, null, null, null);
                     if (confirm == 0) {
                         updateUser();
+                        dispose();
                     }
                 }
             }
@@ -191,7 +188,6 @@ public class SettingsView extends GFrame {
         user.setPassword(password);
 
         user.setUpdated();
-        main.refresh();
     }
 
     private boolean hasChanged() {
