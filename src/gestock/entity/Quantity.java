@@ -29,7 +29,7 @@ public class Quantity {
                 }
                 this.quantity = 0;
                 this.quantity = Double.parseDouble(toParse[0].substring(0, lastIndex));
-                this.quantity += Double.parseDouble("0." + toParse[0].substring(lastIndex));
+                this.quantity += Double.parseDouble("0." + toParse[0].substring(lastIndex+1));
             }
             this.unit = toParse[1];
         } else if (!text.contains(" ")) {
