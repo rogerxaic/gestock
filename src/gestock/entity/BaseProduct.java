@@ -233,6 +233,7 @@ public class BaseProduct extends Observable {
         object.put("quantity", this.getQuantity().toString());
         object.put("traces", StringEscapeUtils.escapeJson(this.getTraces()));
         object.put("ingredients", StringEscapeUtils.escapeJson(this.getIngredients()));
+        object.put("type", 0);
         return object;
     }
 

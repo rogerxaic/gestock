@@ -12,6 +12,7 @@ import gestock.util.Constants;
 import gestock.util.Curl;
 import gestock.util.Tools;
 import org.json.JSONArray;
+import org.json.JSONObject;
 
 import javax.swing.*;
 import java.awt.*;
@@ -108,7 +109,29 @@ public class Gestock extends Observable {
             for (int i = 0; i < baseProductsArray.length(); i++) {
                 try {
                     launcher.setText("Adding product " + (i + 1) + " of " + baseProductsArray.length() + " to catalogue...");
-                    BaseProduct product = new BaseProduct(baseProductsArray.get(i));
+                    JSONObject jsonProduct = (JSONObject) baseProductsArray.get(i);
+                    int type = jsonProduct.getInt("type");
+                    BaseProduct product;
+                    switch (type) {
+                        case 0:
+                            product = new BaseProduct(jsonProduct);
+                            break;
+                        case 1:
+                            product = new DairyBaseProduct(jsonProduct);
+                            break;
+                        case 2:
+                            product = new MilkBaseProduct(jsonProduct);
+                            break;
+                        case 3:
+                            product = new MeatBaseProduct(jsonProduct);
+                            break;
+                        case 4:
+                            product = new FishBaseProduct(jsonProduct);
+                            break;
+                        default:
+                            product = new BaseProduct(jsonProduct);
+                            break;
+                    }
                     catalogue.add(product);
                 } catch (Exception e) {
                     e.printStackTrace();

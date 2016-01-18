@@ -1,5 +1,7 @@
 package gestock.entity;
 
+import org.json.JSONObject;
+
 import java.util.HashMap;
 import java.util.LinkedList;
 
@@ -13,6 +15,11 @@ public class MilkBaseProduct extends DairyBaseProduct {
 
     public MilkBaseProduct(String[] fields, HashMap<String, Double> nutritionFacts) {
         this(Long.parseLong(fields[3]), fields[4], fields[5], new Quantity(fields[6]), Integer.parseInt(fields[7]), fields[8], fields[9], nutritionFacts, Integer.parseInt(fields[18]), Integer.parseInt(fields[19]));
+    }
+
+    public MilkBaseProduct(JSONObject jsonProduct) throws Exception {
+        super(jsonProduct);
+        this.skimmed = jsonProduct.getInt("skim");
     }
 
     public static LinkedList<String> getComboboxContent() {
@@ -36,5 +43,13 @@ public class MilkBaseProduct extends DairyBaseProduct {
     @Override
     public String toString() {
         return name + ' ' + quantity.getQuantity("L") + "L";
+    }
+
+    @Override
+    public JSONObject getJSON() {
+        JSONObject object = super.getJSON();
+        object.put("type", 2);
+        object.put("skim", this.skimmed);
+        return object;
     }
 }
