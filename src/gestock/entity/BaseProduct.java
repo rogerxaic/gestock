@@ -7,6 +7,7 @@ package gestock.entity;
 
 import gestock.util.Constants;
 import gestock.util.Curl;
+import org.apache.commons.lang3.StringEscapeUtils;
 import org.json.JSONObject;
 
 import java.util.*;
@@ -218,9 +219,9 @@ public class BaseProduct extends Observable {
     public JSONObject getJSON() {
         JSONObject object = new JSONObject();
         object.put("code", this.getCode());
-        object.put("name", this.getName());
-        object.put("description", this.getDescription());
-        object.put("brand", this.getBrand());
+        object.put("name", StringEscapeUtils.escapeJson(this.getName()));
+        object.put("description", StringEscapeUtils.escapeJson(this.getDescription()));
+        object.put("brand", StringEscapeUtils.escapeJson(this.getBrand()));
         object.put("energy", this.getNutritionFacts().get("Energy"));
         object.put("fats", this.getNutritionFacts().get("Fats"));
         object.put("acids", this.getNutritionFacts().get("Acids"));
@@ -230,8 +231,8 @@ public class BaseProduct extends Observable {
         object.put("proteins", this.getNutritionFacts().get("Proteins"));
         object.put("salt", this.getNutritionFacts().get("Salt"));
         object.put("quantity", this.getQuantity().toString());
-        object.put("traces", this.getTraces());
-        object.put("ingredients", this.getIngredients());
+        object.put("traces", StringEscapeUtils.escapeJson(this.getTraces()));
+        object.put("ingredients", StringEscapeUtils.escapeJson(this.getIngredients()));
         return object;
     }
 
