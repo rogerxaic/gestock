@@ -28,6 +28,7 @@ public class Curl {
     private String postParameters;
     private String contentType;
     private boolean connected = false;
+    private boolean redirect = true;
     private HashMap<String, String> properties;
 
     public Curl(String url) {
@@ -62,7 +63,7 @@ public class Curl {
         URL obj = new URL(url);
         authCon = obj.openConnection();
         HttpURLConnection con = (HttpURLConnection) authCon;
-        con.setInstanceFollowRedirects(false);
+        con.setInstanceFollowRedirects(redirect);
 
         con.setRequestMethod(requestMethod);
         //add request header
@@ -101,7 +102,7 @@ public class Curl {
     private void runHttps() throws Exception {
         URL obj = new URL(this.url);
         HttpsURLConnection con = (HttpsURLConnection) obj.openConnection();
-        con.setInstanceFollowRedirects(false);
+        con.setInstanceFollowRedirects(redirect);
 
         con.setRequestMethod(requestMethod);
         //add request header
@@ -179,5 +180,9 @@ public class Curl {
 
     public HashMap<String, String> getProperties() {
         return properties;
+    }
+
+    public void setRedirect(boolean redirect) {
+        this.redirect = redirect;
     }
 }

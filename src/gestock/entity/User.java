@@ -119,6 +119,7 @@ public class User extends Observable {
                 "&_submit=security.login.submit";
 
         Curl login = new Curl("http://gestock.xaic.cat/login_check", cookie);
+        login.setRedirect(false);
         login.setRequestMethod("POST");
         login.getProperties().put("Content-Type", "application/x-www-form-urlencoded");
         login.getProperties().put("Accept-Encoding", "gzip, deflate");
