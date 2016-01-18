@@ -155,4 +155,8 @@ public class User extends Observable {
     public String getCookies() {
         return cookie;
     }
+
+    public void setCookie(String cookie) {
+        this.cookie = cookie;
+    }
 }
