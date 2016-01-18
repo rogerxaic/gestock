@@ -261,8 +261,6 @@ public class BaseProduct extends Observable {
             c.setPostParameters(this.toJSONString());
             try {
                 c.run();
-                System.out.println(c.getResponseCode());
-                System.out.println(c.getResponse());
                 if (c.getResponseCode() == 201) {
                     JSONObject response = new JSONObject(c.getResponse());
                     Integer i = (Integer) response.get("id");
