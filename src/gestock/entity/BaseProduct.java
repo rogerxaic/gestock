@@ -28,7 +28,7 @@ public class BaseProduct extends Observable {
     protected String ingredients = "";
     protected String traces = "";
     protected String brand = "";
-    protected Stack<Price> prices = new Stack<>();
+    protected Stack<Double> prices = new Stack<>();
     protected HashMap<String, Double> nutritionFacts;
     protected List<BoughtProduct> boughtProducts = new LinkedList<>();
     protected Map<BaseProduct, Integer> boughtTogether = new HashMap<>();
@@ -118,25 +118,25 @@ public class BaseProduct extends Observable {
         this.description = description;
     }
 
-    public Price getLatestPrice() {
+    public Double getLatestPrice() {
         if (!prices.isEmpty()) {
             return this.prices.peek();
         } else {
-            return new Price(0.0, null);
+            return 0.0;
         }
     }
 
     public double getPriceAverage() {
         double times = 0.0;
         double sum = 0.0;
-        for (Price obj : prices) {
-            sum += obj.getTotalPrice();
+        for (Double obj : prices) {
+            sum += obj;
             times++;
         }
         return (times == 0.0) ? 0.0 : (sum / times);
     }
 
-    public void addPrice(Price price) {
+    public void addPrice(Double price) {
         this.prices.push(price);
     }
 

@@ -214,7 +214,7 @@ public class ShoppingListView extends GFrame {
         shoppingListTitles.forEach((k, v) -> {
             if (k instanceof BaseProduct) {
                 BaseProduct bp = (BaseProduct) k;
-                price[0] += bp.getLatestPrice().getTotalPrice();
+                price[0] += bp.getLatestPrice();
             }
         });
         return price[0];
