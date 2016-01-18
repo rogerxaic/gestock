@@ -48,13 +48,13 @@ public class BoughtProductView extends GFrame {
         }
 
         try {
-            String price = String.valueOf(boughtProduct.getPrice().getTotalPrice());
+            String price = String.valueOf(boughtProduct.getPrice());
             priceField = new JTextField(price, 10);
         } catch (Exception e) {
             priceField = new JTextField(10);
         }
         try {
-            String quantity = String.valueOf(boughtProduct.getPrice().getTotalPrice());
+            String quantity = String.valueOf(boughtProduct.getPrice());
             quantityField = new JTextField(quantity, 10);
         } catch (Exception e) {
             quantityField = new JTextField(10);

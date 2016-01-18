@@ -80,7 +80,7 @@ public class BoughtProductModel extends AbstractTableModel {
                 returnValue = boughtProduct.getRemainingQuantity();
                 break;
             case COLUMN_PRICE:
-                returnValue = boughtProduct.getPrice().getTotalPrice();
+                returnValue = boughtProduct.getPrice();
                 break;
             default:
                 throw new IllegalArgumentException("Invalid column index");

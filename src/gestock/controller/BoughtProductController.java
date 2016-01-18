@@ -2,7 +2,6 @@ package gestock.controller;
 
 import gestock.Gestock;
 import gestock.entity.BoughtProduct;
-import gestock.entity.Price;
 import gestock.resources.views.BoughtProductView;
 
 import java.awt.event.ActionEvent;
@@ -27,7 +26,7 @@ public class BoughtProductController extends Observable implements ActionListene
     @Override
     public void actionPerformed(ActionEvent e) {
         if (view.verifyValid()) {
-            boughtProduct.setPrice(new Price(view.getPrice(), view.getBoughtOn()));
+            boughtProduct.setPrice(view.getPrice());
             boughtProduct.setBoughtDay(view.getBoughtOn());
             boughtProduct.setExpirationDay(view.getExpiry());
             boughtProduct.setShop(view.getShop());

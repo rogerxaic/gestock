@@ -407,6 +407,8 @@ public class Gestock extends Observable {
             sb.append(bp.getBaseProduct().getId());
             sb.append("\t");
             sb.append(bp.getBaseProduct().getReference());
+            sb.append("\t");
+            sb.append(bp.getPrice());
 
             sb.append(System.getProperty("line.separator"));
 

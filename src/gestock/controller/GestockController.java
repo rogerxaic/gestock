@@ -25,7 +25,7 @@ public class GestockController implements Observer {
         List<BaseProduct> fewProducts = new LinkedList<>();
         for (BoughtProduct bp : model.getPantry()) {
             BaseProduct baseProduct = bp.getBaseProduct();
-            if (baseProduct.getQuantityInPantry() <= 2) {
+            if (baseProduct.getQuantityInPantry() <= baseProduct.getAlert()) {
                 fewProducts.add(baseProduct);
             }
         }

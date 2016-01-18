@@ -10,7 +10,7 @@ public class BoughtProduct {
     private Date boughtDay;
     private int quantity; //original quantity
     private int remainingQuantity; //original quantity
-    private Price price;
+    private Double price;
     private Shop shop;
     //protected ShoppingList shoppingList;
     private BaseProduct baseProduct;
@@ -29,6 +29,7 @@ public class BoughtProduct {
         this.quantity = Integer.parseInt(fields[3]);
         this.remainingQuantity = Integer.parseInt(fields[4]);
         this.id = Integer.parseInt(fields[0]);
+        this.price = Double.parseDouble(fields[7]);
         counter = id;
     }
 
@@ -61,18 +62,17 @@ public class BoughtProduct {
         }
     }
 
-    public Price getPrice() {
+    public Double getPrice() {
         if (this.price != null) {
             return this.price;
         } else {
-            return new Price(0.0, new Date());
+            return 0.0;
         }
     }
 
-    public void setPrice(Price price) {
+    public void setPrice(Double price) {
         this.price = price;
         this.baseProduct.addPrice(this.price);
-        this.price.setBoughtProduct(this);
     }
 
     public BaseProduct getBaseProduct() {
