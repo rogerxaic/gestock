@@ -48,7 +48,7 @@ public class GestockView extends GFrame {
 
         this.model = app;
         this.user = model.getUser();
-
+        // Title of columns of the 2 JTables
         expiryColumns = new String[]{model.messages.getString("app.table.expiresoon.name"),
                 model.messages.getString("app.table.expiresoon.quantity"),
                 model.messages.getString("app.table.expiresoon.date")};
@@ -61,18 +61,19 @@ public class GestockView extends GFrame {
         setContentPane(mainPanel);
         mainPanel.setBackground(Color.WHITE);
 
+        // The Panel for the menu from the upper part of the window
         JPanel menuUp = new JPanel();
         menuUp.setLayout(new BoxLayout(menuUp, BoxLayout.X_AXIS));
         mainPanel.add(menuUp, BorderLayout.NORTH);
         menuUp.setBackground(Color.white);
 
-
+        // The Panel for tables
         JPanel tables = new JPanel();
         tables.setLayout(new BoxLayout(tables, BoxLayout.X_AXIS));
         mainPanel.add(tables, BorderLayout.CENTER);
         tables.setBackground(Color.white);
 
-
+        //The Panel for the buttons of the lower part of the window
         JPanel bottomButtonPanel = new JPanel(new BorderLayout());
         mainPanel.add(bottomButtonPanel, BorderLayout.SOUTH);
         bottomButtonPanel.setBackground(Color.white);
@@ -82,7 +83,7 @@ public class GestockView extends GFrame {
         bottomButtonPanel.add(space, BorderLayout.SOUTH);
         space.setBackground(Color.white);
 
-
+        // The button "JustBought"
         bottomButton = new JButton(model.messages.getString("justbought.title"));
         bottomButton.setBackground(Color.white);
         bottomButtonPanel.add(bottomButton, BorderLayout.WEST);
@@ -104,7 +105,7 @@ public class GestockView extends GFrame {
         bottomButton.setHorizontalTextPosition(SwingConstants.CENTER);
         bottomButton.addActionListener((ActionEvent ae) -> new JustBoughtController(app));
 
-
+        // The button "Catalogue"
         catalogue = new JButton(model.messages.getString("catalogue.title"));
         menuUp.add(catalogue);
         catalogue.setBackground(Color.WHITE);
@@ -123,7 +124,7 @@ public class GestockView extends GFrame {
         catalogue.setHorizontalTextPosition(SwingConstants.CENTER);
         catalogue.addActionListener((ActionEvent ae) -> new CatalogueController(app));
 
-
+        // The button "Pantry"
         gardeManger = new JButton(model.messages.getString("pantry.title"));
         menuUp.add(gardeManger);
         gardeManger.setBackground(Color.WHITE);
@@ -142,7 +143,7 @@ public class GestockView extends GFrame {
         gardeManger.setHorizontalTextPosition(SwingConstants.CENTER);
         gardeManger.addActionListener((ActionEvent ae) -> new PantryController(app));
 
-
+        // The button "Shopping List"
         listeAchats = new JButton(model.messages.getString("shoppinglist.title"));
         listeAchats.setBackground(Color.WHITE);
         listeAchats.setContentAreaFilled(false);
@@ -161,6 +162,7 @@ public class GestockView extends GFrame {
         listeAchats.setHorizontalTextPosition(SwingConstants.CENTER);
         listeAchats.addActionListener((ActionEvent ae) -> new ShoppingListController(app));
 
+        // The button "Search"
         chercher = new JButton(model.messages.getString("search.title"));
         chercher.setBackground(Color.WHITE);
         chercher.setContentAreaFilled(false);
@@ -178,6 +180,7 @@ public class GestockView extends GFrame {
         chercher.setVerticalTextPosition(SwingConstants.BOTTOM);
         chercher.setHorizontalTextPosition(SwingConstants.CENTER);
 
+        // The button "Consume"
         consommer = new JButton(model.messages.getString("consume.title"));
         bottomButtonPanel.add(consommer, BorderLayout.EAST);
         consommer.setBackground(Color.WHITE);
@@ -196,8 +199,10 @@ public class GestockView extends GFrame {
         consommer.setHorizontalTextPosition(SwingConstants.CENTER);
         consommer.addActionListener((ActionEvent ae) -> new JustConsumedController(model));
 
+        // To put the space between the upper-left part and upper-right part
         menuUp.add(Box.createHorizontalGlue());
 
+        //// The button "Settings"
         parametres = new JButton(model.messages.getString("settings.title"));
         parametres.setBackground(Color.WHITE);
         parametres.setContentAreaFilled(false);
@@ -219,18 +224,20 @@ public class GestockView extends GFrame {
             //setEnabled(false);
         });
 
+        // To align the elements from the upper-right side horizontally
         JPanel log = new JPanel();
         log.setLayout(new BoxLayout(log, BoxLayout.Y_AXIS));
         menuUp.add(log);
         log.setBackground(Color.white);
 
-
+        //The Username Label
         userName = new JLabel(user.getName());
         userName.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 20, 5, 5));
         log.add(userName);
         userName.setAlignmentX(SwingConstants.CENTER);
         userName.setFont(new Font("Arial", Font.ITALIC, 14));
 
+        // The button "Loginout"
         String[] loginoutText = {model.messages.getString("user.state.login"),
                 model.messages.getString("user.state.logout")};
         loginout = new JButton((user.isLoggedIn()) ? loginoutText[1] : loginoutText[0]);
@@ -270,10 +277,13 @@ public class GestockView extends GFrame {
             }
         });
 
+        //To positionate  well the Tables
         tables.add(Box.createRigidArea(new Dimension((int) (Toolkit.getDefaultToolkit().getScreenSize().getWidth() / 30), 0)));
 
+        // The design of the Tables
         MyRenderer renderer = new MyRenderer();
 
+        // The Expiry Panel and Table
         perimPanel = new JPanel();
         perimPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createLineBorder(Color.black),
                 model.messages.getString("app.table.expiresoon.title")));
@@ -328,6 +338,7 @@ public class GestockView extends GFrame {
 
         tables.add(Box.createRigidArea(new Dimension((int) (Toolkit.getDefaultToolkit().getScreenSize().getWidth() / 30), 0)));
 
+        // Few Panel and Table
         peuPanel = new JPanel();
         peuPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createLineBorder(Color.black),
                 model.messages.getString("app.table.fewproducts.title")));

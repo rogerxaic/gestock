@@ -26,7 +26,7 @@ public class PantryView extends GFrame {
     private JScrollPane tablePane;
 
     public PantryView(Gestock app, PantryController pantryController, List<BoughtProduct> pantry) {
-        super("Gestock - Garde-manger");
+        super(app.messages.getString("pantry.pantry"));
         setSize(700, 300);
         this.model = app;
         this.controller = pantryController;

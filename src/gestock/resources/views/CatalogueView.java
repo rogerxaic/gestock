@@ -28,14 +28,14 @@ public class CatalogueView extends GFrame {
     private JPanel content;
 
     public CatalogueView(Gestock app, CatalogueController catalogueController, List<BaseProduct> products) {
-        super("Gestock - Catalogue");
+        super(app.messages.getString("catalogue.catalogue"));
         this.model = app;
         this.catalogueController = catalogueController;
         this.products = products;
 
         setSize(600, 600);
         header = new JPanel();
-        AbstractButton add = new JButton("Ajouter");
+        AbstractButton add = new JButton(model.messages.getString("catalogue.add"));
         add.setBackground(Color.white);
         header.add(add);
         add.setBackground(Color.WHITE);
@@ -53,8 +53,8 @@ public class CatalogueView extends GFrame {
         add.setVerticalTextPosition(SwingConstants.BOTTOM);
         add.setHorizontalTextPosition(SwingConstants.CENTER);
         add.addActionListener((ActionEvent ae) -> new ProductController(app, new BaseProduct()));
-        header.add(new JLabel("Add"));
-        AbstractButton mag = new JButton("Magasins");
+        header.add(new JLabel(model.messages.getString("catalogue.add")));
+        AbstractButton mag = new JButton(model.messages.getString("catalogue.shops"));
         mag.setBackground(Color.white);
         header.add(mag);
         mag.setBackground(Color.WHITE);
@@ -72,7 +72,7 @@ public class CatalogueView extends GFrame {
         mag.setVerticalTextPosition(SwingConstants.BOTTOM);
         mag.setHorizontalTextPosition(SwingConstants.CENTER);
         mag.addActionListener((ActionEvent ae) -> new ShopController(model));
-        header.add(new JLabel("Magasins"));
+        header.add(new JLabel(model.messages.getString("catalogue.shops")));
 
         container = new JScrollPane();
 
