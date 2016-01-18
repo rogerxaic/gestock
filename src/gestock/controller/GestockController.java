@@ -32,18 +32,14 @@ public class GestockController implements Observer {
         return fewProducts;
     }
 
-    public Map<BaseProduct, Integer> expireSoonProducts() {
-        Map<BaseProduct, Integer> expireSoon = new HashMap<>();
+    public List<BaseProduct> expireSoonProducts() {
+        List<BaseProduct> expireSoon = new LinkedList<>();
         for (BoughtProduct bp : model.getPantry()) {
             Date now = new Date();
             long expiry = bp.getExpirationDay().getTime() - now.getTime();
-            if (expiry < 7 * 24 * 60 * 60 * 1000) {
+            if (bp.getRemainingQuantity() > 0 && expiry < 7 * 24 * 60 * 60 * 1000) {
                 BaseProduct baseProduct = bp.getBaseProduct();
-                if (expireSoon.containsKey(baseProduct)) {
-                    expireSoon.put(baseProduct, expireSoon.get(baseProduct) + bp.getQuantity());
-                } else {
-                    expireSoon.put(baseProduct, bp.getQuantity());
-                }
+                expireSoon.add(baseProduct);
             }
         }
         return expireSoon;

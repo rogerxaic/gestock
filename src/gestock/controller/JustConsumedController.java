@@ -2,12 +2,14 @@ package gestock.controller;
 
 import gestock.Gestock;
 import gestock.entity.BaseProduct;
+import gestock.entity.BoughtProduct;
 import gestock.resources.views.JustConsumedView;
 
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Created by Roger on 1/16/2016.
@@ -25,30 +27,17 @@ public class JustConsumedController implements KeyListener {
     public List<BaseProduct> getProductsInPantry() {
         List<BaseProduct> l = new LinkedList<>();
 
-        model.getPantry().stream().filter(boughtProduct -> boughtProduct.getRemainingQuantity() > 0 && !l.contains(boughtProduct.getBaseProduct())).forEach(boughtProduct -> {
-            l.add(boughtProduct.getBaseProduct());
-        });
-
-        return l;
-    }
-
-    public void consume(BaseProduct baseProduct) {
-        if (baseProduct.getQuantityInPantry() > 0) {
-
-        }
-    }
-
-    public List<BaseProduct> filterSearch(String filter) {
-        List<BaseProduct> l = new LinkedList<>();
-        filter = filter.toLowerCase();
-
-        for (BaseProduct baseProduct : getProductsInPantry()) {
-            if (baseProduct.getName().toLowerCase().equals(filter) || baseProduct.getDescription().toLowerCase().equals(filter)) {
-                l.add(baseProduct);
+        for (BoughtProduct bp : model.getPantry()) {
+            if (bp.getRemainingQuantity() > 0) {
+                l.add(bp.getBaseProduct());
             }
         }
 
         return l;
+    }
+
+    public List<BaseProduct> filterSearch(String filter) {
+        return model.searchBaseProducts(filter).stream().filter(baseProduct -> baseProduct.getQuantityInPantry()>0).collect(Collectors.toList());
     }
 
     @Override

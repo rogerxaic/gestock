@@ -42,12 +42,15 @@ public class GestockView extends GFrame {
     private JTable peu;
     private String[] fewColumns;
 
-    public GestockView(Gestock app, Map<BaseProduct, Integer> expireSoonProducts, List<BaseProduct> fewProducts) {
+    public GestockView(Gestock app, List<BaseProduct> expireSoonProducts, List<BaseProduct> fewProducts) {
         super(app.messages.getString("app.title"));
         setSize(1120, 750);
 
         this.model = app;
         this.user = model.getUser();
+        user.addObserver((o, arg)-> {
+            this.userName.setText(user.getName());
+        });
 
         expiryColumns = new String[]{model.messages.getString("app.table.expiresoon.name"),
                 model.messages.getString("app.table.expiresoon.quantity"),
@@ -177,6 +180,9 @@ public class GestockView extends GFrame {
         }
         chercher.setVerticalTextPosition(SwingConstants.BOTTOM);
         chercher.setHorizontalTextPosition(SwingConstants.CENTER);
+        chercher.addActionListener((ActionEvent ae) -> {
+            new SearchController(model);
+        });
 
         consommer = new JButton(model.messages.getString("consume.title"));
         bottomButtonPanel.add(consommer, BorderLayout.EAST);
@@ -285,8 +291,8 @@ public class GestockView extends GFrame {
         perim = new JTable(model1);
         perimPanel.add(new JScrollPane(perim));
         perim.setEnabled(false);
-        expireSoonProducts.forEach((k, v) -> {
-            model1.addRow(new Object[]{k.toString(), v, String.format("%1$td-%1$tm-%1$tY", k.getOldestBoughtProduct().getExpirationDay())});
+        expireSoonProducts.forEach((k) -> {
+            model1.addRow(new Object[]{k.toString(), k.getQuantityInPantry(), String.format("%1$td-%1$tm-%1$tY", k.getOldestAvailableBoughtProduct().getExpirationDay())});
         });
         perim.setGridColor(Color.black);
         perim.setDefaultRenderer(Integer.class, renderer);
@@ -471,11 +477,11 @@ public class GestockView extends GFrame {
                 model.messages.getString("app.table.fewproducts.add")};
     }
 
-    public void fillExpireSoon(Map<BaseProduct, Integer> expireSoonProducts) {
+    public void fillExpireSoon(List<BaseProduct> expireSoonProducts) {
         TableModel tm = new TableModel(expiryColumns);
         perim.setModel(tm);
-        expireSoonProducts.forEach((k, v) -> {
-            tm.addRow(new Object[]{k.toString(), v, k.getOldestBoughtProduct().getExpirationDay()});
+        expireSoonProducts.forEach((k) -> {
+            tm.addRow(new Object[]{k.toString(), k.getQuantityInPantry(), k.getOldestAvailableBoughtProduct().getExpirationDay()});
         });
     }
 

@@ -49,14 +49,13 @@ public class JustConsumedView extends GFrame {
         search.add(searchListPane, BorderLayout.CENTER);
 
         consume = new JButton(model.messages.getString("shop.button.consume"));
-        consume.addActionListener((ActionEvent ae) -> {
-            relation.forEach((k, v) -> {
-                if (k.isSelected()) {
-                    v.consume();
-                }
-                this.dispose();
-            });
-        });
+        consume.addActionListener((ActionEvent ae) -> relation.forEach((k, v) -> {
+            if (k.isSelected()) {
+                System.out.println("consuming : " + v);
+                v.consume();
+            }
+            this.dispose();
+        }));
         footer = new JPanel();
         footer.add(consume);
         list = new JPanel();

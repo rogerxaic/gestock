@@ -11,6 +11,7 @@ import org.apache.commons.lang3.StringEscapeUtils;
 import org.json.JSONObject;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * @author rmiretgine
@@ -194,15 +195,16 @@ public class BaseProduct extends Observable {
         return q;
     }
 
-    public BoughtProduct getOldestBoughtProduct() {
-        if (!boughtProducts.isEmpty()) {
-            BoughtProduct bp = new BoughtProduct(this);
-            bp.setExpirationDay(new Date());
-            for (BoughtProduct b : boughtProducts) {
-                if (b.getExpirationDay().compareTo(bp.getExpirationDay()) < 0)
-                    bp = b;
+    public BoughtProduct getOldestAvailableBoughtProduct() {
+        if (!boughtProducts.isEmpty() && getQuantityInPantry() > 0) {
+            List<BoughtProduct> notEmpty = boughtProducts.stream().filter(boughtProduct -> boughtProduct.getRemainingQuantity() > 0).collect(Collectors.toList());
+            BoughtProduct oldest = notEmpty.get(0);
+            for (BoughtProduct b : notEmpty) {
+                if (b.getExpirationDay().compareTo(oldest.getExpirationDay()) <= 0) {
+                    oldest = b;
+                }
             }
-            return bp;
+            return oldest;
         } else {
             return null;
         }
@@ -276,7 +278,7 @@ public class BaseProduct extends Observable {
     }
 
     public void consume() {
-        BoughtProduct bp = getOldestBoughtProduct();
+        BoughtProduct bp = getOldestAvailableBoughtProduct();
         bp.consume();
     }
 
@@ -293,5 +295,9 @@ public class BaseProduct extends Observable {
 
     public Map<BaseProduct, Integer> getBoughtTogether() {
         return boughtTogether;
+    }
+
+    public List<BoughtProduct> getBoughtProducts() {
+        return boughtProducts;
     }
 }

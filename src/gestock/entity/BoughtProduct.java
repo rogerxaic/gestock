@@ -22,6 +22,10 @@ public class BoughtProduct {
         this.id = counter;
     }
 
+    public BoughtProduct(BaseProduct baseProduct, boolean mock) {
+        this.baseProduct = baseProduct;
+    }
+
     public BoughtProduct(BaseProduct baseProduct, String[] fields) {
         this(baseProduct);
         this.expirationDay = new Date(Long.parseLong(fields[1]));
