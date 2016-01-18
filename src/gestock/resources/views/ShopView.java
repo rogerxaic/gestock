@@ -23,7 +23,7 @@ public class ShopView extends GFrame {
 
     public ShopView(Gestock model, ShopController shopController, Shop shop) {
         super(model.messages.getString("app.title") + " - " + model.messages.getString("shop.title"));
-        setSize(230, 400);
+        setSize(250, 400);
         boolean update = shop.isValid();
 
         nameField = new JTextField(shop.getName(), 20);

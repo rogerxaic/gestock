@@ -11,6 +11,7 @@ public class BoughtProduct {
     private int quantity; //original quantity
     private int remainingQuantity; //original quantity
     private Price price;
+    private Shop shop;
     //protected ShoppingList shoppingList;
     private BaseProduct baseProduct;
 
@@ -109,5 +110,9 @@ public class BoughtProduct {
         if (getRemainingQuantity() > 0) {
             this.remainingQuantity--;
         }
+    }
+
+    public void setShop(Shop shop) {
+        this.shop = shop;
     }
 }

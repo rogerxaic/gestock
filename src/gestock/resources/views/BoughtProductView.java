@@ -4,6 +4,7 @@ import com.toedter.calendar.JDateChooser;
 import gestock.Gestock;
 import gestock.controller.BoughtProductController;
 import gestock.entity.BoughtProduct;
+import gestock.entity.Shop;
 
 import javax.swing.*;
 import java.util.Date;
@@ -23,6 +24,7 @@ public class BoughtProductView extends GFrame {
     private JButton addButton;
     private JTextField priceField;
     private JTextField quantityField;
+    private JComboBox<Shop> shops;
 
     public BoughtProductView(Gestock app, BoughtProductController boughtProductController, BoughtProduct boughtProduct) {
         super("Gestock - Ajouter produit");
@@ -40,6 +42,10 @@ public class BoughtProductView extends GFrame {
         expiryDate.setDate(testDate.getDate());
         addButton = new JButton("Ajouter");
         addButton.addActionListener(controller);
+        shops = new JComboBox();
+        for (Shop s : model.getShops()) {
+            shops.addItem(s);
+        }
 
         try {
             String price = String.valueOf(boughtProduct.getPrice().getTotalPrice());
@@ -63,6 +69,8 @@ public class BoughtProductView extends GFrame {
         main.add(priceField);
         main.add(new JLabel("Quantity"));
         main.add(quantityField);
+        main.add(new JLabel(model.messages.getString("shop.title")));
+        main.add(shops);
         main.add(addButton);
 
         setContentPane(main);
@@ -112,5 +120,9 @@ public class BoughtProductView extends GFrame {
             errors.removeAllElements();
             return false;
         }
+    }
+
+    public Shop getShop() {
+        return (Shop) shops.getSelectedItem();
     }
 }

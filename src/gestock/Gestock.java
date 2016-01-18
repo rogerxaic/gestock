@@ -125,6 +125,8 @@ public class Gestock extends Observable {
          */
         //BaseProducts
         baseProductLoader(filepath + fs + baseFile);
+        //Shops
+        shopLoader(filepath + fs + shopsFile);
         //BaseProducts
         boughtProductLoader(filepath + fs + boughtFile);
         launcher.dispose();
@@ -399,7 +401,7 @@ public class Gestock extends Observable {
             sb.append("\t");
             sb.append(Tools.escape(s.getLocation()));
             sb.append("\t");
-            sb.append(Tools.escape(s.getUrl()));
+            sb.append((s.getUrl() != null) ? Tools.escape(s.getUrl()) : "0");
 
             sb.append(System.getProperty("line.separator"));
 
@@ -502,5 +504,23 @@ public class Gestock extends Observable {
 
         } catch (Exception ignored) {
         }
+    }
+
+    public void shopLoader(String file) {
+        try (Stream<String> stream = Files.lines(Paths.get(file))) {
+            stream.forEach((k) -> {
+                if (k.length() > 5) {
+                    Shop shop;
+                    String[] fields = k.split("\t");
+                    shop = new Shop(fields);
+                    this.shops.add(shop);
+                }
+            });
+        } catch (Exception ignored) {
+        }
+    }
+
+    public List<Shop> getShops() {
+        return this.shops;
     }
 }

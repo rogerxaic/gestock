@@ -25,6 +25,13 @@ public class Shop {
     public Shop() {
     }
 
+    public Shop(String[] fields) {
+        String url = (fields[3].equals("0")) ? null : fields[3];
+        init(fields[1], fields[2], fields[3]);
+        this.id = Integer.parseInt(fields[0]);
+        counter = id;
+    }
+
     public void init(String name, String location, String url) {
         this.name = name;
         this.location = location;

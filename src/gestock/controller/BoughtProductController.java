@@ -30,6 +30,7 @@ public class BoughtProductController extends Observable implements ActionListene
             boughtProduct.setPrice(new Price(view.getPrice(), view.getBoughtOn()));
             boughtProduct.setBoughtDay(view.getBoughtOn());
             boughtProduct.setExpirationDay(view.getExpiry());
+            boughtProduct.setShop(view.getShop());
             try {
                 boughtProduct.setQuantity(view.getQuantity());
             } catch (Exception e1) {
