@@ -57,7 +57,7 @@ public class ShoppingListView extends GFrame {
         this.selectedCheckBox = new LinkedList<>();
 
         searchField = new JTextField(20);
-        addButton = new JButton("Ajouter");
+        addButton = new JButton(model.messages.getString("shoppinglist.add"));
         addButton.addActionListener((ActionEvent ae) -> {
             if (!searchField.getText().equals("")) {
                 addToShoppingList(searchField.getText());
@@ -66,7 +66,7 @@ public class ShoppingListView extends GFrame {
                 refresh();
             }
         });
-        searchButton = new JButton("Chercher");
+        searchButton = new JButton(model.messages.getString("shoppinglist.search"));
         searchButton.addActionListener((ActionEvent ae) -> {
             BaseProductSearchController bpsc = new BaseProductSearchController(model);
             bpsc.getAndFill(searchField.getText());
@@ -93,7 +93,7 @@ public class ShoppingListView extends GFrame {
         centerPanel.add(pannierPane);
         centerPanel.add(suggestionsPanel);
 
-        deleteSelection = new JButton("Effacer selection");
+        deleteSelection = new JButton(model.messages.getString("shoppinglist.deleteSelection"));
         deleteSelection.addActionListener((ActionEvent ae) -> {
             shoppingListCheckBox.forEach((k, v) -> {
                 JCheckBox cb = (JCheckBox) k;
@@ -104,7 +104,7 @@ public class ShoppingListView extends GFrame {
             fill();
             refresh();
         });
-        sendMessage = new JButton("Envoyer");
+        sendMessage = new JButton(model.messages.getString("shoppinglist.send"));
         sendMessage.addActionListener((ActionEvent ae) -> {
             User u = model.getUser();
             Free f = u.getFree();
@@ -115,16 +115,16 @@ public class ShoppingListView extends GFrame {
                 JDialog jd = new JDialog();
                 jd.getContentPane().setLayout(new BoxLayout(jd.getContentPane(), BoxLayout.PAGE_AXIS));
 
-                JButton open = new JButton("Open");
+                JButton open = new JButton(model.messages.getString("shoppinglist.open"));
                 open.addActionListener((ActionEvent e) -> new SettingsView(app));
-                JButton close = new JButton("Close");
+                JButton close = new JButton(model.messages.getString("shoppinglist.close"));
                 close.addActionListener((ActionEvent e) -> jd.dispose());
 
                 JPanel buttons = new JPanel();
                 buttons.add(open);
                 buttons.add(close);
 
-                JLabel alert = new JLabel("You must set a Free username and secret in order to send SMS");
+                JLabel alert = new JLabel(model.messages.getString("shoppinglist.free"));
                 alert.setAlignmentX(Component.CENTER_ALIGNMENT);
 
                 jd.add(alert);
@@ -135,13 +135,13 @@ public class ShoppingListView extends GFrame {
                 jd.setVisible(true);
             }
         });
-        copyText = new JButton("Copier texte");
+        copyText = new JButton(model.messages.getString("shoppinglist.copyText"));
         copyText.addActionListener((ActionEvent ae) -> {
             StringSelection stringSelection = new StringSelection(getText());
             Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
             clipboard.setContents(stringSelection, null);
         });
-        price = new JLabel("Prix pannier (approx.) : " + getPrice());
+        price = new JLabel(model.messages.getString("shoppinglist.priceList") + getPrice());
         footerPanel = new JPanel();
         footerPanel.setLayout(new BoxLayout(footerPanel, BoxLayout.LINE_AXIS));
         footerPanel.add(deleteSelection);
@@ -203,7 +203,7 @@ public class ShoppingListView extends GFrame {
         });
         if (getPrice() > 0) {
             sb.append("\n");
-            sb.append("Prix pannier approx : \n");
+            sb.append(model.messages.getString("shoppinglist.priceEnter"));
             sb.append(String.valueOf(getPrice()));
         }
         return sb.toString();
@@ -222,7 +222,7 @@ public class ShoppingListView extends GFrame {
 
     @Override
     public void refresh() {
-        price.setText("Prix pannier (approx.) : " + getPrice());
+        price.setText(model.messages.getString("shoppinglist.priceList")+ getPrice());
         super.refresh(true);
         putOriginalSize();
         putInOriginalLocation();

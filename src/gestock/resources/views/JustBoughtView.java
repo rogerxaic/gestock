@@ -40,28 +40,28 @@ public class JustBoughtView extends GFrame {
 
 
     public JustBoughtView(Gestock app, JustBoughtController justBoughtController) {
-        super("Gestock - Je viens d'acheter");
+        super(app.messages.getString("justbought.frame"));
         this.model = app;
         this.controller = justBoughtController;
         setSize(new Dimension(500, 500));
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
-        Add = new JLabel("Ajouter produit");
-        FirstTime = new JButton("Premiere fois");
+        Add = new JLabel(model.messages.getString("justbought.addProduct"));
+        FirstTime = new JButton(model.messages.getString("justbought.firstTime"));
         FirstTime.addActionListener((ActionEvent ae) -> {
             ProductController pc = new ProductController(model, new BaseProduct());
             pc.addObserver(controller);
         });
-        NotFirstTime = new JButton("Deja achete");
+        NotFirstTime = new JButton(model.messages.getString("justbought.alreadyBought"));
         NotFirstTime.addActionListener((ActionEvent ae) -> {
             BaseProductSearchController bpsc = new BaseProductSearchController(model);
             bpsc.addObserver(controller);
         });
-        Addor = new JButton("Ajouter au garde-manger");
+        Addor = new JButton(model.messages.getString("justbought.addpantry"));
         Addor.addActionListener((ActionEvent ae) -> controller.addToPantry());
-        DeleteLast = new JButton("Effacer Dernier");
+        DeleteLast = new JButton(model.messages.getString("justbought.deleteTheLastOne"));
         DeleteLast.addActionListener((ActionEvent ae) -> controller.deleteLast());
-        DeleteAll = new JButton("Effacer Tout");
+        DeleteAll = new JButton(model.messages.getString("justbought.deleteEverything"));
         DeleteAll.addActionListener((ActionEvent ae) -> controller.deleteAll());
         List = new JTextPane();
 
